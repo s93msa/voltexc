@@ -102,65 +102,124 @@ namespace WebApplication1.Controllers
 
                         string fileName;
                         if (vaulterClass.ClassNr == 4)
-                        {
-                            
-                            var step = GetCompetitionStep(startListItem);
-                            var participant = startListItem.Participant;
-                            var vaultingClubName = participant.VaultingClub?.ClubName;
+                    {
 
-                            var horse= startListItem.VaultingHorse;
-                            var lungerName = horse.Lunger.LungerName;
-                            var JudgeTableA = GetJudgeName(startListClassStep.JudgeTables, JudgeTableNames.A);
-                            var JudgeTableB = GetJudgeName(startListClassStep.JudgeTables, JudgeTableNames.B);
-                            var JudgeTableC = GetJudgeName(startListClassStep.JudgeTables, JudgeTableNames.C);
-                            var JudgeTableD = GetJudgeName(startListClassStep.JudgeTables, JudgeTableNames.D);
+                        var step = GetCompetitionStep(startListItem);
+                        var participant = startListItem.Participant;
+                        var vaultingClubName = participant.VaultingClub?.ClubName;
 
-                            var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-                            var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableA;
-                            var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableA;
-                            var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableA;
-                            //startListClassStep
-                            //vaulterClass.Steps
+                        var horse = startListItem.VaultingHorse;
+                        var lungerName = horse.Lunger.LungerName;
+                        var JudgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
+                        var JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
+                        var JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
+                        var JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
 
-
-                            //fileName = @"C:\Temp\Test_Voligemallar\Protokoll 2017 individuell klass.xlsx";
-                            fileName = vaulterClass.Excelfile;
-                            var workbook = new XLWorkbook(fileName);
-
-                            var worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableA);
-                            SetWorksheetHorse(worksheet, contest, startListClassStep.Date, startListItem.StartNumber, startListItem.Participant,
-                                vaultingClubName, horse.HorseName, lungerName, JudgeTableA);
+                        var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
+                        var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
+                        var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
+                        var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
+                        //startListClassStep
+                        //vaulterClass.Steps
 
 
-                            //workbook.Worksheets.Worksheet(3).Visibility = XLWorksheetVisibility.Hidden;
-
-                            //var worksheetHorse = workbook.Worksheet(2);
-                            //worksheetHorse.Cell(7, "c").Value = country;
-                            workbook.SaveAs(@"C:\Temp\Test_Voligemallar\HelloWorld.xlsx");
-                        }
+                        //fileName = @"C:\Temp\Test_Voligemallar\Protokoll 2017 individuell klass.xlsx";
+                        fileName = vaulterClass.Excelfile;
+                        var workbook = new XLWorkbook(fileName);
 
 
-                        // worksheetHorse.Cell(7, "d").Value = d?.Count;
+                        var vaulter = startListItem.Participant;
+
+                        var worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableA);
+
+                        SetWorksheetHorse(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+                                vaultingClubName, horse.HorseName, lungerName, JudgeTableA?.JudgeName);
+
+                        ShowOnlyWorksheet(workbook.Worksheets, worksheet);
+                        var fileOutputname = GetOutputFilename(JudgeTableA,startListClassStep, vaulter);
+                        SaveExcelFile(workbook, fileOutputname);
+
+                        
+                        worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableB);
+
+                        SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+                                vaultingClubName, horse.HorseName, lungerName, JudgeTableB);
+
+                        ShowOnlyWorksheet(workbook.Worksheets, worksheet);
+                        fileOutputname = GetOutputFilename(JudgeTableB, startListClassStep, vaulter);
+                        SaveExcelFile(workbook, fileOutputname);
+
+
+                        worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableC);
+                        SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+                                vaultingClubName, horse.HorseName, lungerName, JudgeTableC);
+
+                        ShowOnlyWorksheet(workbook.Worksheets, worksheet);
+                        fileOutputname = GetOutputFilename(JudgeTableC, startListClassStep, vaulter);
+                        SaveExcelFile(workbook, fileOutputname);
+
+
+
+                        worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableD);
+                        SetWorksheetIndividuellJuniorGrund2(worksheet, contest,  startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+                                vaultingClubName, horse.HorseName, lungerName, JudgeTableD);
+
+                        ShowOnlyWorksheet(workbook.Worksheets, worksheet);
+                        fileOutputname = GetOutputFilename(JudgeTableD, startListClassStep, vaulter);
+                        SaveExcelFile(workbook, fileOutputname);
+
+
+
+
+                        //workbook.Worksheets.Worksheet(3).Visibility = XLWorksheetVisibility.Hidden;
+
+                        //var worksheetHorse = workbook.Worksheet(2);
+                        //worksheetHorse.Cell(7, "c").Value = country;
+                    }
+
+
+                    // worksheetHorse.Cell(7, "d").Value = d?.Count;
 
                     //}
                 }
             }
         }
+        
+        private static void SaveExcelFile(XLWorkbook workbook, string fileName)
+        {
+            string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + fileName + ".xlsx";
+            workbook.SaveAs(fileoutputname);
+        }
 
-        private static string GetJudgeName(List<JudgeTable> judgeTables, JudgeTableNames tableName)
+        private static string GetOutputFilename(JudgeTable judgeTabel, StartListClassStep startListClassStep, Vaulter vaulter)
+        {
+            return judgeTabel.JudgeTableName + @"\" + startListClassStep.Name + @"\" + vaulter.Name + ".xlsx";
+        }
+
+        private static void ShowOnlyWorksheet(IXLWorksheets workbookWorksheets, IXLWorksheet worksheet)
+        {
+            foreach (var currrentWorksheet in workbookWorksheets)
+            {
+                if (currrentWorksheet == worksheet)
+                    currrentWorksheet.Visibility = XLWorksheetVisibility.Visible;
+                else
+                    currrentWorksheet.Visibility = XLWorksheetVisibility.Hidden;
+            }
+        }
+
+        private static JudgeTable GetJudge(List<JudgeTable> judgeTables, JudgeTableNames tableName)
         {
             foreach (var table in judgeTables)
             {
                 if (table.JudgeTableName == tableName)
-                    return table.JudgeName;
+                    return table;
             }
             return null;
         }
 
-        private static void SetWorksheetHorse(IXLWorksheet worksheet, Contest contest, DateTime stepDate, int startnumber, Vaulter participant, string vaultingClubName, string HorseName, string LungerName, string JudgeName)
-
-            //DateTime eventDate, string eventLocation, string vaulterName, string country, string horseName, string lungerName, string Judge)
+        private static void SetWorksheetHorse(IXLWorksheet worksheet, Contest contest, DateTime stepDate, int testNumber , int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, string judgeName)
         {
+            const string tableName = "A";
             var country = contest?.Country;
             var eventLocation = contest?.Location;
             var vaulterName = participant.Name;
@@ -169,7 +228,53 @@ namespace WebApplication1.Controllers
 
             //var startNumber = startListItem.StartNumber;
             //startListItem.VaultingHorse.HorseName
-            SetValueInWorksheet(worksheet, 3, "d", stepDate.ToShortDateString());
+            SetValueInWorksheet(worksheet, 3, "c", stepDate.ToShortDateString());
+            SetValueInWorksheet(worksheet, 4, "c", eventLocation);
+            SetValueInWorksheet(worksheet, 5, "c", vaulterName);
+            SetValueInWorksheet(worksheet, 6, "c", vaultingClubName);
+            SetValueInWorksheet(worksheet, 7, "c", country);
+            SetValueInWorksheet(worksheet, 8, "c", horseName);
+            SetValueInWorksheet(worksheet, 9, "c", lungerName);
+
+            SetValueInWorksheet(worksheet, 1, "l", startnumber.ToString());
+            SetValueInWorksheet(worksheet, 2, "l", tableName);
+            SetValueInWorksheet(worksheet, 3, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
+            SetValueInWorksheet(worksheet, 4, "l", testNumber.ToString());
+            SetValueInWorksheet(worksheet, 6, "l", armNumber);
+
+            SetValueInWorksheet(worksheet, 29, "c", judgeName);
+
+
+        }
+
+        private static void SetWorksheetIndividuellJuniorGrund2(IXLWorksheet worksheet, Contest contest,  DateTime stepDate, int testNumber, int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, JudgeTable judgeTable)
+        {
+            
+            var country = contest?.Country;
+            var eventLocation = contest?.Location;
+            var vaulterName = participant.Name;
+            var vaulterClass = participant.VaultingClass;
+            var armNumber = participant.Armband;
+
+            //var startNumber = startListItem.StartNumber;
+            //startListItem.VaultingHorse.HorseName
+            SetValueInWorksheet(worksheet, 4, "c", stepDate.ToShortDateString());
+            SetValueInWorksheet(worksheet, 5, "c", eventLocation);
+            SetValueInWorksheet(worksheet, 6, "c", vaulterName);
+            SetValueInWorksheet(worksheet, 7, "c", vaultingClubName);
+            SetValueInWorksheet(worksheet, 8, "c", country);
+            SetValueInWorksheet(worksheet, 9, "c", horseName);
+            SetValueInWorksheet(worksheet, 10, "c", lungerName);
+
+            SetValueInWorksheet(worksheet, 2, "l", startnumber.ToString());
+            SetValueInWorksheet(worksheet, 3, "l", judgeTable?.JudgeTableName.ToString());
+            SetValueInWorksheet(worksheet, 4, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
+            SetValueInWorksheet(worksheet, 5, "l", testNumber.ToString());
+            SetValueInWorksheet(worksheet, 7, "l", armNumber);
+
+            SetValueInWorksheet(worksheet, 32, "c", judgeTable?.JudgeName);
+
+
         }
 
         private static void SetValueInWorksheet(IXLWorksheet worksheet, int row, string column , string value)
