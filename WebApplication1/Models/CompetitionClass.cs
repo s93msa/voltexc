@@ -9,7 +9,9 @@ namespace WebApplication1.Models
         public int ClassNr { get; set; }
         public string ClassName { get; set; }
 
-        public List<Step> Steps { get; set; }
+        public string Excelfile { get; set; }
+
+        public virtual List<Step> Steps { get; set; }
        
         //public CompetitionClass(int classNr, string className, List<Step> steps)
         //{

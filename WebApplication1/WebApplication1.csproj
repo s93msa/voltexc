@@ -203,6 +203,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.Designer.cs">
@@ -216,6 +217,14 @@
     <Compile Include="Migrations\201705081950536_AddCompetitionClassToTeam.Designer.cs">
       <DependentUpon>201705081950536_AddCompetitionClassToTeam.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705111922240_AddStartList.cs" />
+    <Compile Include="Migrations\201705111922240_AddStartList.Designer.cs">
+      <DependentUpon>201705111922240_AddStartList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705131240517_AddExcelInformation.cs" />
+    <Compile Include="Migrations\201705131240517_AddExcelInformation.Designer.cs">
+      <DependentUpon>201705131240517_AddExcelInformation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -224,9 +233,11 @@
     <Compile Include="Models\JudgeTable.cs" />
     <Compile Include="Models\Lunger.cs" />
     <Compile Include="Models\StartListClass.cs" />
+    <Compile Include="Models\StartList.cs" />
     <Compile Include="Models\StartListClassStep.cs" />
     <Compile Include="Models\Step.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\TeamList.cs" />
     <Compile Include="Models\Vaulter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -320,6 +331,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705081950536_AddCompetitionClassToTeam.resx">
       <DependentUpon>201705081950536_AddCompetitionClassToTeam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705111922240_AddStartList.resx">
+      <DependentUpon>201705111922240_AddStartList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705131240517_AddExcelInformation.resx">
+      <DependentUpon>201705131240517_AddExcelInformation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -8,7 +8,7 @@ namespace WebApplication1.Models
         public int StartListClassId { get; set; }
 
         public string Name { get; set; }
-        public List<StartListClassStep> StartListClassStep { get; set; }
+        public virtual List<StartListClassStep> StartListClassStep { get; set; }
 
         //public StartListClass(List<StartListClassStep> steps)
         //{

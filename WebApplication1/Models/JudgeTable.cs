@@ -4,7 +4,7 @@
     public class JudgeTable
     {
         public int JudgeTableId { get; set; }
-        public JudgeTableNames JudgeTableName { get; set; }
+        public virtual JudgeTableNames JudgeTableName { get; set; }
         public string JudgeName { get; set; }
 
         //private JudgeTableNames _judge;

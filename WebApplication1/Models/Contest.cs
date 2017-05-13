@@ -8,7 +8,7 @@ namespace WebApplication1.Models
     {
         public int ContestId { get; set; }
         public string Location{ get; set; }
-        public string Country { get; set; }
+        public string Country { get; set; } //TODO: Country of club not contest
         public virtual List<StartListClass> StartListClass { get; set; }
 
     }

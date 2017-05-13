@@ -9,8 +9,8 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public Club VaultingClub { get; set; }
 
-        public SortedList<int, Vaulter> Vaulters { get; set; }
+        public virtual List<TeamList> VaultersList { get; set; }
 
-        public CompetitionClass VaultingClass { get; set; }
+        public virtual CompetitionClass VaultingClass { get; set; }
     }
 }

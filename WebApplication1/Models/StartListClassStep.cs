@@ -9,13 +9,15 @@ namespace WebApplication1.Models
         public int StartListClassStepId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
-        public List<JudgeTable> JudgeTables { get; set; }
+        public virtual List<JudgeTable> JudgeTables { get; set; }
 
-        public bool IsTeam { get; set; }
+        public virtual List<StartList> StartList { get; set; }
 
-        public SortedList<int, Vaulter> Vaulters { get; set; }
-        public SortedList<int, Team> Team { get; set; }
+        //public bool IsTeam { get; set; }
 
-        public List<Step> Step { get; set; }
+        //public virtual SortedList<int, Vaulter> Vaulters { get; set; }
+        //public virtual SortedList<int, Team> Team { get; set; }
+
+        //public List<Step> Step { get; set; }
     }
 }

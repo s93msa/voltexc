@@ -8,8 +8,8 @@ namespace WebApplication1.Models
         public int HorseId { get; set; }
         public string HorseName { get; set; }
 
-        public Lunger Lunger { get; set; }
+        public virtual Lunger Lunger { get; set; }
 
-        public List<Vaulter> Vaulters { get; set; }
+        //public List<Vaulter> Vaulters { get; set; }
     }
 }
