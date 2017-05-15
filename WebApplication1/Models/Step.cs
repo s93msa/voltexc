@@ -8,7 +8,7 @@ namespace WebApplication1.Models
 
         public int TestNumber { get; set; }
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        //public DateTime Date { get; set; }
 
         public string ExcelWorksheetNameJudgesTableA { get; set; }
         public string ExcelWorksheetNameJudgesTableB { get; set; }

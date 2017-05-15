@@ -225,6 +225,10 @@
     <Compile Include="Migrations\201705131240517_AddExcelInformation.Designer.cs">
       <DependentUpon>201705131240517_AddExcelInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705131740082_RemoveDateFromStep.cs" />
+    <Compile Include="Migrations\201705131740082_RemoveDateFromStep.Designer.cs">
+      <DependentUpon>201705131740082_RemoveDateFromStep.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -337,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705131240517_AddExcelInformation.resx">
       <DependentUpon>201705131240517_AddExcelInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705131740082_RemoveDateFromStep.resx">
+      <DependentUpon>201705131740082_RemoveDateFromStep.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
