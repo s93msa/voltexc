@@ -7,6 +7,8 @@ namespace WebApplication1.Models
     public class StartListClassStep
     {
         public int StartListClassStepId { get; set; }
+
+        public int StartOrder { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public virtual List<JudgeTable> JudgeTables { get; set; }

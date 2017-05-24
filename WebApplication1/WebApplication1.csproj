@@ -229,6 +229,22 @@
     <Compile Include="Migrations\201705131740082_RemoveDateFromStep.Designer.cs">
       <DependentUpon>201705131740082_RemoveDateFromStep.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705221809458_HorseAsStartlistorder.cs" />
+    <Compile Include="Migrations\201705221809458_HorseAsStartlistorder.Designer.cs">
+      <DependentUpon>201705221809458_HorseAsStartlistorder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705231643396_VaulterStartOrder.cs" />
+    <Compile Include="Migrations\201705231643396_VaulterStartOrder.Designer.cs">
+      <DependentUpon>201705231643396_VaulterStartOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705241232065_RemoveHorseOrder.cs" />
+    <Compile Include="Migrations\201705241232065_RemoveHorseOrder.Designer.cs">
+      <DependentUpon>201705241232065_RemoveHorseOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705241805048_AddStartOrderToStartListClassAndStartListClassStep.cs" />
+    <Compile Include="Migrations\201705241805048_AddStartOrderToStartListClassAndStartListClassStep.Designer.cs">
+      <DependentUpon>201705241805048_AddStartOrderToStartListClassAndStartListClassStep.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -250,6 +266,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\VaulterOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -322,6 +339,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705131740082_RemoveDateFromStep.resx">
       <DependentUpon>201705131740082_RemoveDateFromStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705221809458_HorseAsStartlistorder.resx">
+      <DependentUpon>201705221809458_HorseAsStartlistorder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705231643396_VaulterStartOrder.resx">
+      <DependentUpon>201705231643396_VaulterStartOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241232065_RemoveHorseOrder.resx">
+      <DependentUpon>201705241232065_RemoveHorseOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241805048_AddStartOrderToStartListClassAndStartListClassStep.resx">
+      <DependentUpon>201705241805048_AddStartOrderToStartListClassAndStartListClassStep.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

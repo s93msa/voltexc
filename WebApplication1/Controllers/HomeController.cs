@@ -42,11 +42,14 @@ namespace WebApplication1.Controllers
                              select contestTable).FirstOrDefault();
                 //var country = contest?.Country;
                 //var eventLocation = contest?.Location; 
-                startListClasses = contest?.StartListClass?? new List<StartListClass>();
+                startListClasses = contest?.StartListClass ?? new List<StartListClass>();
 
-                foreach (var startListClass in startListClasses)
+                var startListClassesSortedStartOrder = startListClasses.OrderBy(x => x.StartOrder);
+
+                foreach (var startListClass in startListClassesSortedStartOrder)
                 {
-                    foreach (var startListClassStep in startListClass.StartListClassStep)
+                    var startListClassStepOrdered = startListClass.StartListClassStep.OrderBy(x => x.StartOrder);
+                    foreach (var startListClassStep in startListClassStepOrdered)
                     {
 //                        var date = startListClassStep.Date;
                         //var isTeam = startListClassStep.IsTeam;
@@ -73,7 +76,7 @@ namespace WebApplication1.Controllers
 
         private static void SaveInExcel(Contest contest, StartListClassStep startListClassStep)
         {
-            
+
             //{ 'Häst, individuell'!A1:XFD1048576}
             //{ 'Individuell minior grund 1'!A1:XFD1048576}
             //{ 'Individuell junior grund 2'!A1:XFD1048576}
@@ -87,32 +90,44 @@ namespace WebApplication1.Controllers
 
             //foreach (var judgesTable in startListClassStep.JudgeTables)
             //{
-                //var tableChar = judgesTable.JudgeTableName;
-                //var judgeName = judgesTable.JudgeName;
+            //var tableChar = judgesTable.JudgeTableName;
+            //var judgeName = judgesTable.JudgeName;
 
-                foreach (var startListItem in startListClassStep.StartList)
+            //Todo: sort startlist
+            var startlistOrderByHorseOrder = startListClassStep.StartList.OrderBy(x => x.StartNumber);
+
+            int startListNumber = 0;
+                foreach (var startListItem in startlistOrderByHorseOrder)
                 {
-                    if (startListItem.Participant != null)
+                    startListNumber++;
+                    //startListItem.
+
+                    if (startListItem.Vaulters != null)
                     {
-                        CreateExcelforIndividual(contest, startListClassStep, startListItem);
+                        var vaultersSorted = startListItem.Vaulters.OrderBy(x => x.StartOrder);
+                        foreach (var vaulter in vaultersSorted)
+                        {
+                            CreateExcelforIndividual(contest, startListClassStep, startListItem, startListNumber, vaulter);                            
+                        }
                     }
                 }
         }
 
-        private static void CreateExcelforIndividual(Contest contest, StartListClassStep startListClassStep, StartList startListItem)
+        private static void CreateExcelforIndividual(Contest contest, StartListClassStep startListClassStep, StartList startListItem, int startVaulterNumber, VaulterOrder vaulterOrder)
         {
+            var vaulter = vaulterOrder.Participant;
             //var vaulterName = startListItem.Participant.Name;
-            var vaulterClass = startListItem.Participant.VaultingClass;
+            var vaulterClass = vaulter.VaultingClass;
             //var armNumber = startListItem.Participant.Armband;
             //var vaulterClub = startListItem.Participant.VaultingClub?.ClubName;
             //var startNumber = startListItem.StartNumber;
 
             string fileName;
-            var testNumber = startListItem.TestNumber;
+            var testNumber = vaulterOrder.Testnumber;
             var step = GetCompetitionStep(vaulterClass, testNumber);
-            var vaulter = startListItem.Participant;
             var vaultingClubName = vaulter.VaultingClub?.ClubName;
-            var horse = startListItem.VaultingHorse;
+            //var horse = startListItem.Horse;
+            var horse = startListItem.HorseInformation;
             var lungerName = horse.Lunger.LungerName;
             var JudgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
             var JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
@@ -176,7 +191,7 @@ namespace WebApplication1.Controllers
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableB);
 
-            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableB);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -185,7 +200,7 @@ namespace WebApplication1.Controllers
 
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableC);
-            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableC);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -195,7 +210,7 @@ namespace WebApplication1.Controllers
 
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableD);
-            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableD);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -228,7 +243,7 @@ namespace WebApplication1.Controllers
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableB);
 
-            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableB);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -237,7 +252,7 @@ namespace WebApplication1.Controllers
 
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableC);
-            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableC);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -247,7 +262,7 @@ namespace WebApplication1.Controllers
 
 
             worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableD);
-            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, startListItem.TestNumber, startListItem.StartNumber, vaulter,
+            SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startListItem.StartNumber, vaulter,
                     vaultingClubName, horse.HorseName, lungerName, JudgeTableD);
 
             ShowOnlyWorksheet(workbook.Worksheets, worksheet);
@@ -298,7 +313,7 @@ namespace WebApplication1.Controllers
 
             //var startNumber = startListItem.StartNumber;
             //startListItem.VaultingHorse.HorseName
-            SetValueInWorksheet(worksheet, "Date", stepDate.ToShortDateString());
+            SetValueInWorksheet(worksheet, "DateCell", stepDate.ToShortDateString());
             //SetValueInWorksheet(worksheet, 3, "c", stepDate.ToShortDateString());
             SetValueInWorksheet(worksheet, 4, "c", eventLocation);
             SetValueInWorksheet(worksheet, 5, "c", vaulterName);
