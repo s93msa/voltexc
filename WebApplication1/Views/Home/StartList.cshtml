@@ -1,0 +1,77 @@
+﻿@model WebApplication1.Models.Contest
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StartListClassStep)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContestId)
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+@*@foreach (var startListClass in Model.StartListClass?.OrderBy(x => x.StartOrder))
+{*@
+
+    @foreach (var startListClassStep in Model.StartListClassStep.OrderBy(x => x.StartOrder))
+    {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => startListClassStep.Date)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => startListClassStep.Name)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+                @*@Html.ActionLink("Edit", "Edit", new { id= startListClass.StartListClassId }) |
+                    @Html.ActionLink("Details", "Details", new { id= startListClass.StartListClassId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id= startListClass.StartListClassId })*@
+            </th>
+        </tr>
+        foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
+        {
+            foreach (var vaulters in startListItem.Vaulters.OrderBy(x => x.StartOrder))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => vaulters.StartOrder)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => vaulters.Participant.Name)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName)
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+            }
+        }
+
+    @*}*@
+}
+</table>

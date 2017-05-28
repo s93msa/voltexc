@@ -10,6 +10,11 @@ namespace WebApplication1.Classes
 {
     public class VaultingContext : DbContext
     {
+        public VaultingContext()
+        {
+            Configuration.LazyLoadingEnabled = true;
+        }
+
         public DbSet<Club> Clubs { get; set; }
         public DbSet<CompetitionClass> CompetitionClasses { get; set; }
         public DbSet<Contest> Contests { get; set; }
