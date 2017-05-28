@@ -1,4 +1,5 @@
-﻿@model WebApplication1.Models.Contest
+﻿@using WebApplication1.Models
+@model WebApplication1.Models.Contest
 
 @{
     ViewBag.Title = "View";
@@ -10,47 +11,56 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.StartListClassStep)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ContestId)
-        </th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
+   
 
 @*@foreach (var startListClass in Model.StartListClass?.OrderBy(x => x.StartOrder))
 {*@
-
+    @{int startnumber = 1;}
     @foreach (var startListClassStep in Model.StartListClassStep.OrderBy(x => x.StartOrder))
     {
+        startnumber = 0;
         <tr>
             <th>
                 @Html.DisplayFor(modelItem => startListClassStep.Date)
             </th>
             <th>
-                @Html.DisplayFor(modelItem => startListClassStep.Name)
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
+                @Html.DisplayFor(modelItem => startListClassStep.Name) <BR />
+                </th>
             <th>
-                @*@Html.ActionLink("Edit", "Edit", new { id= startListClass.StartListClassId }) |
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+            <th>
+
+
+                @*@Html.ActionLink("Edit", "Edit", new { id= startListClass.StartListClassI
+                                    Dommare A: @Html.DisplayFor(modelItem => startListClassStep.JudgeTables[0])
+d }) |
                     @Html.ActionLink("Details", "Details", new { id= startListClass.StartListClassId }) |
                     @Html.ActionLink("Delete", "Delete", new { id= startListClass.StartListClassId })*@
             </th>
         </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                Domare A: @startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B)<br />
+                C: @startListClassStep.GetJudgeName(JudgeTableNames.C) D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
+
+
+            </td><td></td><td></td><td></td><td></td>
+        </tr>
         foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
-        {
-            foreach (var vaulters in startListItem.Vaulters.OrderBy(x => x.StartOrder))
-            {
+                {
+                    foreach (var vaulters in startListItem.Vaulters.OrderBy(x => x.StartOrder))
+                    {
+                        startnumber++;
+
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => vaulters.StartOrder)
+                        @startnumber.ToString()
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.Name)
@@ -66,11 +76,12 @@
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName)
                     </td>
                     <td>
-                        
+                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
+
                     </td>
                 </tr>
-            }
-        }
+                    }
+                }
 
     @*}*@
 }

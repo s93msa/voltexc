@@ -255,6 +255,10 @@
     <Compile Include="Migrations\201705271240353_RemoveStartListClass.Designer.cs">
       <DependentUpon>201705271240353_RemoveStartListClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705281022114_RenamedStartlistToHorseOrder.cs" />
+    <Compile Include="Migrations\201705281022114_RenamedStartlistToHorseOrder.Designer.cs">
+      <DependentUpon>201705281022114_RenamedStartlistToHorseOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -263,7 +267,7 @@
     <Compile Include="Models\JudgeTable.cs" />
     <Compile Include="Models\Lunger.cs" />
     <Compile Include="Models\StartListClass.cs" />
-    <Compile Include="Models\StartList.cs" />
+    <Compile Include="Models\HorseOrder.cs" />
     <Compile Include="Models\StartListClassStep.cs" />
     <Compile Include="Models\Step.cs" />
     <Compile Include="Models\Team.cs" />
@@ -365,6 +369,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705271240353_RemoveStartListClass.resx">
       <DependentUpon>201705271240353_RemoveStartListClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705281022114_RenamedStartlistToHorseOrder.resx">
+      <DependentUpon>201705281022114_RenamedStartlistToHorseOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -5,9 +5,9 @@ using System.Web;
 
 namespace WebApplication1.Models
 {
-    public class StartList
+    public class HorseOrder
     {
-        public int StartListId { get; set; }
+        public int HorseOrderId { get; set; }
         public int StartNumber { get; set; }
 
         //public virtual HorseOrder Horse { get; set; }

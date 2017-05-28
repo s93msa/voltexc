@@ -25,25 +25,30 @@ namespace WebApplication1.Business.Logic.Contest
             if (_contest != null)
                 return _contest;
 
+            return GetAllDataFromDataBase();
+        }
+
+        private static Models.Contest GetAllDataFromDataBase()
+        {
             using (var db = new VaultingContext())
             {
-
                 var contests = db.Contests;
 
                 var contest = contests.ToList()[0];
 
 
-
                 JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
                 var jsonString = jsonSerializer.Serialize(contest);
-                    // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
+                // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
 
                 _contest = jsonSerializer.Deserialize<Models.Contest>(jsonString);
-
-
             }
             return _contest;
+        }
 
+        public static Models.Contest GetNewDataFromDatabase()
+        {
+            return GetAllDataFromDataBase();
         }
     }
 }

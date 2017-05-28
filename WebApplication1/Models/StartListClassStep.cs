@@ -13,8 +13,17 @@ namespace WebApplication1.Models
         public DateTime Date { get; set; }
         public virtual List<JudgeTable> JudgeTables { get; set; }
 
-        public virtual List<StartList> StartList { get; set; }
+        public virtual List<HorseOrder> StartList { get; set; }
 
+        public string GetJudgeName(JudgeTableNames judgeTableName)
+        {
+            var judgeTableNumber = ((int) judgeTableName)-1;
+
+            if (JudgeTables.Count > judgeTableNumber)
+                return JudgeTables[judgeTableNumber].JudgeName;
+
+            return string.Empty;
+        }
         //public bool IsTeam { get; set; }
 
         //public virtual SortedList<int, Vaulter> Vaulters { get; set; }
