@@ -208,8 +208,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Business\Logic\Contest\ContestService.cs" />
+    <Compile Include="Business\Logic\Excel\ExcelBaseService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelIndividualService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
+    <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />

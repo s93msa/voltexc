@@ -52,12 +52,9 @@ namespace WebApplication1.Controllers
 
         public ActionResult CopyExcel()
         {
-            Contest contest;
-            List<StartListClassStep> startListClassesSteps;
+            var contest = ContestService.GetInstance();
            
-            contest = ContestService.GetInstance();
-           
-            startListClassesSteps = contest?.StartListClassStep ?? new List<StartListClassStep>();
+            var startListClassesSteps = contest?.StartListClassStep ?? new List<StartListClassStep>();
         
             var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
             foreach (var startListClassStep in startListClassStepOrdered)
@@ -96,7 +93,9 @@ namespace WebApplication1.Controllers
                         
                         foreach (var vaulter in vaultersSorted)
                         {
-                            var excelIndividualService = new ExcelIndividualService(contest, startListClassStep,horseOrder,startListNumber,vaulter);
+                            var vaulterInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
+                                startListNumber, vaulter);
+                            var excelIndividualService = new ExcelIndividualService(vaulterInformation);
                             excelIndividualService.CreateExcelforIndividual();
 
                             //CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);                            
