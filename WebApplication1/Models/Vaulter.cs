@@ -10,7 +10,7 @@
 
         public virtual CompetitionClass VaultingClass { get; set; }
 
-        public bool Active { get; set; }
+        //public bool Active { get; set; }
 
         //private readonly CompetitionClass _competitionClass;
         //public Vaulter(CompetitionClass competitionClass)

@@ -15,7 +15,7 @@
 
 @*@foreach (var startListClass in Model.StartListClass?.OrderBy(x => x.StartOrder))
 {*@
-    @{int startnumber = 1;}
+    @{int startnumber;}
     @foreach (var startListClassStep in Model.StartListClassStep.OrderBy(x => x.StartOrder))
     {
         startnumber = 0;
@@ -54,8 +54,9 @@ d }) |
         </tr>
         foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
                 {
-                    foreach (var vaulters in startListItem.Vaulters.OrderBy(x => x.StartOrder))
+                    foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
                     {
+
                         startnumber++;
 
                 <tr>

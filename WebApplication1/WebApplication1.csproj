@@ -259,6 +259,14 @@
     <Compile Include="Migrations\201705281022114_RenamedStartlistToHorseOrder.Designer.cs">
       <DependentUpon>201705281022114_RenamedStartlistToHorseOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706060951496_activeboolForVaulterOrder.cs" />
+    <Compile Include="Migrations\201706060951496_activeboolForVaulterOrder.Designer.cs">
+      <DependentUpon>201706060951496_activeboolForVaulterOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.cs" />
+    <Compile Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.Designer.cs">
+      <DependentUpon>201706061028088_RemoveIsAcvtiveFromVaulter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -372,6 +380,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705281022114_RenamedStartlistToHorseOrder.resx">
       <DependentUpon>201705281022114_RenamedStartlistToHorseOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706060951496_activeboolForVaulterOrder.resx">
+      <DependentUpon>201706060951496_activeboolForVaulterOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.resx">
+      <DependentUpon>201706061028088_RemoveIsAcvtiveFromVaulter.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

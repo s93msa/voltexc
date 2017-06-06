@@ -12,9 +12,9 @@ namespace WebApplication1.Models
 
         public int StartOrder { get; set; }
         public virtual Vaulter Participant { get; set; }
-        public int Testnumber { get; set; } 
+        public int Testnumber { get; set; }
 
-
+        public bool IsActive { get; set; }
 
     }
 }

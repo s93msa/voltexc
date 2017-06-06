@@ -91,11 +91,11 @@ namespace WebApplication1.Controllers
 
                     if (horseOrder.Vaulters != null)
                     {
-                        var vaultersSorted = horseOrder.Vaulters.OrderBy(x => x.StartOrder);
+                        var vaultersSorted = horseOrder.GetActiveVaulters().OrderBy(x => x.StartOrder);
                         
                         foreach (var vaulter in vaultersSorted)
                         {
-                            CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);                            
+                                CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);                            
                         }
                     }
                 }
@@ -110,11 +110,11 @@ namespace WebApplication1.Controllers
             var step = GetCompetitionStep(vaulterClass, testNumber);
             var vaultingClubName = vaulter.VaultingClub?.ClubName.Trim();
             var horse = horseOrder.HorseInformation;
-            var lungerName = horse.Lunger.LungerName;
-            var JudgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
-            var JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
-            var JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
-            var JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
+            var lungerName = horse.Lunger.LungerName?.Trim();
+            var judgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
+            var judgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
+            var judgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
+            var judgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
             //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
@@ -126,14 +126,14 @@ namespace WebApplication1.Controllers
             if (vaulterClass.ClassNr == 4)
             {
                 CreateExcelForClass4(contest, startListClassStep, startNumber,  vaulter, vaultingClubName,
-                    horse, lungerName, JudgeTableA, JudgeTableB, JudgeTableC, JudgeTableD,
+                    horse, lungerName, judgeTableA, judgeTableB, judgeTableC, judgeTableD,
                     step, workbook);
 
             }
             else if (vaulterClass.ClassNr == 5)
             {
                 CreateExcelForClass5(contest, startListClassStep, startNumber,  vaulter, vaultingClubName,
-                    horse, lungerName, JudgeTableA, JudgeTableB, JudgeTableC, JudgeTableD,
+                    horse, lungerName, judgeTableA, judgeTableB, judgeTableC, judgeTableD,
                     step, workbook);
                 //workbook.Worksheets.Worksheet(3).Visibility = XLWorksheetVisibility.Hidden;
 
