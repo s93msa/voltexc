@@ -19,7 +19,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void ShowOnlyWorksheet(IXLWorksheet worksheet)
         {
-            IXLWorksheets workbookWorksheets = _competitionData._workbook?.Worksheets;
+            IXLWorksheets workbookWorksheets = _competitionData.Workbook?.Worksheets;
             if (workbookWorksheets == null)
                 return;
 
@@ -38,12 +38,12 @@ namespace WebApplication1.Business.Logic.Excel
         protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
         {
             SetValueInWorksheet(worksheet, startRow, "c", _competitionData.GetStepDate());
-            SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData._eventLocation);
-            SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData._vaulterName);
-            SetValueInWorksheet(worksheet, startRow + 3, "c", _competitionData._vaultingClubName);
-            SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData._country);
-            SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData._horseName);
-            SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData._lungerName);
+            SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData.EventLocation);
+            SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData.VaulterName);
+            SetValueInWorksheet(worksheet, startRow + 3, "c", _competitionData.VaultingClubName);
+            SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData.Country);
+            SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData.HorseName);
+            SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData.LungerName);
         }
 
         //private void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
@@ -61,9 +61,9 @@ namespace WebApplication1.Business.Logic.Excel
             string tableName = GetJudgeTableName(judgeTable);
             SetValueInWorksheet(worksheet, startRow, "l", startNumber);
             SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
-            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData._vaulterClass.ClassNr + " (" + _competitionData._vaulterClass.ClassName + ")");
-            SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData._momentName);
-            SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData._armNumber);
+            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaulterClass.ClassNr + " (" + _competitionData.VaulterClass.ClassName + ")");
+            SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
+            SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
         }
 
         
@@ -74,12 +74,12 @@ namespace WebApplication1.Business.Logic.Excel
                 return;
 
             string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + outputFileName + ".xlsx";
-            _competitionData._workbook.SaveAs(fileoutputname);
+            _competitionData.Workbook.SaveAs(fileoutputname);
         }
 
         protected string GetOutputFilename(JudgeTable judgeTabel)
         {
-            return _competitionData._startListClassStep.Date.ToShortDateString() + @"\" + judgeTabel.JudgeTableName + @"\" + _competitionData._startListClassStep.Name + @"\" + _competitionData._vaulter.Name + ".xlsx";
+            return _competitionData.ListClassStep.Date.ToShortDateString() + @"\" + judgeTabel.JudgeTableName + @"\" + _competitionData.ListClassStep.Name + @"\" + _competitionData.Vaulter1.Name + ".xlsx";
         }
 
         private IXLCell GetNamedCell(IXLWorksheet worksheet, string namedCell)

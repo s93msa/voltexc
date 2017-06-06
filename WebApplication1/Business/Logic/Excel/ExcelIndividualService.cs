@@ -87,12 +87,12 @@ namespace WebApplication1.Business.Logic.Excel
 
         public void CreateExcelforIndividual()
         {
-            if (_competitionData._vaulterClass.ClassNr == 4)
+            if (_competitionData.VaulterClass.ClassNr == 4)
             {
                 CreateExcelForClass4();
 
             }
-            else if (_competitionData._vaulterClass.ClassNr == 5)
+            else if (_competitionData.VaulterClass.ClassNr == 5)
             {
                 CreateExcelForClass5();
             }
@@ -101,38 +101,38 @@ namespace WebApplication1.Business.Logic.Excel
         private void CreateExcelForClass4()
         {
 
-            var worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableA?.Trim());
+            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
 
             SetWorksheetHorse(worksheet);
 
             ShowOnlyWorksheet(worksheet);
-            var fileOutputname = GetOutputFilename(_competitionData._judgeTableA);
+            var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
             SaveExcelFile(fileOutputname);
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableB?.Trim());
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
 
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData._judgeTableB);
+            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableB);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableB);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
             SaveExcelFile(fileOutputname);
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableC?.Trim());
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData._judgeTableC);
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
+            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableC);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableC);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
             SaveExcelFile(fileOutputname);
 
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableD?.Trim());
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData._judgeTableD);
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
+            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableD);
 
             ShowOnlyWorksheet( worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableD);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
             SaveExcelFile(fileOutputname);
         }
 
@@ -147,38 +147,38 @@ namespace WebApplication1.Business.Logic.Excel
 
            //string testNumber = Convert.ToString(step?.TestNumber) + step?.Name;
 
-            var worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableA?.Trim());
+            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
 
             SetWorksheetHorse(worksheet);
 
             ShowOnlyWorksheet( worksheet);
-            var fileOutputname = GetOutputFilename(_competitionData._judgeTableA);
+            var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
             SaveExcelFile(fileOutputname);
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableB?.Trim());
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
 
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData._judgeTableB);
+            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableB);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableB);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
             SaveExcelFile(fileOutputname);
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableC?.Trim());
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData._judgeTableC);
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
+            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableC);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableC);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
             SaveExcelFile(fileOutputname);
 
 
 
-            worksheet = _competitionData._workbook.Worksheets.Worksheet(_competitionData._excelWorksheetNameJudgesTableD?.Trim());
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData._judgeTableD);
+            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
+            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableD);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData._judgeTableD);
+            fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
             SaveExcelFile(fileOutputname);
         }
 
@@ -204,7 +204,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetHorse(IXLWorksheet worksheet)
         {
-            var judgeTable = _competitionData._judgeTableA;
+            var judgeTable = _competitionData.JudgeTableA;
             //const string tableName = "A";
 
             SetFirstInformationGroup(worksheet, 3);
@@ -338,7 +338,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private string GetStartNumberForVaulterString()
         {
-            return _competitionData._startVaulterNumber.ToString();
+            return _competitionData.StartVaulterNumber.ToString();
         }
 
         //private static JudgeTable GetJudge(List<JudgeTable> judgeTables, JudgeTableNames tableName)
