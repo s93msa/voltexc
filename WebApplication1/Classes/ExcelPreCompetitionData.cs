@@ -75,7 +75,8 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
             InputFileName = VaulterClass?.Excelfile;
-            Workbook = new XLWorkbook(InputFileName);
+            var workingdirectory = HttpContext.Current.Server.MapPath("~");
+            Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
         }
         public string GetStepDate()

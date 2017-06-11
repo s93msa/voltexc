@@ -87,102 +87,188 @@ namespace WebApplication1.Business.Logic.Excel
 
         public void CreateExcelforIndividual()
         {
-            if (_competitionData.VaulterClass.ClassNr == 4)
-            {
-                CreateExcelForClass4();
+            CreateExcelFromValuesJudgeA();
+            CreateExcelFromValuesJudgeB();
+            CreateExcelFromValuesJudgeC();
+            CreateExcelFromValuesJudgeD();
+            //if (_competitionData.VaulterClass.ClassNr == 3)
+            //{
+            //    CreateExcelForClass3();
 
-            }
-            else if (_competitionData.VaulterClass.ClassNr == 5)
-            {
-                CreateExcelForClass5();
-            }
+            //}
+            //else if (_competitionData.VaulterClass.ClassNr == 4)
+            //{
+            //    CreateExcelForClass4();
+
+            //}
+            //else if (_competitionData.VaulterClass.ClassNr == 5)
+            //{
+            //    CreateExcelForClass5();
+            //}
         }
 
-        private void CreateExcelForClass4()
+        //private void CreateExcelForClass3()
+        //{
+        //    CreateExcelFromValuesJudgeA(SetWorksheetHorse);
+        //    CreateExcelFromValuesJudgeB(SetWorksheetIndividuellJuniorGrund2);
+        //    CreateExcelFromValuesJudgeC(SetWorksheetIndividuellJuniorGrund2);
+        //    CreateExcelFromValuesJudgeD(SetWorksheetIndividuellJuniorGrund2);
+
+        //    //var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
+
+        //    //SetWorksheetHorse(worksheet);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
+        //    //SaveExcelFile(fileOutputname);
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
+
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableB);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
+        //    //SaveExcelFile(fileOutputname);
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableC);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
+        //    //SaveExcelFile(fileOutputname);
+
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableD);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
+        //    //SaveExcelFile(fileOutputname);
+        //}
+
+        //private void CreateExcelForClass4()
+        //{
+        //    CreateExcelFromValuesJudgeA(SetWorksheetHorse);
+        //    CreateExcelFromValuesJudgeB(SetWorksheetIndividuellJuniorGrund2);
+        //    CreateExcelFromValuesJudgeC(SetWorksheetIndividuellJuniorGrund2);
+        //    CreateExcelFromValuesJudgeD(SetWorksheetIndividuellJuniorGrund2);
+
+        //    //var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
+
+        //    //SetWorksheetHorse(worksheet);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
+        //    //SaveExcelFile(fileOutputname);
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
+
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableB);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
+        //    //SaveExcelFile(fileOutputname);
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableC);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
+        //    //SaveExcelFile(fileOutputname);
+
+
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
+        //    //SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableD);
+
+        //    //ShowOnlyWorksheet( worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
+        //    //SaveExcelFile(fileOutputname);
+        //}
+
+        ////Individuella miniorer
+        //private  void CreateExcelForClass5()
+        //{
+
+        //    //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
+        //    //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
+        //    //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
+        //    //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
+
+        //   //string testNumber = Convert.ToString(step?.TestNumber) + step?.Name;
+
+        //    //var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableA?.Trim();
+        //    // var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
+        //    //   SetWorksheetHorse(worksheet);
+        //    //CreateExcelFromValues(SetWorksheetHorse, excelWorksheetNameJudgesTable, _competitionData.JudgeTableA);
+
+        //    //ShowOnlyWorksheet( worksheet);
+        //    //var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
+        //    //SaveExcelFile(fileOutputname);
+        //    CreateExcelFromValuesJudgeA();
+        //    CreateExcelFromValuesJudgeB();
+        //    CreateExcelFromValuesJudgeC();
+        //    CreateExcelFromValuesJudgeD();
+
+        //    //excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableC?.Trim();
+        //    //CreateExcelFromValues(SetWorksheetIndividuellMiniorGrund1, excelWorksheetNameJudgesTable, _competitionData.JudgeTableC);
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
+        //    //SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableC);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
+        //    //SaveExcelFile(fileOutputname);
+
+        //    //excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableD?.Trim();
+        //    //CreateExcelFromValues(SetWorksheetIndividuellMiniorGrund1, excelWorksheetNameJudgesTable, _competitionData.JudgeTableD);
+
+        //    //worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
+        //    //SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableD);
+
+        //    //ShowOnlyWorksheet(worksheet);
+        //    //fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
+        //    //SaveExcelFile(fileOutputname);
+        //}
+
+        private void CreateExcelFromValuesJudgeA()
         {
-
-            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
-
-            SetWorksheetHorse(worksheet);
-
-            ShowOnlyWorksheet(worksheet);
-            var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
-            SaveExcelFile(fileOutputname);
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
-
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableB);
-
-            ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
-            SaveExcelFile(fileOutputname);
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableC);
-
-            ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
-            SaveExcelFile(fileOutputname);
-
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
-            SetWorksheetIndividuellJuniorGrund2(worksheet, _competitionData.JudgeTableD);
-
-            ShowOnlyWorksheet( worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
-            SaveExcelFile(fileOutputname);
+            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableA?.Trim();
+            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableA);
         }
-
-        //Individuella miniorer
-        private  void CreateExcelForClass5()
+        private void CreateExcelFromValuesJudgeB()
         {
+            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableB?.Trim();
+            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableB);
+        }
+        private void CreateExcelFromValuesJudgeC()
+        {
+            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableC?.Trim();
+            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableC);
+        }
 
-            //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-            //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-            //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-            //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
+        private void CreateExcelFromValuesJudgeD()
+        {
+            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableD?.Trim();
+            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableD);
+        }
 
-           //string testNumber = Convert.ToString(step?.TestNumber) + step?.Name;
+        private void CreateExcelFromValues(string excelWorksheetNameJudgesTable, JudgeTable judgeTable)
+        {
+            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
 
-            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim());
-
-            SetWorksheetHorse(worksheet);
-
-            ShowOnlyWorksheet( worksheet);
-            var fileOutputname = GetOutputFilename(_competitionData.JudgeTableA);
-            SaveExcelFile(fileOutputname);
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim());
-
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableB);
-
-            ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableB);
-            SaveExcelFile(fileOutputname);
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim());
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableC);
+            SetWorksheetIndividuell(worksheet, judgeTable);
 
             ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableC);
-            SaveExcelFile(fileOutputname);
-
-
-
-            worksheet = _competitionData.Workbook.Worksheets.Worksheet(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim());
-            SetWorksheetIndividuellMiniorGrund1(worksheet, _competitionData.JudgeTableD);
-
-            ShowOnlyWorksheet(worksheet);
-            fileOutputname = GetOutputFilename(_competitionData.JudgeTableD);
+            var fileOutputname = GetOutputFilename(judgeTable);
             SaveExcelFile(fileOutputname);
         }
 
-       
 
         //private void ShowOnlyWorksheet( IXLWorksheet worksheet)
         //{
@@ -202,17 +288,71 @@ namespace WebApplication1.Business.Logic.Excel
         //    }
         //}
 
-        private void SetWorksheetHorse(IXLWorksheet worksheet)
-        {
-            var judgeTable = _competitionData.JudgeTableA;
-            //const string tableName = "A";
+            
 
+        private void SetWorksheetIndividuell(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+            switch (worksheet.Name)
+
+            {
+                case "Häst, individuell":
+                    SetWorksheetHorse(worksheet, judgeTable);
+                    break;
+                case "Individuell minior grund 1":
+                    SetWorksheetIndividuellMiniorGrund1(worksheet,judgeTable);
+                    break;
+                case "Individuell junior grund 2":
+                    SetWorksheetIndividuellJuniorGrund2(worksheet, judgeTable);                    
+                    break;
+                case "Individuell senior grund 3":
+                    SetWorksheetIndividuellSeniorGrund3(worksheet, judgeTable);
+                    break;
+                case "Ind kür tekn 1":
+                    SetWorksheetIndkürtekn1(worksheet, judgeTable);
+                    break;
+                case "Ind kür tekn 2 3":
+                    SetWorksheetIndkürtekn2_3(worksheet, judgeTable);
+                    break;
+                case "Individuell kür artistisk":
+                    SetWorksheetIndKurArtistisk(worksheet, judgeTable);
+                    break;
+                case "Individuell tekniska övningar":
+                    SetWorksheetIndTekniskaOvningar(worksheet, judgeTable);
+                    break;
+                case "Individuellt tekniskt artistisk":
+                    SetWorksheetIndTekniskArtistisk(worksheet, judgeTable);
+                    break;
+                default:
+                    SetWorksheetIndividuellDefault(worksheet, judgeTable);
+                    break;
+            }
+
+
+        }
+
+        private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 2);
+
+            SetJudgeName(worksheet, 32, judgeTable);
+
+
+        }
+
+        //private void SetWorksheetHorse(IXLWorksheet worksheet)
+        //{
+        //    var judgeTable = _competitionData.JudgeTableA;
+        //    SetWorksheetHorse(worksheet, judgeTable);
+        //}
+        private void SetWorksheetHorse(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
             SetFirstInformationGroup(worksheet, 3);
 
             SetVaulterInformation(worksheet, judgeTable, 1);
      
-            SetJudgeName(worksheet, 29, judgeTable);
-            
+            SetJudgeName(worksheet, 29, judgeTable);   
         }
 
         
@@ -236,7 +376,26 @@ namespace WebApplication1.Business.Logic.Excel
 
         }
 
+        private void SetWorksheetIndividuellSeniorGrund3(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
 
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 2);
+
+            SetJudgeName(worksheet, 32, judgeTable);
+
+
+        }
+
+        private void SetWorksheetIndkürtekn1(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+
+
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 2);
+
+            SetJudgeName(worksheet, 37, judgeTable);
+        }
 
         private void SetWorksheetIndkürtekn2_3(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
@@ -246,6 +405,34 @@ namespace WebApplication1.Business.Logic.Excel
             SetVaulterInformation(worksheet, judgeTable, 2);
 
             SetJudgeName(worksheet, 37, judgeTable);
+        }
+        private void SetWorksheetIndKurArtistisk(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+
+
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 2);
+
+            SetJudgeName(worksheet, 27, judgeTable);
+        }
+        private void SetWorksheetIndTekniskaOvningar(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+
+
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 2);
+
+            SetJudgeName(worksheet, 34, judgeTable);
+        }
+
+        private void SetWorksheetIndTekniskArtistisk(IXLWorksheet worksheet, JudgeTable judgeTable)
+        {
+
+
+            SetFirstInformationGroup(worksheet, 4);
+            SetVaulterInformation(worksheet, judgeTable, 3);
+
+            SetJudgeName(worksheet, 28, judgeTable);
         }
 
 
