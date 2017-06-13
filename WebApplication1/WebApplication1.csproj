@@ -210,6 +210,7 @@
     <Compile Include="Business\Logic\Contest\ContestService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelBaseService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelIndividualService.cs" />
+    <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
@@ -269,6 +270,10 @@
     <Compile Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.cs" />
     <Compile Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.Designer.cs">
       <DependentUpon>201706061028088_RemoveIsAcvtiveFromVaulter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706122045133_AddTeamTestnumber.cs" />
+    <Compile Include="Migrations\201706122045133_AddTeamTestnumber.Designer.cs">
+      <DependentUpon>201706122045133_AddTeamTestnumber.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
@@ -389,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706061028088_RemoveIsAcvtiveFromVaulter.resx">
       <DependentUpon>201706061028088_RemoveIsAcvtiveFromVaulter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706122045133_AddTeamTestnumber.resx">
+      <DependentUpon>201706122045133_AddTeamTestnumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

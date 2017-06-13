@@ -19,6 +19,8 @@ namespace WebApplication1.Models
 
         public virtual Team VaultingTeam { get; set; }
 
+        public int TeamTestnumber { get; set; }
+
         public virtual List<VaulterOrder> Vaulters { get; set; }
         //public virtual Vaulter Participant { get; set; }
         

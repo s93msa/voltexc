@@ -79,7 +79,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected string GetOutputFilename(JudgeTable judgeTabel)
         {
-            return _competitionData.ListClassStep.Date.ToShortDateString() + @"\" + judgeTabel.JudgeTableName + @"\" + _competitionData.ListClassStep.Name + @"\" + _competitionData.Vaulter1.Name + ".xlsx";
+            return _competitionData.ListClassStep.Date.ToShortDateString() + @"\" + judgeTabel.JudgeTableName + @"\" + _competitionData.ListClassStep.Name + @"\" + _competitionData.GetName() + ".xlsx";
         }
 
         private IXLCell GetNamedCell(IXLWorksheet worksheet, string namedCell)

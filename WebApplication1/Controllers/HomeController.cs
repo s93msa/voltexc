@@ -86,8 +86,15 @@ namespace WebApplication1.Controllers
                 foreach (var horseOrder in startlistOrderByHorseOrder)
                 {
                     startListNumber++;
+                    if (horseOrder.IsTeam)
+                    {
+                    var teamInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
+                            startListNumber, horseOrder.VaultingTeam);
+                    var excelTeamService = new ExcelTeamService(teamInformation);
+                    excelTeamService.CreateExcelforIndividual();
+                    }
 
-                    if (horseOrder.Vaulters != null)
+                    else if (1==2 && horseOrder.Vaulters != null)
                     {
                         var vaultersSorted = horseOrder.GetActiveVaulters().OrderBy(x => x.StartOrder);
                         

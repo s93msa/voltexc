@@ -53,11 +53,41 @@ d }) |
             </td><td></td><td></td><td></td><td></td>
         </tr>
         foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
-                {
-                    foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
-                    {
+        {
+            if (startListItem.IsTeam)
+            {
+                startnumber++;
 
-                        startnumber++;
+                <tr>
+                    <td>
+                        @startnumber.ToString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.Name)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
+
+                    </td>
+                </tr>
+
+            }
+            else
+            {
+                foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
+                {
+
+                    startnumber++;
 
                 <tr>
                     <td>
@@ -81,9 +111,11 @@ d }) |
 
                     </td>
                 </tr>
-                    }
                 }
+            }
+
+        }
 
     @*}*@
-}
+    }
 </table>

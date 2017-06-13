@@ -15,8 +15,13 @@ namespace WebApplication1.Classes
 
         public Vaulter Vaulter1 { get; }
         public string VaulterName { get; }
-        public string Country { get; }
         public string ArmNumber { get; }
+
+        public Team Team1 { get; }
+        public string TeamName { get; }
+
+        public string Country { get; }
+       
         public int StartVaulterNumber { get; }
         public CompetitionClass VaulterClass { get; }
         public int TestNumber { get; }
@@ -78,6 +83,50 @@ namespace WebApplication1.Classes
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
+        }
+
+        public ExcelPreCompetitionData(Models.Contest contest, StartListClassStep startListClassStep,
+             HorseOrder horseOrder, int startVaulterNumber, Team team)
+        {
+            var contest1 = contest;
+            EventLocation = contest1?.Location;
+
+            ListClassStep = startListClassStep;
+            StartVaulterNumber = startVaulterNumber;
+           // Vaulter1 = vaulterOrder.Participant;
+            TeamName = team?.Name;
+            Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
+            //ArmNumber = Vaulter1?.Armband;
+            VaulterClass = team?.VaultingClass;
+
+            TestNumber = horseOrder.TeamTestnumber;
+            Step1 = GetCompetitionStep(VaulterClass, TestNumber);
+            MomentName = Convert.ToString(Step1?.TestNumber) + ": " + Step1?.Name;
+            ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
+            ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
+            ExcelWorksheetNameJudgesTableC = Step1?.ExcelWorksheetNameJudgesTableC;
+            ExcelWorksheetNameJudgesTableD = Step1?.ExcelWorksheetNameJudgesTableD;
+            VaultingClubName = team?.VaultingClub?.ClubName.Trim();
+            Horse1 = horseOrder.HorseInformation;
+            HorseName = Horse1?.HorseName?.Trim();
+            LungerName = Horse1?.Lunger?.LungerName?.Trim();
+            JudgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
+            JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
+            JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
+            JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
+            //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
+            //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
+            //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
+            //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
+            InputFileName = VaulterClass?.Excelfile;
+            var workingdirectory = HttpContext.Current.Server.MapPath("~");
+            Workbook = new XLWorkbook(workingdirectory + InputFileName);
+            //var vaulter = horseOrder.Participant;
+        }
+
+        public string GetName()
+        {
+            return TeamName ?? VaulterName;
         }
         public string GetStepDate()
         {
