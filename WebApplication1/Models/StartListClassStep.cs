@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WebApplication1.Controllers;
 
 namespace WebApplication1.Models
@@ -17,12 +18,9 @@ namespace WebApplication1.Models
 
         public string GetJudgeName(JudgeTableNames judgeTableName)
         {
-            var judgeTableNumber = ((int) judgeTableName)-1;
-
-            if (JudgeTables.Count > judgeTableNumber)
-                return JudgeTables[judgeTableNumber].JudgeName;
-
-            return string.Empty;
+            var selectedJudgeTable =  JudgeTables?.FirstOrDefault(judgeTable => judgeTable.JudgeTableName == judgeTableName);
+            
+            return selectedJudgeTable?.JudgeName;            
         }
         //public bool IsTeam { get; set; }
 

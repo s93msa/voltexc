@@ -39,7 +39,7 @@ namespace WebApplication1.Business.Logic.Excel
         {
             SetValueInWorksheet(worksheet, startRow, "c", _competitionData.GetStepDate());
             SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData.EventLocation);
-            SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData.VaulterName);
+            SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData.VaulterName??_competitionData.Team1?.Name);
             SetValueInWorksheet(worksheet, startRow + 3, "c", _competitionData.VaultingClubName);
             SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData.Country);
             SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData.HorseName);
