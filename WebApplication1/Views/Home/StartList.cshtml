@@ -23,15 +23,10 @@
             <th>
                 @Html.DisplayFor(modelItem => startListClassStep.Date)
             </th>
-            <th>
+            <th colspan="4">
                 @Html.DisplayFor(modelItem => startListClassStep.Name) <BR />
                 </th>
-            <th>
-            </th>
-            <th>
-            </th>
-            <th>
-            </th>
+           
             <th>
 
 
@@ -45,12 +40,12 @@ d }) |
         <tr>
             <td>
             </td>
-            <td>
-                Domare A: @startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B)<br />
+            <td colspan="4">
+                Domare A: @startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B) 
                 C: @startListClassStep.GetJudgeName(JudgeTableNames.C) D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
 
 
-            </td><td></td><td></td><td></td><td></td>
+            </td><td></td>
         </tr>
         foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
         {

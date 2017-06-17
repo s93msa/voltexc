@@ -41,8 +41,51 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        
+        public ActionResult ResultVaulterList()
+        {
+            var rows = new List<string[]>();   
 
+            var contest = ContestService.GetInstance();
+            foreach (var startListClassStep in contest.StartListClassStep.OrderBy(x => x.StartOrder))
+            {
+                foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
+                {
+                    var horseName = startListItem.HorseInformation.HorseName;
+                    var lungerName = startListItem.HorseInformation.Lunger.LungerName;
 
+                    if (startListItem.IsTeam)
+                    {
+                        if (startListItem.TeamTestnumber > 1) continue;
+                        var vaultingClass =  startListItem.VaultingTeam.VaultingClass?.ClassNr.ToString();
+                        var teamName = startListItem.VaultingTeam.Name;
+                        var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
+                        var teamId = startListItem.VaultingTeam.VaultingClass?.CompetitionClassId + "_" +
+                                     startListItem.VaultingTeam.TeamId;
+                        var row = new string[] { vaultingClass, teamName, lungerName, clubName, horseName, teamId };
+                        rows.Add(row);
+                    }
+                    else
+                    {
+                        foreach (var participant in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
+                        {
+                            if(participant.Testnumber > 1) continue;
+
+                            var vaultingClass = participant.Participant.VaultingClass?.ClassNr.ToString();
+                            var vaulterName = participant.Participant.Name;
+                            var clubName = participant.Participant.VaultingClub?.ClubName;
+                            var vaulterId = "id_" + participant.Participant.VaultingClass?.CompetitionClassId + "_" + participant.Participant.VaulterId;
+                            var row = new string[] { vaultingClass, vaulterName, lungerName, clubName, horseName, vaulterId };
+                            
+                            rows.Add(row);
+                        }
+                    }
+                }
+                
+            }
+           
+            return View(rows);
+        }
 
         public ActionResult StartList()
         {

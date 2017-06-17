@@ -1,0 +1,65 @@
+﻿@using WebApplication1.Models
+@model List<string[]>
+
+@{
+    ViewBag.Title = "View";
+}
+
+
+
+
+<table class="table">
+
+    <tr>
+        <th>
+            Klass
+        </th>
+        <th>
+            Voltigör/Lag
+        </th>
+        <th>
+            Linförare
+        </th>
+        <th>
+           Klubb
+        </th>
+        <th>
+            Häst
+        </th>
+        <th>
+            Id
+        </th>
+
+    </tr>
+    
+    @{int startnumber;}
+    @foreach (var ListofTeamsVaulters in Model)
+    {
+        startnumber = 0;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[0])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[1])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[2])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[3])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[4])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ListofTeamsVaulters[5])
+            </td>
+        </tr>
+
+
+        
+
+       
+    }
+</table>
