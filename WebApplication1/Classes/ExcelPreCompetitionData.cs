@@ -67,7 +67,7 @@ namespace WebApplication1.Classes
 
             TestNumber = vaulterOrder.Testnumber;
             Step1 = GetCompetitionStep(VaultingClass, TestNumber);
-            MomentName = Step1?.Name + " " + Convert.ToString(Step1?.TestNumber);
+            MomentName = Step1?.Name;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
             ExcelWorksheetNameJudgesTableC = Step1?.ExcelWorksheetNameJudgesTableC;
@@ -108,7 +108,7 @@ namespace WebApplication1.Classes
             
             TestNumber = horseOrder.TeamTestnumber;
             Step1 = GetCompetitionStep(VaultingClass, TestNumber);
-            MomentName = Convert.ToString(Step1?.TestNumber) + ": " + Step1?.Name;
+            MomentName = Step1?.Name;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
             ExcelWorksheetNameJudgesTableC = Step1?.ExcelWorksheetNameJudgesTableC;

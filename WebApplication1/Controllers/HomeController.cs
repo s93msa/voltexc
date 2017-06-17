@@ -138,7 +138,8 @@ namespace WebApplication1.Controllers
             var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
             foreach (var startListClassStep in startListClassStepOrdered)
             {
-                SaveInExcel(contest, startListClassStep);
+                //if (startListClassStep.Date < new DateTime(2017,8,8,12,0,0))
+                    SaveInExcel(contest, startListClassStep);
             }
                 
             return View();
@@ -173,7 +174,7 @@ namespace WebApplication1.Controllers
                     excelTeamService.CreateExcelforIndividual();
                     }
 
-                    else if (1==2 && horseOrder.Vaulters != null)
+                    else if (1 == 2 && horseOrder.Vaulters != null)
                     {
                         var vaultersSorted = horseOrder.GetActiveVaulters().OrderBy(x => x.StartOrder);
                         

@@ -61,7 +61,7 @@ namespace WebApplication1.Business.Logic.Excel
             string tableName = GetJudgeTableName(judgeTable);
             SetValueInWorksheet(worksheet, startRow, "l", startNumber);
             SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
-            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr + " (" + _competitionData.VaultingClass.ClassName + ")");
+            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr.ToString());
             SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
             SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
         }
@@ -73,13 +73,21 @@ namespace WebApplication1.Business.Logic.Excel
             if (outputFileName == null)
                 return;
 
-            string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + outputFileName + ".xlsx";
+            string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + outputFileName;
             _competitionData.Workbook.SaveAs(fileoutputname);
         }
 
         protected string GetOutputFilename(JudgeTable judgeTabel)
         {
-            return _competitionData.ListClassStep.Date.ToShortDateString() + @"\" + judgeTabel.JudgeTableName + @"\" + _competitionData.ListClassStep.Name + @"\" + _competitionData.GetName() + ".xlsx";
+            var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
+            fileName = fileName + '_' + judgeTabel.JudgeTableName+
+            "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName;
+
+            var path = _competitionData.ListClassStep.Date.ToShortDateString() +
+                       @"\" + judgeTabel.JudgeTableName + @"\" +
+                       _competitionData.ListClassStep.Name.Replace("–", "") + @"\";
+
+            return path + fileName + ".xlsx";
         }
 
         private IXLCell GetNamedCell(IXLWorksheet worksheet, string namedCell)
