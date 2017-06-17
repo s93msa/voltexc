@@ -115,6 +115,7 @@ namespace WebApplication1.Business.Logic.Excel
         {
             var startNumber = GetStartNumberForVaulterString();
             SetInformationGroup2(worksheet, judgeTable, startRow, startNumber);
+            SetMemberNames(worksheet, judgeTable, startRow + 5);
         }
 
         private string GetStartNumberForVaulterString()
@@ -122,5 +123,16 @@ namespace WebApplication1.Business.Logic.Excel
             return _competitionData.StartVaulterNumber.ToString();
         }
 
+        protected void SetMemberNames(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
+        {
+            //string tableName = GetJudgeTableName(judgeTable);
+            foreach (var vaulter in _competitionData.getTeamVaultersSorted())
+            {
+                SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);
+                startRow++;
+            }
+           
+            
+        }
     }
 }

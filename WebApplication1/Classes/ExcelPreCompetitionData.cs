@@ -17,7 +17,7 @@ namespace WebApplication1.Classes
         public string VaulterName { get; }
         public string ArmNumber { get; }
 
-        public Team Team1 { get; }
+        
         public string TeamName { get; }
 
         public string Country { get; }
@@ -46,6 +46,8 @@ namespace WebApplication1.Classes
         public string InputFileName { get; }
         public XLWorkbook Workbook { get; }
 
+        private SortedList<int, Vaulter> _vaultersList = null;
+        private Team _team = null;
         public ExcelPreCompetitionData(Models.Contest contest, StartListClassStep startListClassStep,
              HorseOrder horseOrder, int startVaulterNumber, VaulterOrder vaulterOrder)
         {
@@ -94,11 +96,12 @@ namespace WebApplication1.Classes
             ListClassStep = startListClassStep;
             StartVaulterNumber = startVaulterNumber;
            // Vaulter1 = vaulterOrder.Participant;
+            _team = team;
             TeamName = team?.Name;
             Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             //ArmNumber = Vaulter1?.Armband;
             VaulterClass = team?.VaultingClass;
-
+            
             TestNumber = horseOrder.TeamTestnumber;
             Step1 = GetCompetitionStep(VaulterClass, TestNumber);
             MomentName = Convert.ToString(Step1?.TestNumber) + ": " + Step1?.Name;
@@ -122,6 +125,21 @@ namespace WebApplication1.Classes
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
+        }
+
+        public SortedList<int, Vaulter> getTeamVaultersSorted()
+        {
+            if (_vaultersList != null)
+                return _vaultersList;
+
+            _vaultersList = new SortedList<int, Vaulter>();
+
+            foreach (var vaulter in _team.VaultersList)
+            {
+                _vaultersList.Add(vaulter.StartNumber, vaulter.Participant);
+            }
+
+            return _vaultersList;
         }
 
         public string GetName()
