@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ClosedXML.Excel;
+using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
 
@@ -27,7 +28,10 @@ namespace WebApplication1.Business.Logic.Excel
         }
 
 
-        private void CreateExcelFromValuesJudgeA()
+
+    
+
+    private void CreateExcelFromValuesJudgeA()
         {
             var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableA?.Trim();
             CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableA);
@@ -62,6 +66,8 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetTeam(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
+            SetIdInSheet(worksheet);
+           
             switch (worksheet.Name)
 
             {
@@ -100,6 +106,12 @@ namespace WebApplication1.Business.Logic.Excel
 
         }
 
+        private void SetIdInSheet(IXLWorksheet worksheet)
+        {
+            string idString = ContestService.GetTeamAndClassId(_competitionData.Team1);
+            SetValueInWorksheet(worksheet, 1, "u", idString);
+        }
+
         private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
@@ -134,5 +146,7 @@ namespace WebApplication1.Business.Logic.Excel
            
             
         }
+
+
     }
 }

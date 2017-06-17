@@ -50,6 +50,18 @@ namespace WebApplication1.Business.Logic.Contest
         {
             return GetAllDataFromDataBase();
         }
+
+        
+        public static string GetVaulterAndClassId(Vaulter participant)
+        {
+            return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId;
+        }
+
+        public static string GetTeamAndClassId(Team team)
+        {
+            return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
+                   team.TeamId;
+        }
     }
 }
 
