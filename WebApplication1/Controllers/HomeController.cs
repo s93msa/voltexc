@@ -41,7 +41,41 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        
+        public ActionResult CompetitionClasses()
+        {
+
+            var rows = new List<string[]>();
+
+            using (var db = new VaultingContext())
+            {
+                var competitionClasses = db.CompetitionClasses;
+
+
+
+                foreach (var competitionClass in competitionClasses.ToList())
+                {
+                    var classNumber = competitionClass.ClassNr.ToString();
+                    var className = competitionClass.ClassName;
+                    var numberOfJudges = "4";
+                    var steps = new string[4];
+                    var momentText = new string[4];
+                    foreach (var step in competitionClass.Steps)
+                    {
+                        if(step.TestNumber < 1) continue;
+                        
+                        steps[step.TestNumber-1] = step.Name;
+                        momentText[step.TestNumber-1] = step.ResultMomentText;
+                    }
+
+                    var row = new string[] { classNumber, className, numberOfJudges, steps[0], steps[1], steps[2], steps[3], momentText[0], momentText[1], momentText[2], momentText[3]};
+                    rows.Add(row);
+                }
+
+               }
+
+            return View(rows);
+        }
+
         public ActionResult ResultVaulterList()
         {
             var rows = new List<string[]>();   
@@ -60,8 +94,7 @@ namespace WebApplication1.Controllers
                         var vaultingClass =  startListItem.VaultingTeam.VaultingClass?.ClassNr.ToString();
                         var teamName = startListItem.VaultingTeam.Name;
                         var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
-                        var teamId = startListItem.VaultingTeam.VaultingClass?.CompetitionClassId + "_" +
-                                     startListItem.VaultingTeam.TeamId;
+                        var teamId = ContestService.GetTeamAndClassId(startListItem.VaultingTeam);
                         var row = new string[] { vaultingClass, teamName, lungerName, clubName, horseName, teamId };
                         rows.Add(row);
                     }
@@ -69,14 +102,14 @@ namespace WebApplication1.Controllers
                     {
                         foreach (var participant in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
                         {
-                            if(participant.Testnumber > 1) continue;
+                            if (participant.Testnumber > 1) continue;
 
                             var vaultingClass = participant.Participant.VaultingClass?.ClassNr.ToString();
                             var vaulterName = participant.Participant.Name;
                             var clubName = participant.Participant.VaultingClub?.ClubName;
-                            var vaulterId = "id_" + participant.Participant.VaultingClass?.CompetitionClassId + "_" + participant.Participant.VaulterId;
+                            string vaulterId = ContestService.GetVaulterAndClassId(participant.Participant);
                             var row = new string[] { vaultingClass, vaulterName, lungerName, clubName, horseName, vaulterId };
-                            
+
                             rows.Add(row);
                         }
                     }
@@ -86,6 +119,9 @@ namespace WebApplication1.Controllers
            
             return View(rows);
         }
+
+        
+
 
         public ActionResult StartList()
         {

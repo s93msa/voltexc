@@ -61,7 +61,7 @@ namespace WebApplication1.Business.Logic.Excel
             string tableName = GetJudgeTableName(judgeTable);
             SetValueInWorksheet(worksheet, startRow, "l", startNumber);
             SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
-            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaulterClass.ClassNr + " (" + _competitionData.VaulterClass.ClassName + ")");
+            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr + " (" + _competitionData.VaultingClass.ClassName + ")");
             SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
             SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
         }

@@ -15,5 +15,8 @@ namespace WebApplication1.Models
         public string ExcelWorksheetNameJudgesTableC { get; set; }
         public string ExcelWorksheetNameJudgesTableD { get; set; }
 
+        public string ResultMomentText { get; set; }
+
+
     }
 }

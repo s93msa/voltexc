@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ClosedXML.Excel;
+using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
 
@@ -26,6 +27,11 @@ namespace WebApplication1.Business.Logic.Excel
             CreateExcelFromValuesJudgeD();
         }
 
+        private void SetIdInSheet(IXLWorksheet worksheet)
+        {
+            string idString = ContestService.GetVaulterAndClassId(_competitionData.Vaulter1);
+            SetValueInWorksheet(worksheet, 1, "u", idString);
+        }
 
         private void CreateExcelFromValuesJudgeA()
         {
@@ -65,6 +71,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetIndividuell(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
+            SetIdInSheet(worksheet);
             switch (worksheet.Name)
 
             {

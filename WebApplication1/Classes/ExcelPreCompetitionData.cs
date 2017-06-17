@@ -20,10 +20,13 @@ namespace WebApplication1.Classes
         
         public string TeamName { get; }
 
+        public Team  Team1{ get; }
+
+
         public string Country { get; }
        
         public int StartVaulterNumber { get; }
-        public CompetitionClass VaulterClass { get; }
+        public CompetitionClass VaultingClass { get; }
         public int TestNumber { get; }
         public Step Step1 { get; }
         public string ExcelWorksheetNameJudgesTableA { get; }
@@ -60,10 +63,10 @@ namespace WebApplication1.Classes
             VaulterName = Vaulter1?.Name;
             Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             ArmNumber = Vaulter1?.Armband;
-            VaulterClass = Vaulter1?.VaultingClass;
+            VaultingClass = Vaulter1?.VaultingClass;
 
             TestNumber = vaulterOrder.Testnumber;
-            Step1 = GetCompetitionStep(VaulterClass, TestNumber);
+            Step1 = GetCompetitionStep(VaultingClass, TestNumber);
             MomentName = Step1?.Name + " " + Convert.ToString(Step1?.TestNumber);
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
@@ -81,7 +84,7 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = VaulterClass?.Excelfile;
+            InputFileName = VaultingClass?.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
@@ -98,12 +101,13 @@ namespace WebApplication1.Classes
            // Vaulter1 = vaulterOrder.Participant;
             _team = team;
             TeamName = team?.Name;
+            Team1 = team;
             Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             //ArmNumber = Vaulter1?.Armband;
-            VaulterClass = team?.VaultingClass;
+            VaultingClass = team?.VaultingClass;
             
             TestNumber = horseOrder.TeamTestnumber;
-            Step1 = GetCompetitionStep(VaulterClass, TestNumber);
+            Step1 = GetCompetitionStep(VaultingClass, TestNumber);
             MomentName = Convert.ToString(Step1?.TestNumber) + ": " + Step1?.Name;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
@@ -121,7 +125,7 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = VaulterClass?.Excelfile;
+            InputFileName = VaultingClass?.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;

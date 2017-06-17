@@ -275,6 +275,10 @@
     <Compile Include="Migrations\201706122045133_AddTeamTestnumber.Designer.cs">
       <DependentUpon>201706122045133_AddTeamTestnumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706171111347_addResultMomentText.cs" />
+    <Compile Include="Migrations\201706171111347_addResultMomentText.Designer.cs">
+      <DependentUpon>201706171111347_addResultMomentText.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -341,6 +345,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\StartList.cshtml" />
     <Content Include="Views\Home\ResultVaulterList.cshtml" />
+    <Content Include="Views\Home\CompetitionClasses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -398,6 +403,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706122045133_AddTeamTestnumber.resx">
       <DependentUpon>201706122045133_AddTeamTestnumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706171111347_addResultMomentText.resx">
+      <DependentUpon>201706171111347_addResultMomentText.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
