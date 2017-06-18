@@ -78,7 +78,8 @@ namespace WebApplication1.Business.Logic.Excel
             secondcell.Value = tableName;
             secondcell.CellBelow(1).Value = _competitionData.VaultingClass.ClassNr.ToString();
             secondcell.CellBelow(2).Value = _competitionData.MomentName;
-            secondcell.CellBelow(3).Value = _competitionData.ArmNumber;
+            SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber);
+            //secondcell.CellBelow(3).Value = _competitionData.ArmNumber;
             //SetValueInWorksheet(worksheet, startRow, "l", startNumber);
 
             ////           SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
@@ -114,6 +115,8 @@ namespace WebApplication1.Business.Logic.Excel
         protected IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
         {
             var linkTocell = worksheet.NamedRange(cellName);
+            if (linkTocell == null)
+                return null;
 
             //var g = GetNamedCell(worksheet, cellName);
             var currentCell = worksheet.Cell(linkTocell.RefersTo.Split('!')[1]);
@@ -139,6 +142,9 @@ namespace WebApplication1.Business.Logic.Excel
             
             //var g = GetNamedCell(worksheet, cellName);
             var currentCell = GetNamedCell(worksheet, cellName);
+            if (currentCell == null)
+                return;
+
             currentCell.Value = value;
 
             //          worksheet.Workbook.Range(cellName).Cells();
