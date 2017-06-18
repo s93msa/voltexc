@@ -137,11 +137,15 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SetMemberNames(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
         {
+            var firstcell = GetNamedCell(worksheet, "firstvaulter");
             //string tableName = GetJudgeTableName(judgeTable);
+            int offset = 0;
             foreach (var vaulter in _competitionData.getTeamVaultersSorted())
             {
-                SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);
-                startRow++;
+                firstcell.CellBelow(offset).Value = vaulter.Value?.Name;
+                //SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);
+                //startRow++;
+                offset++;
             }
            
             

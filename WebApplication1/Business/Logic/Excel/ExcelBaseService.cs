@@ -37,13 +37,24 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
         {
-            SetValueInWorksheet(worksheet, startRow, "c", _competitionData.GetStepDate());
-            SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData.EventLocation);
-            SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData.VaulterName??_competitionData.TeamName);
-            SetValueInWorksheet(worksheet, startRow + 3, "c", _competitionData.VaultingClubName);
-            SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData.Country);
-            SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData.HorseName);
-            SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData.LungerName);
+            var firstcell = GetNamedCell(worksheet, "datum");
+            
+            //var range = worksheet.Range("datum") ;
+            //var firstcell = range.FirstCell();
+            firstcell.Value = _competitionData.GetStepDate();
+            firstcell.CellBelow(1).Value = _competitionData.EventLocation;
+            firstcell.CellBelow(2).Value = _competitionData.GetName();
+            firstcell.CellBelow(3).Value = _competitionData.VaultingClubName;
+            firstcell.CellBelow(4).Value = _competitionData.Country;
+            firstcell.CellBelow(5).Value = _competitionData.HorseName;
+            firstcell.CellBelow(6).Value = _competitionData.LungerName;
+            //SetValueInWorksheet(worksheet, startRow, "c", _competitionData.GetStepDate());
+            //SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData.EventLocation);
+            //SetValueInWorksheet(worksheet, startRow + 2, "c", _competitionData.VaulterName??_competitionData.TeamName);
+            //SetValueInWorksheet(worksheet, startRow + 3, "c", _competitionData.VaultingClubName);
+            //SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData.Country);
+            //SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData.HorseName);
+            //SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData.LungerName);
         }
 
         //private void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
@@ -53,18 +64,27 @@ namespace WebApplication1.Business.Logic.Excel
         //}
         protected void SetJudgeName(IXLWorksheet worksheet, int row, JudgeTable judgeTable)
         {
-            SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
+            SetValueInWorksheet(worksheet,"domare", GetJudgeName(judgeTable));
+            //SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
         }
 
         protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow, string startNumber)
         {
             string tableName = GetJudgeTableName(judgeTable);
-            SetValueInWorksheet(worksheet, startRow, "l", startNumber);
-            SetValueInWorksheet(worksheet,"bord", tableName);
- //           SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
-            SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr.ToString());
-            SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
-            SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
+
+            var secondcell = GetNamedCell(worksheet, "bord");
+
+            secondcell.CellAbove(1).Value = startNumber;
+            secondcell.Value = tableName;
+            secondcell.CellBelow(1).Value = _competitionData.VaultingClass.ClassNr.ToString();
+            secondcell.CellBelow(2).Value = _competitionData.MomentName;
+            secondcell.CellBelow(3).Value = _competitionData.ArmNumber;
+            //SetValueInWorksheet(worksheet, startRow, "l", startNumber);
+
+            ////           SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
+            //SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr.ToString());
+            //SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
+            //SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
         }
 
         
@@ -91,15 +111,21 @@ namespace WebApplication1.Business.Logic.Excel
             return path + fileName + ".xlsx";
         }
 
-        private IXLCell GetNamedCell(IXLWorksheet worksheet, string namedCell)
+        protected IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
         {
-            IXLNamedRange xlNamedRange = worksheet.NamedRange(namedCell);
-            if (xlNamedRange == null)
-                return (IXLCell)null;
-            IXLRange xlRange = xlNamedRange.Ranges.FirstOrDefault<IXLRange>();
-            if (xlRange == null)
-                return (IXLCell)null;
-            return xlRange.FirstCell();
+            var linkTocell = worksheet.NamedRange(cellName);
+
+            //var g = GetNamedCell(worksheet, cellName);
+            var currentCell = worksheet.Cell(linkTocell.RefersTo.Split('!')[1]);
+
+            return currentCell;
+            //IXLNamedRange xlNamedRange = worksheet.NamedRange(namedCell);
+            //if (xlNamedRange == null)
+            //    return (IXLCell)null;
+            //IXLRange xlRange = xlNamedRange.Ranges.FirstOrDefault<IXLRange>();
+            //if (xlRange == null)
+            //    return (IXLCell)null;
+            //return xlRange.FirstCell();
         }
 
         protected void SetValueInWorksheet(IXLWorksheet worksheet, int row, string column, string value)
@@ -109,11 +135,15 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
         {
-            var linkTocell = worksheet.NamedRange(cellName);
+            //var linkTocell = worksheet.NamedRange(cellName);
+            
             //var g = GetNamedCell(worksheet, cellName);
-            worksheet.Cell(linkTocell.RefersTo.Split('!')[1]).Value = value;
+            var currentCell = GetNamedCell(worksheet, cellName);
+            currentCell.Value = value;
+
             //          worksheet.Workbook.Range(cellName).Cells();
             //= value;
+
         }
         private string GetJudgeName(JudgeTable judgeTable)
         {
