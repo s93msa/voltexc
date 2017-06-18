@@ -174,7 +174,7 @@ namespace WebApplication1.Controllers
                     excelTeamService.CreateExcelforIndividual();
                     }
 
-                    else if (1 == 2 && horseOrder.Vaulters != null)
+                    else if (horseOrder.Vaulters != null)
                     {
                         var vaultersSorted = horseOrder.GetActiveVaulters().OrderBy(x => x.StartOrder);
                         
