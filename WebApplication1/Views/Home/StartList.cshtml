@@ -21,7 +21,8 @@
         startnumber = 0;
         <tr>
             <th>
-                @Html.DisplayFor(modelItem => startListClassStep.Date)
+                @startListClassStep.Date.ToLocalTime()
+               
             </th>
             <th colspan="4">
                 @Html.DisplayFor(modelItem => startListClassStep.Name) <BR />
@@ -41,9 +42,13 @@ d }) |
             <td>
             </td>
             <td colspan="4">
-                Domare A: @startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B) 
-                C: @startListClassStep.GetJudgeName(JudgeTableNames.C) D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
-
+                @if (!string.IsNullOrWhiteSpace(startListClassStep.GetJudgeName(JudgeTableNames.A)))
+                {
+                    <div>
+                        Domare A:@startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B)
+                        C: @startListClassStep.GetJudgeName(JudgeTableNames.C) D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
+                    </div>
+                }
 
             </td><td></td>
         </tr>

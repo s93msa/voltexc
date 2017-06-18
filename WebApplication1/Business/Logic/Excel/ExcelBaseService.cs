@@ -60,7 +60,8 @@ namespace WebApplication1.Business.Logic.Excel
         {
             string tableName = GetJudgeTableName(judgeTable);
             SetValueInWorksheet(worksheet, startRow, "l", startNumber);
-            SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
+            SetValueInWorksheet(worksheet,"bord", tableName);
+ //           SetValueInWorksheet(worksheet, startRow + 1, "l", tableName);
             SetValueInWorksheet(worksheet, startRow + 2, "l", _competitionData.VaultingClass.ClassNr.ToString());
             SetValueInWorksheet(worksheet, startRow + 3, "l", _competitionData.MomentName);
             SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
@@ -108,7 +109,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
         {
-            var linkTocell = worksheet.Workbook.NamedRange(cellName);
+            var linkTocell = worksheet.NamedRange(cellName);
             //var g = GetNamedCell(worksheet, cellName);
             worksheet.Cell(linkTocell.RefersTo.Split('!')[1]).Value = value;
             //          worksheet.Workbook.Range(cellName).Cells();
