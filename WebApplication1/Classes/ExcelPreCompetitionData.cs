@@ -60,7 +60,7 @@ namespace WebApplication1.Classes
             ListClassStep = startListClassStep;
             StartVaulterNumber = startVaulterNumber;
             Vaulter1 = vaulterOrder.Participant;
-            VaulterName = Vaulter1?.Name;
+            VaulterName = Vaulter1?.Name?.Trim();
             Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             ArmNumber = Vaulter1?.Armband;
             VaultingClass = Vaulter1?.VaultingClass;
@@ -100,7 +100,7 @@ namespace WebApplication1.Classes
             StartVaulterNumber = startVaulterNumber;
            // Vaulter1 = vaulterOrder.Participant;
             _team = team;
-            TeamName = team?.Name;
+            TeamName = team?.Name?.Trim();
             Team1 = team;
             Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             //ArmNumber = Vaulter1?.Armband;
@@ -148,7 +148,7 @@ namespace WebApplication1.Classes
 
         public string GetName()
         {
-            return TeamName ?? VaulterName;
+            return TeamName?? VaulterName;
         }
         public string GetStepDate()
         {
