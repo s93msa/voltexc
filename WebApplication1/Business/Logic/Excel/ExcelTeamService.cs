@@ -142,7 +142,7 @@ namespace WebApplication1.Business.Logic.Excel
             int offset = 0;
             foreach (var vaulter in _competitionData.getTeamVaultersSorted())
             {
-                firstcell.CellBelow(offset).Value = vaulter.Value?.Name;
+                firstcell.CellBelow(offset).Value = vaulter.Value?.Name?.Trim();
                 //SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);
                 //startRow++;
                 offset++;

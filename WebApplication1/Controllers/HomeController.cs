@@ -85,8 +85,8 @@ namespace WebApplication1.Controllers
             {
                 foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
                 {
-                    var horseName = startListItem.HorseInformation.HorseName;
-                    var lungerName = startListItem.HorseInformation.Lunger.LungerName;
+                    var horseName = startListItem.HorseInformation?.HorseName;
+                    var lungerName = startListItem.HorseInformation?.Lunger?.LungerName;
 
                     if (startListItem.IsTeam)
                     {
