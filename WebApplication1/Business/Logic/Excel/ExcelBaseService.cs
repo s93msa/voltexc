@@ -136,17 +136,18 @@ namespace WebApplication1.Business.Logic.Excel
             worksheet.Cell(row, column).Value = value;
         }
 
-        private void SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
+        protected IXLCell SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
         {
             //var linkTocell = worksheet.NamedRange(cellName);
             
             //var g = GetNamedCell(worksheet, cellName);
             var currentCell = GetNamedCell(worksheet, cellName);
             if (currentCell == null)
-                return;
+                return null;
 
             currentCell.Value = value;
 
+            return currentCell;
             //          worksheet.Workbook.Range(cellName).Cells();
             //= value;
 

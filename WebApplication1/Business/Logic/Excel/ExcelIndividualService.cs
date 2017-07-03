@@ -30,7 +30,8 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetIdInSheet(IXLWorksheet worksheet)
         {
             string idString = ContestService.GetVaulterAndClassId(_competitionData.Vaulter1);
-            SetValueInWorksheet(worksheet, 1, "u", idString);
+            var cell = SetValueInWorksheet(worksheet, "id", idString);
+            cell?.WorksheetColumn().Hide();
         }
 
         private void CreateExcelFromValuesJudgeA()

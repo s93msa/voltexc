@@ -109,7 +109,8 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetIdInSheet(IXLWorksheet worksheet)
         {
             string idString = ContestService.GetTeamAndClassId(_competitionData.Team1);
-            SetValueInWorksheet(worksheet, 1, "u", idString);
+            var cell = SetValueInWorksheet(worksheet, "id", idString);
+            cell?.WorksheetColumn().Hide();
         }
 
         private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
