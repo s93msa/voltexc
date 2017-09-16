@@ -15,6 +15,7 @@ using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Business.Logic.Excel;
 using WebApplication1.Classes;
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -44,11 +45,14 @@ namespace WebApplication1.Controllers
         public ActionResult CompetitionClasses()
         {
 
-            var rows = new List<string[]>();
+            var contest = ContestService.GetInstance();
+            var judges = ContestService.GetJudgesPerStep();
 
+            var competitionClassesViewModel = new CompetitionClassesViewModel();
             using (var db = new VaultingContext())
             {
                 var competitionClasses = db.CompetitionClasses;
+                var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
 
 
 
@@ -56,24 +60,73 @@ namespace WebApplication1.Controllers
                 {
                     var classNumber = competitionClass.ClassNr.ToString();
                     var className = competitionClass.ClassName;
-                    var numberOfJudges = "4";
+                    var numberOfJudges = "0";
                     var steps = new string[4];
                     var momentText = new string[4];
+                    var judgesString1 = GetJudgesString(judges, startListClassSteps, classNumber, 1);
+                    var judgesString2 = GetJudgesString(judges, startListClassSteps, classNumber, 2);
+                    var judgesString3 = GetJudgesString(judges, startListClassSteps, classNumber, 3);
+                    var judgesString4 = GetJudgesString(judges, startListClassSteps, classNumber, 4);
+
                     foreach (var step in competitionClass.Steps)
                     {
-                        if(step.TestNumber < 1) continue;
-                        
-                        steps[step.TestNumber-1] = step.Name;
-                        momentText[step.TestNumber-1] = step.ResultMomentText;
+                       
+                        if (step.TestNumber < 1) continue;
+
+                        steps[step.TestNumber - 1] = step.Name;
+                        momentText[step.TestNumber - 1] = step.ResultMomentText;
+
                     }
 
-                    var row = new string[] { classNumber, className, numberOfJudges, steps[0], steps[1], steps[2], steps[3], momentText[0], momentText[1], momentText[2], momentText[3]};
-                    rows.Add(row);
+                    var competitionClassInfo = new CompetitionClassViewModel
+                    {
+                        ClassNumber = classNumber,
+                        ClassName = className,
+                        NumberOfJudges = numberOfJudges,
+                        Moment1 = steps[0],
+                        Moment2 = steps[1],
+                        Moment3 = steps[2],
+                        Moment4 = steps[3],
+                        Moment1Header = momentText[0],
+                        Moment2Header = momentText[1],
+                        Moment3Header = momentText[2],
+                        Moment4Header = momentText[3],
+                        JudgesMoment1 = judgesString1,
+                        JudgesMoment2 = judgesString2,
+                        JudgesMoment3 = judgesString3,
+                        JudgesMoment4 = judgesString4
+                    };
+
+                    competitionClassesViewModel.CompetitionClassesInformation.Add(competitionClassInfo);
                 }
 
-               }
+            }
 
-            return View(rows);
+            return View(competitionClassesViewModel);
+        }
+
+        private static string GetJudgesString(Dictionary<string, int> judges, Dictionary<int, StartListClassStep> startListClassSteps, string classNumber, int testNumber)
+        {
+            string judgesString = GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.A, testNumber);
+            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.B, testNumber);
+            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.C, testNumber);
+            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.D, testNumber);
+            return judgesString.TrimStart(',').TrimStart();
+        }
+
+        private static string GetJudgeName(Dictionary<string, int> stepsrelation, string classNumber, Dictionary<int, StartListClassStep> startListClassSteps,
+            JudgeTableNames judgeTableName, int testNumber)
+        {
+
+            int startliststep;
+            StartListClassStep startListClassStep = null;
+            if(stepsrelation.TryGetValue(classNumber + "_" + testNumber.ToString(), out startliststep))
+                startListClassSteps.TryGetValue(startliststep, out startListClassStep);
+            var judgeName = startListClassStep?.GetJudgeName(judgeTableName);
+            if (string.IsNullOrWhiteSpace(judgeName))
+                return "";
+
+            return ", " + judgeName;
         }
 
         public ActionResult ResultVaulterList()
@@ -138,7 +191,8 @@ namespace WebApplication1.Controllers
             var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
             foreach (var startListClassStep in startListClassStepOrdered)
             {
-                //if (startListClassStep.Date < new DateTime(2017,8,8,12,0,0))
+                //if (startListClassStep.Date > new DateTime(2017,7,7,23,0,0) && startListClassStep.Date < new DateTime(2017, 7, 8, 13, 0, 0))
+                if (startListClassStep.StartListClassStepId == 1)
                     SaveInExcel(contest, startListClassStep);
             }
                 

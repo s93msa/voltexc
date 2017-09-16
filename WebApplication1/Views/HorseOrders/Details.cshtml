@@ -1,0 +1,42 @@
+﻿@model WebApplication1.Models.HorseOrder
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HorseOrder</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StartNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsTeam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsTeam)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TeamTestnumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TeamTestnumber)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.HorseOrderId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

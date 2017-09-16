@@ -154,7 +154,7 @@ namespace WebApplication1.Classes
         {
             return ListClassStep.Date.ToShortDateString();
         }
-        private static Step GetCompetitionStep(CompetitionClass vaulterClass, int testNumber)
+        public static Step GetCompetitionStep(CompetitionClass vaulterClass, int testNumber)
         {
             foreach (var step in vaulterClass.Steps)
             {

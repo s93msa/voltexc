@@ -16,6 +16,8 @@ namespace WebApplication1.Models
 
         public virtual List<HorseOrder> StartList { get; set; }
 
+        //public virtual List<Step> IncludedSteps { get; set; }
+
         public string GetJudgeName(JudgeTableNames judgeTableName)
         {
             var selectedJudgeTable =  JudgeTables?.FirstOrDefault(judgeTable => judgeTable.JudgeTableName == judgeTableName);

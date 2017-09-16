@@ -28,5 +28,7 @@ namespace WebApplication1.Classes
         public DbSet<Step> Steps { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Vaulter> Vaulters { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.HorseOrder> HorseOrders { get; set; }
     }
 }

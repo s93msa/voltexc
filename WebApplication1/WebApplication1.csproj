@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -215,6 +216,7 @@
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
+    <Compile Include="Controllers\HorseOrdersController.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.Designer.cs">
       <DependentUpon>201705072114391_InitialCreate.cs</DependentUpon>
@@ -303,6 +305,7 @@
     <Compile Include="Models\VaulterOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CompetitionClassesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -346,6 +349,11 @@
     <Content Include="Views\Home\StartList.cshtml" />
     <Content Include="Views\Home\ResultVaulterList.cshtml" />
     <Content Include="Views\Home\CompetitionClasses.cshtml" />
+    <Content Include="Views\HorseOrders\Create.cshtml" />
+    <Content Include="Views\HorseOrders\Delete.cshtml" />
+    <Content Include="Views\HorseOrders\Details.cshtml" />
+    <Content Include="Views\HorseOrders\Edit.cshtml" />
+    <Content Include="Views\HorseOrders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
