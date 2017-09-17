@@ -281,10 +281,19 @@
     <Compile Include="Migrations\201706171111347_addResultMomentText.Designer.cs">
       <DependentUpon>201706171111347_addResultMomentText.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709161029324_AddContestType.cs" />
+    <Compile Include="Migrations\201709161029324_AddContestType.Designer.cs">
+      <DependentUpon>201709161029324_AddContestType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709161126130_AddSpepType.cs" />
+    <Compile Include="Migrations\201709161126130_AddSpepType.Designer.cs">
+      <DependentUpon>201709161126130_AddSpepType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
     <Compile Include="Models\Contest.cs" />
+    <Compile Include="Models\ContestType.cs" />
     <Compile Include="Models\Horse.cs" />
     <Compile Include="Models\JudgeTable.cs" />
     <Compile Include="Models\Lunger.cs" />
@@ -292,6 +301,7 @@
     <Compile Include="Models\HorseOrder.cs" />
     <Compile Include="Models\StartListClassStep.cs" />
     <Compile Include="Models\Step.cs" />
+    <Compile Include="Models\StepType.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\TeamList.cs" />
     <Compile Include="Models\Vaulter.cs" />
@@ -414,6 +424,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706171111347_addResultMomentText.resx">
       <DependentUpon>201706171111347_addResultMomentText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709161029324_AddContestType.resx">
+      <DependentUpon>201709161029324_AddContestType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709161126130_AddSpepType.resx">
+      <DependentUpon>201709161126130_AddSpepType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

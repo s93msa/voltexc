@@ -11,6 +11,8 @@ namespace WebApplication1.Models
     public class Contest
     {
         public int ContestId { get; set; }
+
+        public virtual ContestType TypeOfContest { get; set; }
         public string Location{ get; set; }
         public string Country { get; set; } //TODO: Country of club not contest
         public virtual List<StartListClassStep> StartListClassStep { get; set; }
@@ -31,4 +33,12 @@ namespace WebApplication1.Models
         //    }
         //}
     }
+
+    //public enum ContestType
+    //{
+    //    Endagarstavling3Domare,
+    //    Endagarstavling4Domare,
+    //    Tvådagarstavling3Domare,
+    //    Diamonds
+    //}
 }

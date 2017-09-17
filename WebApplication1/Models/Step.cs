@@ -5,6 +5,8 @@ namespace WebApplication1.Models
     public class Step
     {
         public int StepId { get; set; }
+        public virtual ContestType TypeOfContest { get; set; }
+        public virtual StepType TypeOfStep { get; set; }
 
         public int TestNumber { get; set; }
         public string Name { get; set; }
@@ -19,4 +21,6 @@ namespace WebApplication1.Models
 
 
     }
+
+   
 }
