@@ -101,6 +101,9 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected string GetOutputFilename(JudgeTable judgeTabel)
         {
+            if (judgeTabel == null)
+                return null;
+
             var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
             fileName = fileName + '_' + judgeTabel.JudgeTableName+
             "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName;

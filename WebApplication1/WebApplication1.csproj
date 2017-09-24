@@ -289,6 +289,10 @@
     <Compile Include="Migrations\201709161126130_AddSpepType.Designer.cs">
       <DependentUpon>201709161126130_AddSpepType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709181846454_AddHorseOrderIsActive.cs" />
+    <Compile Include="Migrations\201709181846454_AddHorseOrderIsActive.Designer.cs">
+      <DependentUpon>201709181846454_AddHorseOrderIsActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -430,6 +434,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709161126130_AddSpepType.resx">
       <DependentUpon>201709161126130_AddSpepType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709181846454_AddHorseOrderIsActive.resx">
+      <DependentUpon>201709181846454_AddHorseOrderIsActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

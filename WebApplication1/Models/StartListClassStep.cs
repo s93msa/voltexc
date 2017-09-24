@@ -18,6 +18,11 @@ namespace WebApplication1.Models
 
         //public virtual List<Step> IncludedSteps { get; set; }
 
+        public List<HorseOrder> GetActiveStartList()
+        {
+            return StartList.FindAll(x => x.IsActive);
+        }
+
         public string GetJudgeName(JudgeTableNames judgeTableName)
         {
             var selectedJudgeTable =  JudgeTables?.FirstOrDefault(judgeTable => judgeTable.JudgeTableName == judgeTableName);

@@ -52,7 +52,7 @@ d }) |
 
             </td><td></td>
         </tr>
-        foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
+        foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
         {
             if (startListItem.IsTeam)
             {

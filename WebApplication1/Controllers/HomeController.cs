@@ -45,13 +45,13 @@ namespace WebApplication1.Controllers
         public ActionResult CompetitionClasses()
         {
 
-            var contest = ContestService.GetInstance();
+           // var contest = ContestService.GetInstance();
             var judges = ContestService.GetJudgesPerStep();
 
             var competitionClassesViewModel = new CompetitionClassesViewModel();
             using (var db = new VaultingContext())
             {
-                var competitionClasses = db.CompetitionClasses;
+                var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
                 var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
 
 
@@ -68,9 +68,11 @@ namespace WebApplication1.Controllers
                     var judgesString3 = GetJudgesString(judges, startListClassSteps, classNumber, 3);
                     var judgesString4 = GetJudgesString(judges, startListClassSteps, classNumber, 4);
 
-                    foreach (var step in competitionClass.Steps)
+                    var stepsList = GetStepsForThisTypeOfCompetition(competitionClass);
+
+                    foreach (var step in stepsList)
                     {
-                       
+
                         if (step.TestNumber < 1) continue;
 
                         steps[step.TestNumber - 1] = step.Name;
@@ -105,6 +107,14 @@ namespace WebApplication1.Controllers
             return View(competitionClassesViewModel);
         }
 
+        private static List<Step> GetStepsForThisTypeOfCompetition(CompetitionClass competitionClass)
+        {
+            var currentContestTypeId = ContestService.GetContestTypeId();
+
+            return competitionClass.Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestTypeId);
+        }
+
+
         private static string GetJudgesString(Dictionary<string, int> judges, Dictionary<int, StartListClassStep> startListClassSteps, string classNumber, int testNumber)
         {
             string judgesString = GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.A, testNumber);
@@ -136,7 +146,7 @@ namespace WebApplication1.Controllers
             var contest = ContestService.GetInstance();
             foreach (var startListClassStep in contest.StartListClassStep.OrderBy(x => x.StartOrder))
             {
-                foreach (var startListItem in startListClassStep.StartList.OrderBy(x => x.StartNumber))
+                foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
                 {
                     var horseName = startListItem.HorseInformation?.HorseName;
                     var lungerName = startListItem.HorseInformation?.Lunger?.LungerName;
@@ -192,7 +202,7 @@ namespace WebApplication1.Controllers
             foreach (var startListClassStep in startListClassStepOrdered)
             {
                 //if (startListClassStep.Date > new DateTime(2017,7,7,23,0,0) && startListClassStep.Date < new DateTime(2017, 7, 8, 13, 0, 0))
-                if (startListClassStep.StartListClassStepId == 1)
+                //if (startListClassStep.StartListClassStepId == 18)
                     SaveInExcel(contest, startListClassStep);
             }
                 
@@ -214,7 +224,7 @@ namespace WebApplication1.Controllers
 
 
 
-            var startlistOrderByHorseOrder = startListClassStep.StartList.OrderBy(x => x.StartNumber);
+            var startlistOrderByHorseOrder = startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber);
 
             int startListNumber = 0;
                 foreach (var horseOrder in startlistOrderByHorseOrder)

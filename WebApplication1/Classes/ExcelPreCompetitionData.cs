@@ -66,7 +66,7 @@ namespace WebApplication1.Classes
             VaultingClass = Vaulter1?.VaultingClass;
 
             TestNumber = vaulterOrder.Testnumber;
-            Step1 = GetCompetitionStep(VaultingClass, TestNumber);
+            Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
@@ -107,7 +107,7 @@ namespace WebApplication1.Classes
             VaultingClass = team?.VaultingClass;
             
             TestNumber = horseOrder.TeamTestnumber;
-            Step1 = GetCompetitionStep(VaultingClass, TestNumber);
+            Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
@@ -154,9 +154,9 @@ namespace WebApplication1.Classes
         {
             return ListClassStep.Date.ToShortDateString();
         }
-        public static Step GetCompetitionStep(CompetitionClass vaulterClass, int testNumber)
+        public static Step GetCompetitionStep(ContestType contestType, CompetitionClass vaulterClass, int testNumber)
         {
-            foreach (var step in vaulterClass.Steps)
+            foreach (var step in vaulterClass.GetCompetitionSteps(contestType))
             {
                 if (testNumber == step.TestNumber)
                     return step;

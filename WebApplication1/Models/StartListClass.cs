@@ -11,6 +11,8 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public virtual List<StartListClassStep> StartListClassStep { get; set; }
 
+
+
         //public StartListClass(List<StartListClassStep> steps)
         //{
         //    _steps = steps;

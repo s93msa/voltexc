@@ -7,6 +7,7 @@
 //using WebApplication1.Models;
 
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Script.Serialization;
 using System.Web.UI.WebControls;
@@ -41,7 +42,7 @@ namespace WebApplication1.Business.Logic.Contest
             foreach (var startListClassStep in GetInstance().StartListClassStep)
             {
                 //var judgeTables = startListClassStep.JudgeTables;
-                foreach (var carriage in startListClassStep.StartList)
+                foreach (var carriage in startListClassStep.GetActiveStartList())
                 {
                     if (carriage.IsTeam && carriage.VaultingTeam != null)
                     {
@@ -73,6 +74,15 @@ namespace WebApplication1.Business.Logic.Contest
             return _stepsJudges;
         }
 
+        public static int GetContestTypeId()
+        {
+            int contestId;
+            if (int.TryParse(ConfigurationManager.AppSettings["ContestId"], out contestId))
+                return contestId;
+
+            return 0;
+        }
+
         private static void AddToStepsJudgesList(string classNr, string testNumberString, StartListClassStep startListClassStep)
         {
             var key = classNr + "_" + testNumberString;
@@ -88,7 +98,8 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 var contests = db.Contests;
 
-                var contest = contests.ToList()[0];
+                var currentContestId = GetContestTypeId();
+                var contest = contests.Find(currentContestId);
 
 
                 JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();

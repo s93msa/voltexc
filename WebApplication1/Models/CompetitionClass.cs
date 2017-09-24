@@ -12,6 +12,11 @@ namespace WebApplication1.Models
         public string Excelfile { get; set; }
 
         public virtual List<Step> Steps { get; set; }
+
+        public List<Step> GetCompetitionSteps(ContestType currentContestType)
+        {
+            return Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestType.ContestTypeId);
+        }
        
         //public CompetitionClass(int classNr, string className, List<Step> steps)
         //{
