@@ -117,18 +117,29 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
         
-        public static string GetVaulterAndClassId(Vaulter participant)
+        public static string GetVaulterExcelId(Vaulter participant, StepType stepType = null)
         {
-            return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId;
+            var stepTypeString = GetStepTypeString(stepType);
+
+            return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId + stepTypeString;
         }
 
-        public static string GetTeamAndClassId(Team team)
+
+        public static string GetTeamExcelId(Team team, StepType stepType = null)
         {
+            var stepTypeString = GetStepTypeString(stepType);
+
             return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
-                   team.TeamId;
+                   team.TeamId + stepTypeString;
         }
 
-        
+        private static string GetStepTypeString(StepType stepType)
+        {
+            var stepTypeString = "";
+            if (stepType != null)
+                stepTypeString = "_" + stepType.StepTypeId;
+            return stepTypeString;
+        }
     }
 }
 

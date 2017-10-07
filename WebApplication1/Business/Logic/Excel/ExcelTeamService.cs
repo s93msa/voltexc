@@ -110,7 +110,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetIdInSheet(IXLWorksheet worksheet)
         {
-            string idString = ContestService.GetTeamAndClassId(_competitionData.Team1);
+            string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.MomentType);
             var cell = SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }

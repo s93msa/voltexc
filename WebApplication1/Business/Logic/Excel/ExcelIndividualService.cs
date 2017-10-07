@@ -29,7 +29,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetIdInSheet(IXLWorksheet worksheet)
         {
-            string idString = ContestService.GetVaulterAndClassId(_competitionData.Vaulter1);
+            string idString = ContestService.GetVaulterExcelId(_competitionData.Vaulter1, _competitionData.MomentType);
             var cell = SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }

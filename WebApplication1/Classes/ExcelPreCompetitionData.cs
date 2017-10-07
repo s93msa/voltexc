@@ -13,6 +13,7 @@ namespace WebApplication1.Classes
         public string EventLocation { get; }
         public StartListClassStep ListClassStep { get; }
 
+
         public Vaulter Vaulter1 { get; }
         public string VaulterName { get; }
         public string ArmNumber { get; }
@@ -34,6 +35,7 @@ namespace WebApplication1.Classes
         public string ExcelWorksheetNameJudgesTableC { get; }
         public string ExcelWorksheetNameJudgesTableD { get; }
         public string MomentName { get; }
+        public StepType MomentType { get; }
         public string VaultingClubName { get; }
         public Horse Horse1 { get; }
         public string HorseName { get; }
@@ -68,6 +70,7 @@ namespace WebApplication1.Classes
             TestNumber = vaulterOrder.Testnumber;
             Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;
+            MomentType = Step1?.TypeOfStep;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
             ExcelWorksheetNameJudgesTableC = Step1?.ExcelWorksheetNameJudgesTableC;
@@ -109,6 +112,7 @@ namespace WebApplication1.Classes
             TestNumber = horseOrder.TeamTestnumber;
             Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;
+            MomentType = Step1?.TypeOfStep;
             ExcelWorksheetNameJudgesTableA = Step1?.ExcelWorksheetNameJudgesTableA;
             ExcelWorksheetNameJudgesTableB = Step1?.ExcelWorksheetNameJudgesTableB;
             ExcelWorksheetNameJudgesTableC = Step1?.ExcelWorksheetNameJudgesTableC;
