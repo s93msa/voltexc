@@ -68,7 +68,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetTeam(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
-            SetIdInSheet(worksheet);
+            SetIdInSheet(worksheet, judgeTable);
            
             switch (worksheet.Name)
 
@@ -108,9 +108,9 @@ namespace WebApplication1.Business.Logic.Excel
 
         }
 
-        private void SetIdInSheet(IXLWorksheet worksheet)
+        private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
-            string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.MomentType);
+            string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.TestNumber, judgeTable);
             var cell = SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }
@@ -143,7 +143,7 @@ namespace WebApplication1.Business.Logic.Excel
             var firstcell = GetNamedCell(worksheet, "firstvaulter");
             //string tableName = GetJudgeTableName(judgeTable);
             int offset = 0;
-            foreach (var vaulter in _competitionData.getTeamVaultersSorted())
+            foreach (var vaulter in _competitionData.GetTeamVaultersSorted())
             {
                 firstcell.CellBelow(offset).Value = vaulter.Value?.Name?.Trim();
                 //SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);

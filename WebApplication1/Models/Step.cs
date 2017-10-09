@@ -19,8 +19,11 @@ namespace WebApplication1.Models
 
         public string ResultMomentText { get; set; }
 
+        public string OverrideExcelfileName { get; set; }
+
+
 
     }
 
-   
+
 }

@@ -236,13 +236,13 @@ namespace WebApplication1.Controllers
             int startListNumber = 0;
                 foreach (var horseOrder in startlistOrderByHorseOrder)
                 {
-                    startListNumber++;
                     if (horseOrder.IsTeam)
                     {
-                    var teamInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
-                            startListNumber, horseOrder.VaultingTeam);
-                    var excelTeamService = new ExcelTeamService(teamInformation);
-                    excelTeamService.CreateExcelforIndividual();
+                        startListNumber++;
+                        var teamInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
+                                startListNumber, horseOrder.VaultingTeam);
+                        var excelTeamService = new ExcelTeamService(teamInformation);
+                        excelTeamService.CreateExcelforIndividual();
                     }
 
                     else if (horseOrder.Vaulters != null)
@@ -251,12 +251,13 @@ namespace WebApplication1.Controllers
                         
                         foreach (var vaulter in vaultersSorted)
                         {
+                            startListNumber++;
                             var vaulterInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
                                 startListNumber, vaulter);
                             var excelIndividualService = new ExcelIndividualService(vaulterInformation);
                             excelIndividualService.CreateExcelforIndividual();
 
-                            //CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);                            
+                            //CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);  
                         }
                     }
                 }

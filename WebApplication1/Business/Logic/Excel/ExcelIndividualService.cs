@@ -27,9 +27,9 @@ namespace WebApplication1.Business.Logic.Excel
             CreateExcelFromValuesJudgeD();
         }
 
-        private void SetIdInSheet(IXLWorksheet worksheet)
+        private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
-            string idString = ContestService.GetVaulterExcelId(_competitionData.Vaulter1, _competitionData.MomentType);
+            string idString = ContestService.GetVaulterExcelId(_competitionData.Vaulter1, _competitionData.TestNumber, judgeTable);
             var cell = SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }
@@ -75,7 +75,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetIndividuell(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
-            SetIdInSheet(worksheet);
+            SetIdInSheet(worksheet, judgeTable);
             switch (worksheet.Name)
 
             {

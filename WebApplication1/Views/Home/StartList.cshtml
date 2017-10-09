@@ -1,4 +1,5 @@
-﻿@using WebApplication1.Models
+﻿@using WebApplication1.Classes
+@using WebApplication1.Models
 @model WebApplication1.Models.Contest
 
 @{
@@ -74,20 +75,27 @@ d }) |
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName)
+                        @ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber).Name                        
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
+                        <br />Voltigörer: <br />
+                        @foreach (var vaulter in startListItem.VaultingTeam.VaultersList)
+                        {
+                            @(vaulter.Participant.Name )
+                            <br />
 
+                        }
                     </td>
                 </tr>
 
             }
             else
             {
-                foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
-                {
+                                foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
+                                {
 
-                    startnumber++;
+                                    startnumber++;
 
                 <tr>
                     <td>
@@ -105,16 +113,17 @@ d }) |
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName)
+                                        @ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber).Name
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
 
                     </td>
                 </tr>
-                }
-            }
+                                }
+                            }
 
-        }
+                        }
 
     @*}*@
     }

@@ -51,6 +51,9 @@ namespace WebApplication1.Classes
         public string InputFileName { get; }
         public XLWorkbook Workbook { get; }
 
+      
+
+
         private SortedList<int, Vaulter> _vaultersList = null;
         private Team _team = null;
         public ExcelPreCompetitionData(Models.Contest contest, StartListClassStep startListClassStep,
@@ -87,7 +90,7 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = VaultingClass?.Excelfile;
+            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
@@ -129,13 +132,21 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = VaultingClass?.Excelfile;
+            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
+            //WorkbookOverrideA = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
+            //WorkbookOverrideB = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
+            //WorkbookOverrideC = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
+            //WorkbookOverrideD = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
+
+
             //var vaulter = horseOrder.Participant;
         }
 
-        public SortedList<int, Vaulter> getTeamVaultersSorted()
+        
+
+        public SortedList<int, Vaulter> GetTeamVaultersSorted()
         {
             if (_vaultersList != null)
                 return _vaultersList;
@@ -169,6 +180,15 @@ namespace WebApplication1.Classes
             return null;
         }
 
+        //public XLWorkbook GetWorkbook()
+        //{
+        //    var excelfile = Step1.OverrideExcelfileName;
+        //    if (string.IsNullOrEmpty(excelfile))
+        //        return Workbook;
+
+        //    return excelfile;
+        //}
+
         private static JudgeTable GetJudge(List<JudgeTable> judgeTables, JudgeTableNames tableName)
         {
             foreach (var table in judgeTables)
@@ -178,8 +198,13 @@ namespace WebApplication1.Classes
             }
             return null;
         }
+        //private XLWorkbook GetOverrideExcelfile(string workingdirectory, string overrideExcelfile)
+        //{
+        //    if (string.IsNullOrWhiteSpace(overrideExcelfile))
+        //        return new XLWorkbook(workingdirectory + overrideExcelfile);
+        //    return null;
+        //}
 
-       
     }
 
 

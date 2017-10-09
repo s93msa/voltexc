@@ -117,20 +117,40 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
         
-        public static string GetVaulterExcelId(Vaulter participant, StepType stepType = null)
+        public static string GetVaulterExcelId(Vaulter participant, int testNumber = 0, JudgeTable judgeTable = null)
         {
-            var stepTypeString = GetStepTypeString(stepType);
+            var classId = participant.VaultingClass?.CompetitionClassId;
+            var vaulterId = participant.VaulterId;
+            var classnr = participant.VaultingClass?.ClassNr;
+            var returnString = "id_" + classId + "_" + vaulterId + "_" + classnr;
 
-            return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId + stepTypeString;
+            //var stepTypeString = GetStepTypeString(stepType);
+            if (testNumber > 0 && judgeTable != null)
+            {
+                returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+            }
+            return returnString;
+            //return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId + testNumber;
         }
 
 
-        public static string GetTeamExcelId(Team team, StepType stepType = null)
+        public static string GetTeamExcelId(Team team, int testNumber = 0, JudgeTable judgeTable = null)
         {
-            var stepTypeString = GetStepTypeString(stepType);
+            // var stepTypeString = GetStepTypeString(stepType);
+            var classId = team.VaultingClass?.CompetitionClassId;
+            var vaulterId = team.TeamId;
+            var classnr = team.VaultingClass?.ClassNr;
+            var returnString = "id_" + classId + "_" + vaulterId + "_" + classnr;
 
-            return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
-                   team.TeamId + stepTypeString;
+            //var stepTypeString = GetStepTypeString(stepType);
+            if (testNumber > 0 && judgeTable != null)
+            {
+                returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+            }
+
+            return returnString;
+            //return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
+            //      team.TeamId + testNumber;
         }
 
         private static string GetStepTypeString(StepType stepType)
