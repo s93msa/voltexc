@@ -15,6 +15,7 @@ namespace WebApplication1.Classes
             Configuration.LazyLoadingEnabled = true;
         }
 
+
         public DbSet<Club> Clubs { get; set; }
         public DbSet<CompetitionClass> CompetitionClasses { get; set; }
         public DbSet<Contest> Contests { get; set; }

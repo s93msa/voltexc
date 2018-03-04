@@ -8,7 +8,10 @@
 
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Web.UI.WebControls;
 using AutoMapper;
@@ -22,14 +25,18 @@ namespace WebApplication1.Business.Logic.Contest
     {
         private static Models.Contest _contest;
         private static Dictionary<string, int> _stepsJudges = null;
+        private static Dictionary<string, Lunger> _lungers = null;
 
-        public static Models.Contest GetInstance()
+
+        public static Models.Contest GetContestInstance()
         {
             if (_contest != null)
                 return _contest;
 
             return GetAllDataFromDataBase();
         }
+
+        
 
         public static Dictionary<string,int> GetJudgesPerStep()
         {
@@ -39,7 +46,7 @@ namespace WebApplication1.Business.Logic.Contest
 
             _stepsJudges = new Dictionary<string, int>();
 
-            foreach (var startListClassStep in GetInstance().StartListClassStep)
+            foreach (var startListClassStep in GetContestInstance().StartListClassStep)
             {
                 //var judgeTables = startListClassStep.JudgeTables;
                 foreach (var carriage in startListClassStep.GetActiveStartList())
@@ -83,6 +90,73 @@ namespace WebApplication1.Business.Logic.Contest
             return 0;
         }
 
+        public static Lunger GetLunger(string lungerName)
+        {
+            Lunger lunger;
+            var lungers = GetLungers();
+            if (lungers != null && lungers.TryGetValue(lungerName, out lunger))
+            {
+                return lunger;
+            }
+
+            return null;
+        }
+
+        public static Lunger GetLunger(int lungerTdbId)
+        {
+            
+            var lungers = GetLungers();
+            var lunger = lungers.FirstOrDefault(x => x.Value.LungerTdbId == lungerTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return lunger.Value;
+
+        }
+
+
+
+
+        public static void AddLungers(Lunger[] lungers)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.Lungers.AddRange(lungers);
+                db.SaveChanges();
+            }
+            _lungers = GetLungers();
+
+        }
+
+        public static void UpdateLungers(Lunger[] lungers)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var lunger in lungers)
+                {
+                    db.Entry(lunger).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+            _lungers = GetLungers();
+
+        }
+
+
+        private static Dictionary<string, Lunger> GetLungers()
+        {
+            if (_lungers == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _lungers = db.Lungers.ToDictionary(x => x.LungerName);
+                }
+            }
+
+            return _lungers;
+
+        }
+
+
+
         private static void AddToStepsJudgesList(string classNr, string testNumberString, StartListClassStep startListClassStep)
         {
             var key = classNr + "_" + testNumberString;
@@ -110,6 +184,7 @@ namespace WebApplication1.Business.Logic.Contest
             }
             return _contest;
         }
+
 
         public static Models.Contest GetNewDataFromDatabase()
         {

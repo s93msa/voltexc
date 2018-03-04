@@ -212,11 +212,16 @@
     <Compile Include="Business\Logic\Excel\ExcelBaseService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelIndividualService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportModel.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportService.cs" />
+    <Compile Include="Business\Logic\Import\UpdateService.cs" />
+    <Compile Include="Business\Logic\Import\RequestService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
     <Compile Include="Controllers\HorseOrdersController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.Designer.cs">
       <DependentUpon>201705072114391_InitialCreate.cs</DependentUpon>
@@ -297,6 +302,10 @@
     <Compile Include="Migrations\201710091838304_overrideexcelfilename.Designer.cs">
       <DependentUpon>201710091838304_overrideexcelfilename.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802181758321_AddTdbIdToLunger.cs" />
+    <Compile Include="Migrations\201802181758321_AddTdbIdToLunger.Designer.cs">
+      <DependentUpon>201802181758321_AddTdbIdToLunger.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -372,9 +381,11 @@
     <Content Include="Views\HorseOrders\Details.cshtml" />
     <Content Include="Views\HorseOrders\Edit.cshtml" />
     <Content Include="Views\HorseOrders\Index.cshtml" />
+    <Content Include="Views\Import\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Business\Logic\RequestService\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -444,6 +455,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710091838304_overrideexcelfilename.resx">
       <DependentUpon>201710091838304_overrideexcelfilename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802181758321_AddTdbIdToLunger.resx">
+      <DependentUpon>201802181758321_AddTdbIdToLunger.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

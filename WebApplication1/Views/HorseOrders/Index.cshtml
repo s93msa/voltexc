@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.HorseOrder>
+﻿@model WebApplication1.Models.HorseOrder
 
 @{
     ViewBag.Title = "Index";
@@ -23,7 +23,7 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@*@foreach (var item in Model) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.StartNumber)
@@ -40,6 +40,6 @@
             @Html.ActionLink("Delete", "Delete", new { id=item.HorseOrderId })
         </td>
     </tr>
-}
+}*@
 
 </table>
