@@ -27,14 +27,12 @@ namespace WebApplication1.Controllers
             var excelImportService = new ExcelImportService(workbook);
             var updateservice = new UpdateService();
             var lungers = excelImportService.GetLungers();
-            var horses = excelImportService.GetHorses();
             
-            updateservice.AddLungers(lungers);
+            updateservice.UpdateLungers(lungers);
+            var horses = excelImportService.GetHorses();
 
-
-
-
-
+            updateservice.UpdateHorses(horses);
+            
             return RedirectToAction("Index");
         }
     }

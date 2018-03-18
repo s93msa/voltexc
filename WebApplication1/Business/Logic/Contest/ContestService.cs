@@ -24,8 +24,11 @@ namespace WebApplication1.Business.Logic.Contest
     public class ContestService
     {
         private static Models.Contest _contest;
+
+        //TODO: Ska det verkligen vara dictionaries? Borde göras om till listor istället?
         private static Dictionary<string, int> _stepsJudges = null;
         private static Dictionary<string, Lunger> _lungers = null;
+        private static List<Horse> _horses = null; 
 
 
         public static Models.Contest GetContestInstance()
@@ -112,6 +115,25 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static Horse GetHorse(int horseTdbId, int lungerTdbId)
+        {
+
+            var horses = GetHorses();
+            var horse = horses.FirstOrDefault(x => x.HorseTdbId == horseTdbId && x.Lunger.LungerTdbId == lungerTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return horse;
+
+        }
+
+        public static Horse GetHorse(string horseName, int lungerTdbId)
+        {
+
+            var horses = GetHorses();
+            var horse = horses.FirstOrDefault(x => x.HorseName.Trim() == horseName && x.Lunger.LungerTdbId == lungerTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return horse;
+
+        }
 
 
 
@@ -122,7 +144,18 @@ namespace WebApplication1.Business.Logic.Contest
                 db.Lungers.AddRange(lungers);
                 db.SaveChanges();
             }
-            _lungers = GetLungers();
+            _lungers = null;
+
+        }
+
+        public static void AddHorses(Horse[] horses)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.Horses.AddRange(horses);
+                db.SaveChanges();
+            }
+            _horses = null;
 
         }
 
@@ -136,7 +169,20 @@ namespace WebApplication1.Business.Logic.Contest
                 }
                 db.SaveChanges();
             }
-            _lungers = GetLungers();
+            _lungers = null;
+
+        }
+        public static void UpdateHorses(Horse[] horses)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var horse in horses)
+                {
+                    db.Entry(horse).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+            _horses = null;
 
         }
 
@@ -147,7 +193,7 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 using (var db = new VaultingContext())
                 {
-                    _lungers = db.Lungers.ToDictionary(x => x.LungerName);
+                    _lungers = db.Lungers.ToDictionary(x => x.LungerName?.Trim());
                 }
             }
 
@@ -155,6 +201,23 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        private static List<Horse> GetHorses(bool forceReadFromDb = false)
+        {
+            if (forceReadFromDb || _horses == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _horses = db.Horses.ToList();
+
+                    // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
+                    JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+                    var jsonString = jsonSerializer.Serialize(_horses);
+                }
+            }
+
+            return _horses;
+
+        }
 
 
         private static void AddToStepsJudgesList(string classNr, string testNumberString, StartListClassStep startListClassStep)

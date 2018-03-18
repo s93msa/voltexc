@@ -22,6 +22,7 @@ namespace WebApplication1
 
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<Contest, Contest>();
+                cfg.CreateMap<Horse, Horse>();
             });
         }
     }
