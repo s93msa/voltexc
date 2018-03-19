@@ -29,7 +29,8 @@ namespace WebApplication1.Business.Logic.Contest
         private static Dictionary<string, int> _stepsJudges = null;
         private static Dictionary<string, Lunger> _lungers = null;
         private static List<Club> _clubs = null;
-        private static List<Horse> _horses = null; 
+        private static List<Horse> _horses = null;
+        private static List<CompetitionClass> _classes;
 
 
         public static Models.Contest GetContestInstance()
@@ -134,6 +135,24 @@ namespace WebApplication1.Business.Logic.Contest
 
             return club;
         }
+        public static CompetitionClass GetClass(int classTdbId)
+        {
+
+            var classes = GetClasses();
+            var competitionClass = classes.FirstOrDefault(x => x.ClassTdbId == classTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return competitionClass;
+        }
+
+        public static CompetitionClass GetClass(string className)
+        {
+
+            var classes = GetClasses();
+            var competitionClass = classes.FirstOrDefault(x => x.ClassName == className); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return competitionClass;
+        }
+
 
         public static Horse GetHorse(int horseTdbId, int lungerTdbId)
         {
@@ -172,6 +191,17 @@ namespace WebApplication1.Business.Logic.Contest
             using (var db = new VaultingContext())
             {
                 db.Clubs.AddRange(clubs);
+                db.SaveChanges();
+            }
+            _lungers = null;
+
+        }
+
+        public static void AddClasses(CompetitionClass[] classes)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.CompetitionClasses.AddRange(classes);
                 db.SaveChanges();
             }
             _lungers = null;
@@ -216,6 +246,20 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static void UpdateClasses(CompetitionClass[] competitionClasses)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var competitionClass in competitionClasses)
+                {
+                    db.Entry(competitionClass).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+            _classes = null;
+
+        }
+
         public static void UpdateHorses(Horse[] horses)
         {
             using (var db = new VaultingContext())
@@ -256,6 +300,20 @@ namespace WebApplication1.Business.Logic.Contest
             }
 
             return _clubs;
+
+        }
+
+        private static List<CompetitionClass> GetClasses()
+        {
+            if (_classes == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _classes = db.CompetitionClasses.ToList();
+                }
+            }
+
+            return _classes;
 
         }
 

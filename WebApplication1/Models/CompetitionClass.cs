@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Controllers;
 
 namespace WebApplication1.Models
@@ -8,6 +9,10 @@ namespace WebApplication1.Models
         public int CompetitionClassId { get; set; }
         public int ClassNr { get; set; }
         public string ClassName { get; set; }
+
+        [Index]
+        public int ClassTdbId { get; set; }
+
 
         public string Excelfile { get; set; }
 

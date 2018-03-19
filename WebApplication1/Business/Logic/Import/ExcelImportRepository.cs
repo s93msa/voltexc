@@ -69,6 +69,24 @@ namespace WebApplication1.Business.Logic.Import
             return clubs.ToArray();
         }
 
+        public CompetitionClass[] GetClasses()
+        {
+            var competitionClasses = new List<CompetitionClass>();
+            var worksheet = _workbook.Worksheets?.Worksheet("Klasser");
+            foreach (var row in worksheet.Rows())
+            {
+                var competitionClass = new CompetitionClass
+                {
+                    ClassTdbId = GetInt(row, "b"),
+                    ClassNr = GetInt(row, "c"),
+                    ClassName = GetString(row, "d")
+                };
+                competitionClasses.Add(competitionClass);
+            }
+
+            return competitionClasses.ToArray();
+        }
+
         public Lunger[] GetLungers()
         {
             var lungers = new List<Lunger>();

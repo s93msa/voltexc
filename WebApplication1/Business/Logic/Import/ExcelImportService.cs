@@ -39,6 +39,12 @@ namespace WebApplication1.Business.Logic.Import
             return _excelImportRepository.GetClubs();
         }
 
+        public CompetitionClass[] GetClasses()
+        {
+            //TODO: cache
+            return _excelImportRepository.GetClasses();
+        }
+
         private List<Horse> SetLungers(List<Horse> horses)
         {
             var moreHorses = new List<Horse>();

@@ -72,6 +72,34 @@ namespace WebApplication1.Business.Logic.Import
             ContestService.UpdateClubs(updatedClubs.ToArray());
             ContestService.AddClubs(newClubs.ToArray());
         }
+
+        public void UpdateClasses(CompetitionClass[] classes)
+        {
+            var newClasses = new List<CompetitionClass>();
+            var updatedClasses = new List<CompetitionClass>();
+            foreach (var competitionClass in classes)
+            {
+                var existingClass = GetExistingClass(competitionClass);
+                if (existingClass != null)
+                {
+                    if (NotEqual(competitionClass, existingClass))
+                    {
+                        existingClass.ClassName = competitionClass.ClassName;
+                        existingClass.ClassNr = competitionClass.ClassNr;
+                        existingClass.ClassTdbId = competitionClass.ClassTdbId;
+                        updatedClasses.Add(existingClass);
+                    }
+                }
+                else
+                {
+                    newClasses.Add(competitionClass);
+                }
+            }
+
+            ContestService.UpdateClasses(updatedClasses.ToArray());
+            ContestService.AddClasses(newClasses.ToArray());
+        }
+
         public void UpdateHorses(Horse[] horses)
         {
             var newHorses = new List<Horse>();
@@ -118,6 +146,12 @@ namespace WebApplication1.Business.Logic.Import
         {
             return existingLunger.LungerName != lunger.LungerName ||
                                     existingLunger.LungerTdbId != lunger.LungerTdbId;
+        }
+
+        private static bool NotEqual(CompetitionClass competitionClass, CompetitionClass existingClass)
+        {
+            return existingClass.ClassName != competitionClass.ClassName ||
+                   existingClass.ClassTdbId != competitionClass.ClassTdbId;
         }
 
         private static bool NotEqual(Club club, Club existingClub)
@@ -192,16 +226,32 @@ namespace WebApplication1.Business.Logic.Import
             return existingClub;
         }
 
+        private static CompetitionClass GetExistingClass(CompetitionClass competitionClass)
+        {
+            var existingClub = ContestService.GetClass(competitionClass.ClassTdbId);
+            if (existingClub != null)
+            {
+                return existingClub;
+            }
+            var className = competitionClass.ClassName;
+            existingClub = ContestService.GetClass(className);
+            //if (existingLunger != null)
+            //    if (lungerName != existingLunger.LungerName ||
+            //        lunger.LungerTdbId != existingLunger.LungerTdbId)
+            //    {
+            //        var updatedLunger = new Lunger() {LungerName = lungerName, LungerTdbId = lunger.LungerTdbId};
+
+            //    }
+            return existingClub;
+        }
+
 
         void AddClubs(string[] clubs)
         {
             
         }
 
-        void UpdateClasses(CompetitionClass[] competitionClasses)
-        {
-
-        }
+       
         void UpdateVaulters(Vaulter[] vaulters)
         {
 

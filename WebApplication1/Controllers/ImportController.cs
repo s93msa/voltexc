@@ -35,6 +35,9 @@ namespace WebApplication1.Controllers
             var clubs = excelImportService.GetClubs();
             updateservice.UpdateClubs(clubs);
 
+            var classes = excelImportService.GetClasses();
+            updateservice.UpdateClasses(classes);
+
 
             return RedirectToAction("Index");
         }
