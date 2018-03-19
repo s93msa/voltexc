@@ -37,7 +37,7 @@ namespace WebApplication1.Business.Logic.Import
         }
 
        
-        public Horse[] GetHorsesWorksheet()
+        public Horse[] GetHorses()
         {
             var horses = new List<Horse>();
             var worksheet = _workbook.Worksheets?.Worksheet("Hästar");
@@ -50,6 +50,23 @@ namespace WebApplication1.Business.Logic.Import
             }
 
             return horses.ToArray();
+        }
+
+        public Club[] GetClubs()
+        {
+            var clubs = new List<Club>();
+            var worksheet = _workbook.Worksheets?.Worksheet("Klubb");
+            foreach (var row in worksheet.Rows())
+            {
+                var club = new Club
+                {
+                    ClubTdbId = GetInt(row, "b"),
+                    ClubName = GetString(row, "c")
+                };
+                clubs.Add(club);
+            }
+
+            return clubs.ToArray();
         }
 
         public Lunger[] GetLungers()

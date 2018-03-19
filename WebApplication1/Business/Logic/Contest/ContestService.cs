@@ -28,6 +28,7 @@ namespace WebApplication1.Business.Logic.Contest
         //TODO: Ska det verkligen vara dictionaries? Borde göras om till listor istället?
         private static Dictionary<string, int> _stepsJudges = null;
         private static Dictionary<string, Lunger> _lungers = null;
+        private static List<Club> _clubs = null;
         private static List<Horse> _horses = null; 
 
 
@@ -115,6 +116,25 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static Club GetClub(int clubTdbId)
+        {
+
+            var clubs = GetClubs();
+            var club = clubs.FirstOrDefault(x => x.ClubTdbId == clubTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return club;
+
+        }
+
+        public static Club GetClub(string clubName)
+        {
+            var clubs = GetClubs();
+            var club = clubs.FirstOrDefault(x => x.ClubName == clubName);
+           
+
+            return club;
+        }
+
         public static Horse GetHorse(int horseTdbId, int lungerTdbId)
         {
 
@@ -147,7 +167,16 @@ namespace WebApplication1.Business.Logic.Contest
             _lungers = null;
 
         }
+        public static void AddClubs(Club[] clubs)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.Clubs.AddRange(clubs);
+                db.SaveChanges();
+            }
+            _lungers = null;
 
+        }
         public static void AddHorses(Horse[] horses)
         {
             using (var db = new VaultingContext())
@@ -172,6 +201,21 @@ namespace WebApplication1.Business.Logic.Contest
             _lungers = null;
 
         }
+
+        public static void UpdateClubs(Club[] clubs)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var lunger in clubs)
+                {
+                    db.Entry(lunger).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+            _lungers = null;
+
+        }
+
         public static void UpdateHorses(Horse[] horses)
         {
             using (var db = new VaultingContext())
@@ -198,6 +242,20 @@ namespace WebApplication1.Business.Logic.Contest
             }
 
             return _lungers;
+
+        }
+
+        private static List<Club> GetClubs()
+        {
+            if (_clubs == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _clubs = db.Clubs.ToList();
+                }
+            }
+
+            return _clubs;
 
         }
 

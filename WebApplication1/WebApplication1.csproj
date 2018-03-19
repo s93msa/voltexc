@@ -311,6 +311,10 @@
     <Compile Include="Migrations\201803171407362_addHorseTdbId.Designer.cs">
       <DependentUpon>201803171407362_addHorseTdbId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803181209318_addClubTDbId.cs" />
+    <Compile Include="Migrations\201803181209318_addClubTDbId.Designer.cs">
+      <DependentUpon>201803181209318_addClubTDbId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -466,6 +470,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803171407362_addHorseTdbId.resx">
       <DependentUpon>201803171407362_addHorseTdbId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181209318_addClubTDbId.resx">
+      <DependentUpon>201803181209318_addClubTDbId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

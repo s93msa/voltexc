@@ -27,10 +27,16 @@ namespace WebApplication1.Business.Logic.Import
         public Horse[] GetHorses()
         {
             //TODO: cache
-            var horsesArray = _excelImportRepository.GetHorsesWorksheet();
+            var horsesArray = _excelImportRepository.GetHorses();
             List<Horse> horses = new List<Horse>(horsesArray);
             horses = SetLungers(horses);
             return horses.ToArray();
+        }
+
+        public Club[] GetClubs()
+        {
+            //TODO: cache
+            return _excelImportRepository.GetClubs();
         }
 
         private List<Horse> SetLungers(List<Horse> horses)

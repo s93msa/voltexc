@@ -47,6 +47,31 @@ namespace WebApplication1.Business.Logic.Import
             ContestService.AddLungers(newLungers.ToArray());
         }
 
+        public void UpdateClubs(Club[] clubs)
+        {
+            var newClubs = new List<Club>();
+            var updatedClubs = new List<Club>();
+            foreach (var club in clubs)
+            {
+                var existingClub = GetExistingClub(club);
+                if (existingClub != null)
+                {
+                    if (NotEqual(club, existingClub))
+                    {
+                        existingClub.ClubName = club.ClubName;
+                        existingClub.ClubTdbId = club.ClubTdbId;
+                        updatedClubs.Add(existingClub);
+                    }
+                }
+                else
+                {
+                    newClubs.Add(club);
+                }
+            }
+
+            ContestService.UpdateClubs(updatedClubs.ToArray());
+            ContestService.AddClubs(newClubs.ToArray());
+        }
         public void UpdateHorses(Horse[] horses)
         {
             var newHorses = new List<Horse>();
@@ -95,6 +120,12 @@ namespace WebApplication1.Business.Logic.Import
                                     existingLunger.LungerTdbId != lunger.LungerTdbId;
         }
 
+        private static bool NotEqual(Club club, Club existingClub)
+        {
+            return existingClub.ClubName != club.ClubName ||
+                   existingClub.ClubTdbId != club.ClubTdbId;
+        }
+
         private static bool NotEqual(Horse horse, Horse existingHorse)
         {
             return horse.HorseName != existingHorse.HorseName ||
@@ -141,6 +172,26 @@ namespace WebApplication1.Business.Logic.Import
                 //    }
             return existingLunger;
         }
+
+        private static Club GetExistingClub(Club club)
+        {
+            var existingClub = ContestService.GetClub(club.ClubTdbId);
+            if (existingClub != null)
+            {
+                return existingClub;
+            }
+            var clubName = club.ClubName;
+            existingClub = ContestService.GetClub(clubName);
+            //if (existingLunger != null)
+            //    if (lungerName != existingLunger.LungerName ||
+            //        lunger.LungerTdbId != existingLunger.LungerTdbId)
+            //    {
+            //        var updatedLunger = new Lunger() {LungerName = lungerName, LungerTdbId = lunger.LungerTdbId};
+
+            //    }
+            return existingClub;
+        }
+
 
         void AddClubs(string[] clubs)
         {
