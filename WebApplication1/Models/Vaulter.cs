@@ -1,4 +1,6 @@
-﻿namespace WebApplication1.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebApplication1.Models
 {
     public class Vaulter
     {
@@ -9,6 +11,10 @@
         public string Armband { get; set; }
 
         public virtual CompetitionClass VaultingClass { get; set; }
+
+        [Index]
+        public int VaulterTdbId { get; set; }
+
 
         //public bool Active { get; set; }
 

@@ -28,9 +28,19 @@ namespace WebApplication1.Business.Logic.Import
         {
             //TODO: cache
             var horsesArray = _excelImportRepository.GetHorses();
-            List<Horse> horses = new List<Horse>(horsesArray);
+            var horses = new List<Horse>(horsesArray);
             horses = SetLungers(horses);
             return horses.ToArray();
+        }
+
+        public Vaulter[] GetVaulters()
+        {
+            //TODO: cache
+            var vaultersArray = _excelImportRepository.GetVaulters();
+            var vaulters = new List<Vaulter>(vaultersArray);
+            vaulters = SetClub(vaulters);
+            vaulters = SetClass(vaulters);
+            return vaulters.ToArray();
         }
 
         public Club[] GetClubs()
@@ -57,6 +67,34 @@ namespace WebApplication1.Business.Logic.Import
             horses.AddRange(moreHorses);
 
             return horses;
+        }
+
+        private List<Vaulter> SetClub(List<Vaulter> vaulters)
+        {
+//            var moreVaulters = new List<Vaulter>();
+            foreach (var vaulter in vaulters)
+            {
+                var clubs = GetClubs(vaulter.VaulterTdbId);
+                vaulter.VaultingClub = clubs.FirstOrDefault();
+                //moreVaulters = ExtendHorsesWithMoreClubs(horse, lungers, moreHorses); //Lägg till om voltigörer kan tillhöra flera klubbar i samma tävling 
+            }
+            //vaulters.AddRange(moreVaulters);
+
+            return vaulters;
+        }
+
+        private List<Vaulter> SetClass(List<Vaulter> vaulters)
+        {
+            //            var moreVaulters = new List<Vaulter>();
+            foreach (var vaulter in vaulters)
+            {
+                var competitionClasses = GetClasses(vaulter.VaulterTdbId);
+                vaulter.VaultingClass = competitionClasses.FirstOrDefault();
+                //moreVaulters = ExtendHorsesWithMoreClubs(horse, lungers, moreHorses); //Lägg till om voltigörer kan tillhöra flera klasser i samma tävling 
+            }
+            //vaulters.AddRange(moreVaulters);
+
+            return vaulters;
         }
 
         private static List<Horse> ExtendHorsesWithMoreLungers(Horse horse, Lunger[] lungers, List<Horse> newHorseLungers)
@@ -98,6 +136,56 @@ namespace WebApplication1.Business.Logic.Import
             }
             return lungers.ToArray();
         }
+        public Club[] GetClubs(int vaulterTdbId)
+        {
+            var mergedInfo = GetMergedInfo();
+            var filteredRows = mergedInfo.Where(x => !x.isTeam && x.VaulterId1 == vaulterTdbId).ToArray();
+
+            var clubs = new List<Club>();
+
+            foreach (var row in filteredRows)
+            {
+                if (clubs.Exists(x => x.ClubTdbId == row.ClubTdbId))
+                {
+                    continue;
+                }
+
+                var club = new Club()
+                {
+                    ClubTdbId = row.ClubTdbId,
+                    ClubName = row.ClubName
+                };
+                clubs.Add(club); ;
+            }
+            return clubs.ToArray();
+        }
+
+        public CompetitionClass[] GetClasses(int vaulterTdbId)
+        {
+            var mergedInfo = GetMergedInfo();
+            var filteredRows = mergedInfo.Where(x => !x.isTeam && x.VaulterId1 == vaulterTdbId).ToArray();
+
+            var classes = new List<CompetitionClass>();
+
+            foreach (var row in filteredRows)
+            {
+                if (classes.Exists(x => x.ClassTdbId == row.ClassTdbId))
+                {
+                    continue;
+                }
+
+                var competitionClass = new CompetitionClass()
+                {
+                    ClassTdbId = row.ClassTdbId,
+                    ClassName = row.ClassName,
+                    ClassNr = row.ClassNr
+                   
+                };
+                classes.Add(competitionClass); ;
+            }
+            return classes.ToArray();
+        }
+
 
         public ExcelImportMergedModel[] GetMergedInfo()
         {

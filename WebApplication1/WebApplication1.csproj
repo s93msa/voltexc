@@ -319,6 +319,10 @@
     <Compile Include="Migrations\201803192049188_addClassTdbId.Designer.cs">
       <DependentUpon>201803192049188_addClassTdbId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803301106347_AddVaulterTdbID.cs" />
+    <Compile Include="Migrations\201803301106347_AddVaulterTdbID.Designer.cs">
+      <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -480,6 +484,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803192049188_addClassTdbId.resx">
       <DependentUpon>201803192049188_addClassTdbId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301106347_AddVaulterTdbID.resx">
+      <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

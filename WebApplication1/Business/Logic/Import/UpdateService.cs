@@ -100,6 +100,46 @@ namespace WebApplication1.Business.Logic.Import
             ContestService.AddClasses(newClasses.ToArray());
         }
 
+        public void UpdateVaulters(Vaulter[] vaulters)
+        {
+            var newVaulters = new List<Vaulter>();
+            var updatetdVaulters = new List<Vaulter>();
+            foreach (var vaulter in vaulters)
+            {
+                var existingVaulter = GetExistingVaulter(vaulter);
+                if (existingVaulter != null)
+                {
+                    if (NotEqual(vaulter, existingVaulter))
+                    {
+                        existingVaulter.Name = vaulter.Name.Trim();
+                        existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
+
+       //                 if (existingVaulter.VaultingClass?.ClassTdbId != vaulter.VaultingClass?.ClassTdbId)
+                        {
+                            existingVaulter.VaultingClass = GetExistingClass(vaulter.VaultingClass);
+                        }
+         //               if (existingVaulter.VaultingClub?.ClubTdbId != vaulter.VaultingClub?.ClubTdbId)
+                        {
+                            existingVaulter.VaultingClub =  GetExistingClub(vaulter.VaultingClub);
+                        }
+                        updatetdVaulters.Add(existingVaulter);
+                    }
+                }
+                else
+                {
+                    newVaulters.Add(vaulter);
+                }
+            }
+
+            //updatetdVaulters = SetClassDatabaseId(updatetdVaulters);
+            //updatetdVaulters = SetClubDatabaseId(updatetdVaulters);
+            ContestService.UpdateVaulters(updatetdVaulters.ToArray());
+            newVaulters = SetClassDatabaseId(newVaulters);
+            newVaulters = SetClubDatabaseId(newVaulters);
+            ContestService.AddVaulters(newVaulters.ToArray());
+
+        }
+
         public void UpdateHorses(Horse[] horses)
         {
             var newHorses = new List<Horse>();
@@ -113,6 +153,7 @@ namespace WebApplication1.Business.Logic.Import
                     {
                         existingHorse.HorseName = horse.HorseName;
                         existingHorse.HorseTdbId = horse.HorseTdbId;
+                        existingHorse.Lunger = horse.Lunger; 
                         updatedHorses.Add(existingHorse);
                     }
                 }
@@ -123,6 +164,7 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
+            //updatedHorses = SetLungerDatabaseId(updatedHorses);
             ContestService.UpdateHorses(updatedHorses.ToArray());
 
             newHorses = SetLungerDatabaseId(newHorses);
@@ -142,6 +184,38 @@ namespace WebApplication1.Business.Logic.Import
             return newHorses;
         }
 
+        private static List<Vaulter> SetClassDatabaseId(List<Vaulter> newVaulters)
+        {
+            foreach (var newVaulter in newVaulters)
+            {
+                if (newVaulter.VaultingClass == null)
+                {
+                    continue;
+                }
+                var classTdbId = newVaulter.VaultingClass.ClassTdbId;
+                var competitionClass = ContestService.GetClass(classTdbId);
+                newVaulter.VaultingClass.CompetitionClassId = competitionClass.CompetitionClassId;
+            }
+
+            return newVaulters;
+        }
+
+        private static List<Vaulter> SetClubDatabaseId(List<Vaulter> newVaulters)
+        {
+            foreach (var newVaulter in newVaulters)
+            {
+                if (newVaulter.VaultingClub == null)
+                {
+                    continue;
+                }
+                var clubTdbId = newVaulter.VaultingClub.ClubTdbId;
+                var club = ContestService.GetClub(clubTdbId);
+                newVaulter.VaultingClub.ClubId = club.ClubId;
+            }
+
+            return newVaulters;
+        }
+
         private static bool NotEqual(Lunger lunger, Lunger existingLunger)
         {
             return existingLunger.LungerName != lunger.LungerName ||
@@ -154,6 +228,14 @@ namespace WebApplication1.Business.Logic.Import
                    existingClass.ClassTdbId != competitionClass.ClassTdbId;
         }
 
+        private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)
+        {
+            return vaulter.Name != existingVaulter.Name ||
+                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId||
+                   vaulter.VaultingClass?.ClassTdbId != existingVaulter.VaultingClass?.ClassTdbId||
+                   vaulter.VaultingClub?.ClubTdbId != existingVaulter.VaultingClub?.ClubTdbId;
+        }
+
         private static bool NotEqual(Club club, Club existingClub)
         {
             return existingClub.ClubName != club.ClubName ||
@@ -163,7 +245,8 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(Horse horse, Horse existingHorse)
         {
             return horse.HorseName != existingHorse.HorseName ||
-                   horse.HorseTdbId != existingHorse.HorseTdbId;
+                   horse.HorseTdbId != existingHorse.HorseTdbId||
+                   horse.Lunger.LungerTdbId != existingHorse.Lunger.LungerTdbId;
         }
         
         private static Horse GetExistingHorse(Horse horse)
@@ -209,6 +292,10 @@ namespace WebApplication1.Business.Logic.Import
 
         private static Club GetExistingClub(Club club)
         {
+            if (club == null)
+            {
+                return null;
+            }
             var existingClub = ContestService.GetClub(club.ClubTdbId);
             if (existingClub != null)
             {
@@ -228,6 +315,11 @@ namespace WebApplication1.Business.Logic.Import
 
         private static CompetitionClass GetExistingClass(CompetitionClass competitionClass)
         {
+            if (competitionClass == null)
+            {
+                return null;
+            }
+
             var existingClub = ContestService.GetClass(competitionClass.ClassTdbId);
             if (existingClub != null)
             {
@@ -245,16 +337,27 @@ namespace WebApplication1.Business.Logic.Import
             return existingClub;
         }
 
-
-        void AddClubs(string[] clubs)
+        private static Vaulter GetExistingVaulter(Vaulter vaulter)
         {
-            
+            var existingVaulter = ContestService.GetVaulter(vaulter.VaulterTdbId);
+            if (existingVaulter != null)
+            {
+                return existingVaulter;
+            }
+            var vaulterName = vaulter.Name.Trim();
+            existingVaulter = ContestService.GetVaulter(vaulterName);
+
+            if (existingVaulter == null || existingVaulter.VaulterTdbId > 0) // en annan voltigör med samma namn
+            {
+                return null;
+            }
+
+            return existingVaulter;
         }
 
        
-        void UpdateVaulters(Vaulter[] vaulters)
-        {
 
-        }
+       
+      
     }
 }

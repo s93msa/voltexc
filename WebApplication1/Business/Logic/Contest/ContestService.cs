@@ -31,6 +31,7 @@ namespace WebApplication1.Business.Logic.Contest
         private static List<Club> _clubs = null;
         private static List<Horse> _horses = null;
         private static List<CompetitionClass> _classes;
+        private static List<Vaulter> _vaulters;
 
 
         public static Models.Contest GetContestInstance()
@@ -99,7 +100,7 @@ namespace WebApplication1.Business.Logic.Contest
         {
             Lunger lunger;
             var lungers = GetLungers();
-            if (lungers != null && lungers.TryGetValue(lungerName, out lunger))
+            if (lungers != null && lungers.TryGetValue(lungerName.Trim(), out lunger))
             {
                 return lunger;
             }
@@ -130,7 +131,7 @@ namespace WebApplication1.Business.Logic.Contest
         public static Club GetClub(string clubName)
         {
             var clubs = GetClubs();
-            var club = clubs.FirstOrDefault(x => x.ClubName == clubName);
+            var club = clubs.FirstOrDefault(x => x.ClubName.Trim() == clubName);
            
 
             return club;
@@ -152,6 +153,25 @@ namespace WebApplication1.Business.Logic.Contest
 
             return competitionClass;
         }
+
+        public static Vaulter GetVaulter(int vaulterTdbId)
+        {
+
+            var vaulters = GetVaulters();
+            var vaulter = vaulters.FirstOrDefault(x => x.VaulterTdbId == vaulterTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return vaulter;
+        }
+
+        public static Vaulter GetVaulter(string vaulterName)
+        {
+
+            var vaulters = GetVaulters();
+            var vaulter = vaulters.FirstOrDefault(x => (x.Name.Trim() == vaulterName)); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return vaulter;
+        }
+
 
 
         public static Horse GetHorse(int horseTdbId, int lungerTdbId)
@@ -205,6 +225,17 @@ namespace WebApplication1.Business.Logic.Contest
                 db.SaveChanges();
             }
             _lungers = null;
+
+        }
+
+        public static void AddVaulters(Vaulter[] vaulters)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.Vaulters.AddRange(vaulters);
+                db.SaveChanges();
+            }
+            _vaulters = null;
 
         }
         public static void AddHorses(Horse[] horses)
@@ -266,11 +297,25 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 foreach (var horse in horses)
                 {
-                    db.Entry(horse).State = EntityState.Modified;
+                    db.Entry(horse).State = EntityState.Modified; //TODO; bara uppdatera förändrade fält
                 }
                 db.SaveChanges();
             }
             _horses = null;
+
+        }
+
+        public static void UpdateVaulters(Vaulter[] vaulters)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var vaulter in vaulters)
+                {
+                    db.Entry(vaulter).State = EntityState.Modified; //TODO; bara uppdatera förändrade fält
+                }
+                db.SaveChanges();
+            }
+            _vaulters = null;
 
         }
 
@@ -317,17 +362,32 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        private static List<Vaulter> GetVaulters()
+        {
+            if (_vaulters == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                     var vaulters = db.Vaulters.ToList();
+                    _vaulters = GetAllDataFromDataBase<List<Vaulter>>(vaulters);
+                }
+            }
+
+
+            return _vaulters;
+
+        }
+
         private static List<Horse> GetHorses(bool forceReadFromDb = false)
         {
             if (forceReadFromDb || _horses == null)
             {
                 using (var db = new VaultingContext())
                 {
-                    _horses = db.Horses.ToList();
+                     var horses = db.Horses.ToList();
 
-                    // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
-                    JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
-                    var jsonString = jsonSerializer.Serialize(_horses);
+                    _horses = GetAllDataFromDataBase<List<Horse>>(horses);
+
                 }
             }
 
@@ -355,13 +415,18 @@ namespace WebApplication1.Business.Logic.Contest
                 var contest = contests.Find(currentContestId);
 
 
-                JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
-                var jsonString = jsonSerializer.Serialize(contest);
-                // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
-
-                _contest = jsonSerializer.Deserialize<Models.Contest>(jsonString);
+                _contest = GetAllDataFromDataBase<Models.Contest>(contest);
             }
             return _contest;
+        }
+
+        private static T GetAllDataFromDataBase<T>(T contest) 
+        {
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            var jsonString = jsonSerializer.Serialize(contest);
+            // För att ladda alla multipla nestlade entiteter som annars skulle lazy loadas och vara utanför scopet när databas connectionen stängs
+
+            return jsonSerializer.Deserialize<T>(jsonString);
         }
 
 

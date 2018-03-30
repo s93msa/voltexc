@@ -30,7 +30,6 @@ namespace WebApplication1.Business.Logic.Import
             foreach (var row in worksheet.Rows())
             {
                 var excelImportMergedModel = GetAllRowInformation(row);
-
                 excelImportMergedList.Add(excelImportMergedModel);
             }
             return excelImportMergedList.ToArray();
@@ -50,6 +49,21 @@ namespace WebApplication1.Business.Logic.Import
             }
 
             return horses.ToArray();
+        }
+
+        public Vaulter[] GetVaulters()
+        {
+            var vaulters = new List<Vaulter>();
+            var worksheet = _workbook.Worksheets?.Worksheet("Voltigörer");
+            foreach (var row in worksheet.Rows())
+            {
+                var vaulter = new Vaulter();
+                vaulter.VaulterTdbId = Convert.ToInt32(row.Cell("b").Value);
+                vaulter.Name = row.Cell("c").Value.ToString();
+                vaulters.Add(vaulter);
+            }
+
+            return vaulters.ToArray();
         }
 
         public Club[] GetClubs()
@@ -109,9 +123,10 @@ namespace WebApplication1.Business.Logic.Import
 
         private static ExcelImportMergedModel GetAllRowInformation(IXLRow row)
         {
+            var vaulterId2 = GetInt(row, "l");
             var excelImportMergedModel = new ExcelImportMergedModel
             {
-                ClassTdbId = GetInt(row,"a"),
+                ClassTdbId = GetInt(row, "a"),
                 ClassNr = GetInt(row, "b"),
                 ClassName = GetString(row, "c"),
                 LungerTdbId = GetInt(row, "d"),
@@ -122,7 +137,7 @@ namespace WebApplication1.Business.Logic.Import
                 ClubName = GetString(row, "i"),
                 VaulterId1 = GetInt(row, "j"),
                 VaulterName1 = GetString(row, "k"),
-                VaulterId2 = GetInt(row, "l"),
+                VaulterId2 = vaulterId2,
                 VaulterName2 = GetString(row, "m"),
                 VaulterId3 = GetInt(row, "n"),
                 VaulterName3 = GetString(row, "o"),
@@ -133,7 +148,13 @@ namespace WebApplication1.Business.Logic.Import
                 VaulterId6 = GetInt(row, "t"),
                 VaulterName6 = GetString(row, "u")
             };
+            excelImportMergedModel.isTeam = !IsEmpty(vaulterId2);
             return excelImportMergedModel;
+        }
+
+        private static bool IsEmpty(int vaulterId2)
+        {
+            return vaulterId2 <= 0;
         }
 
         private static string GetString(IXLRow row, string cell)
