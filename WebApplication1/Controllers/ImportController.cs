@@ -38,6 +38,7 @@ namespace WebApplication1.Controllers
             var classes = excelImportService.GetClasses();
             updateservice.UpdateClasses(classes);
 
+
             var vaulters = excelImportService.GetVaulters();
             updateservice.UpdateVaulters(vaulters);
 

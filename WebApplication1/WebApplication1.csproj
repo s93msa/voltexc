@@ -323,6 +323,14 @@
     <Compile Include="Migrations\201803301106347_AddVaulterTdbID.Designer.cs">
       <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.cs" />
+    <Compile Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.Designer.cs">
+      <DependentUpon>201804011232194_AddForeignKeyFieldInSteps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.cs" />
+    <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.Designer.cs">
+      <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -487,6 +495,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803301106347_AddVaulterTdbID.resx">
       <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.resx">
+      <DependentUpon>201804011232194_AddForeignKeyFieldInSteps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.resx">
+      <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

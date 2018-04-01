@@ -114,11 +114,11 @@ namespace WebApplication1.Business.Logic.Import
                         existingVaulter.Name = vaulter.Name.Trim();
                         existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
 
-       //                 if (existingVaulter.VaultingClass?.ClassTdbId != vaulter.VaultingClass?.ClassTdbId)
+                        if (vaulter.VaultingClass != null && existingVaulter.VaultingClass?.ClassTdbId != vaulter.VaultingClass?.ClassTdbId)
                         {
                             existingVaulter.VaultingClass = GetExistingClass(vaulter.VaultingClass);
                         }
-         //               if (existingVaulter.VaultingClub?.ClubTdbId != vaulter.VaultingClub?.ClubTdbId)
+                        if (vaulter.VaultingClub != null && existingVaulter.VaultingClub?.ClubTdbId != vaulter.VaultingClub?.ClubTdbId)
                         {
                             existingVaulter.VaultingClub =  GetExistingClub(vaulter.VaultingClub);
                         }
@@ -153,7 +153,7 @@ namespace WebApplication1.Business.Logic.Import
                     {
                         existingHorse.HorseName = horse.HorseName;
                         existingHorse.HorseTdbId = horse.HorseTdbId;
-                        existingHorse.Lunger = horse.Lunger; 
+                        existingHorse.Lunger = GetExistingLunger(horse.Lunger); 
                         updatedHorses.Add(existingHorse);
                     }
                 }
@@ -231,9 +231,9 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)
         {
             return vaulter.Name != existingVaulter.Name ||
-                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId||
-                   vaulter.VaultingClass?.ClassTdbId != existingVaulter.VaultingClass?.ClassTdbId||
-                   vaulter.VaultingClub?.ClubTdbId != existingVaulter.VaultingClub?.ClubTdbId;
+                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId|| (vaulter.VaultingClass != null &&
+                   vaulter.VaultingClass?.ClassTdbId != existingVaulter.VaultingClass?.ClassTdbId)||
+                   (vaulter.VaultingClub != null && vaulter.VaultingClub?.ClubTdbId != existingVaulter.VaultingClub?.ClubTdbId);
         }
 
         private static bool NotEqual(Club club, Club existingClub)

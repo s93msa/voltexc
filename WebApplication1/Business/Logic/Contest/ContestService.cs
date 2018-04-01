@@ -311,7 +311,30 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 foreach (var vaulter in vaulters)
                 {
-                    db.Entry(vaulter).State = EntityState.Modified; //TODO; bara uppdatera förändrade fält
+                    db.Entry(vaulter).State = EntityState.Modified;
+                    // var vaulter = vaulters[0];
+                    //var existingVaulter = GetVaulter(vaulter.VaulterTdbId);
+                    //db.Vaulters.Attach(existingVaulter);
+                    //db.Entry(existingVaulter).State = EntityState.Added; //TODO; bara uppdatera förändrade fält
+                    //db.Entry(existingVaulter).State = EntityState.Unchanged;
+                    //if (existingVaulter.VaulterTdbId != vaulter.VaulterTdbId)
+                    //{
+                    //    existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
+                    //}
+                    //if (existingVaulter.Name != vaulter.Name)
+                    //{
+                    //    existingVaulter.Name = vaulter.Name;
+                    //}
+                    ////if (existingVaulter.VaultingClass.ClassTdbId != vaulter.VaultingClass.ClassTdbId)
+                    ////{
+                    ////    existingVaulter.VaultingClass = vaulter.VaultingClass;
+                    ////}
+                    ////if (existingVaulter.VaultingClub.ClubTdbId != vaulter.VaultingClub.ClubTdbId)
+                    ////{
+                    ////    existingVaulter.VaultingClub = vaulter.VaultingClub;
+                    ////}
+
+
                 }
                 db.SaveChanges();
             }
@@ -354,7 +377,8 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 using (var db = new VaultingContext())
                 {
-                    _classes = db.CompetitionClasses.ToList();
+                    var classes = db.CompetitionClasses.ToList();
+                    _classes = GetAllDataFromDataBase(classes);
                 }
             }
 
@@ -369,7 +393,7 @@ namespace WebApplication1.Business.Logic.Contest
                 using (var db = new VaultingContext())
                 {
                      var vaulters = db.Vaulters.ToList();
-                    _vaulters = GetAllDataFromDataBase<List<Vaulter>>(vaulters);
+                    _vaulters = GetAllDataFromDataBase(vaulters);
                 }
             }
 

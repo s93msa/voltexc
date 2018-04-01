@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using ClosedXML.Excel;
+using WebApplication1.Migrations;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -35,12 +36,42 @@ namespace WebApplication1.Business.Logic.Import
 
         public Vaulter[] GetVaulters()
         {
+            var individualVaulters = GetIndividualVaulters();
+            var vaulters = AddTeamVaulters(individualVaulters);
+
+            return vaulters.ToArray();
+        }
+
+        private List<Vaulter> AddTeamVaulters(Vaulter[] individualVaulters)
+        {
+            var vaulters = new List<Vaulter>(individualVaulters);
+
+            var teamVaulters = GetTeamVaulters();
+            foreach (var teamVaulter in teamVaulters)
+            {
+                if (!vaulters.Exists(x => x.VaulterTdbId == teamVaulter.VaulterTdbId))
+                {
+                    vaulters.Add(teamVaulter);
+                }
+            }
+            return vaulters;
+        }
+
+        public Vaulter[] GetIndividualVaulters()
+        {
             //TODO: cache
             var vaultersArray = _excelImportRepository.GetVaulters();
             var vaulters = new List<Vaulter>(vaultersArray);
             vaulters = SetClub(vaulters);
             vaulters = SetClass(vaulters);
             return vaulters.ToArray();
+        }
+
+        public Vaulter[] GetTeamVaulters()
+        {
+            //TODO: cache
+            var vaulters = _excelImportRepository.GetTeamVaulters();
+            return vaulters;
         }
 
         public Club[] GetClubs()

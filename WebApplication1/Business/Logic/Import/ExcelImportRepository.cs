@@ -66,6 +66,37 @@ namespace WebApplication1.Business.Logic.Import
             return vaulters.ToArray();
         }
 
+        public Vaulter[] GetTeamVaulters()
+        {
+            var vaulters = new List<Vaulter>();
+            var worksheet = _workbook.Worksheets?.Worksheet("Blad1");
+            foreach (var row in worksheet.Rows())
+            {
+                vaulters = AddVaulter(row, vaulters, "l", "m");
+                vaulters = AddVaulter(row, vaulters, "n", "o");
+                vaulters = AddVaulter(row, vaulters, "p", "q");
+                vaulters = AddVaulter(row, vaulters, "r", "s");
+                vaulters = AddVaulter(row, vaulters, "t", "u");
+            }
+
+            return vaulters.ToArray();
+        }
+
+        private static List<Vaulter> AddVaulter(IXLRow row, List<Vaulter> vaulters, string tdbIdColumn, string nameColumn)
+        {
+            int tdbId;
+            if (row.Cell(tdbIdColumn).TryGetValue(out tdbId))
+            {
+                var vaulter = new Vaulter
+                {
+                    VaulterTdbId = tdbId,
+                    Name = row.Cell(nameColumn).Value.ToString()
+                };
+                vaulters.Add(vaulter);
+            }
+            return vaulters;
+        }
+
         public Club[] GetClubs()
         {
             var clubs = new List<Club>();
