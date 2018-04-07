@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Web;
 
@@ -29,7 +30,9 @@ namespace WebApplication1.Business.Logic.Import
         public int VaulterId6 { get; set; }
         public string VaulterName6 { get; set; }
 
-        public bool isTeam { get; set; }
+        public bool IsTeam { get; set; }
+
+        public string TeamName { get; set; }
 
     }
 }

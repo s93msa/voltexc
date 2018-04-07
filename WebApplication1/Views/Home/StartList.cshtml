@@ -80,7 +80,7 @@ d }) |
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
                         <br />Voltigörer: <br />
-                        @foreach (var vaulter in startListItem.VaultingTeam.VaultersList)
+                        @foreach (var vaulter in startListItem.VaultingTeam.TeamList)
                         {
                             @(vaulter.Participant.Name )
                             <br />

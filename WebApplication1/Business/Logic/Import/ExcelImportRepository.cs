@@ -82,6 +82,9 @@ namespace WebApplication1.Business.Logic.Import
             return vaulters.ToArray();
         }
 
+       
+
+
         private static List<Vaulter> AddVaulter(IXLRow row, List<Vaulter> vaulters, string tdbIdColumn, string nameColumn)
         {
             int tdbId;
@@ -155,17 +158,19 @@ namespace WebApplication1.Business.Logic.Import
         private static ExcelImportMergedModel GetAllRowInformation(IXLRow row)
         {
             var vaulterId2 = GetInt(row, "l");
+            var clubName = GetString(row, "i");
+            var className = GetString(row, "c");
             var excelImportMergedModel = new ExcelImportMergedModel
             {
                 ClassTdbId = GetInt(row, "a"),
                 ClassNr = GetInt(row, "b"),
-                ClassName = GetString(row, "c"),
+                ClassName = className,
                 LungerTdbId = GetInt(row, "d"),
                 LungerName = GetString(row, "e"),
                 HorseTdbId = GetInt(row, "f"),
                 HorseName = GetString(row, "g"),
                 ClubTdbId = GetInt(row, "h"),
-                ClubName = GetString(row, "i"),
+                ClubName = clubName,
                 VaulterId1 = GetInt(row, "j"),
                 VaulterName1 = GetString(row, "k"),
                 VaulterId2 = vaulterId2,
@@ -177,9 +182,10 @@ namespace WebApplication1.Business.Logic.Import
                 VaulterId5 = GetInt(row, "r"),
                 VaulterName5 = GetString(row, "s"),
                 VaulterId6 = GetInt(row, "t"),
-                VaulterName6 = GetString(row, "u")
+                VaulterName6 = GetString(row, "u"),
+                TeamName = GetString(row, "v", clubName + className),
+                IsTeam = !IsEmpty(vaulterId2)
             };
-            excelImportMergedModel.isTeam = !IsEmpty(vaulterId2);
             return excelImportMergedModel;
         }
 
@@ -188,9 +194,16 @@ namespace WebApplication1.Business.Logic.Import
             return vaulterId2 <= 0;
         }
 
-        private static string GetString(IXLRow row, string cell)
+        private static string GetString(IXLRow row, string cell, string defaultValue = "")
         {
-            return row?.Cell(cell)?.Value?.ToString().Trim();
+            var returnValue = row?.Cell(cell)?.Value?.ToString().Trim();
+
+            if(defaultValue != "" && string.IsNullOrWhiteSpace(returnValue))
+            {
+                return defaultValue;
+            }
+
+            return returnValue;
         }
         private static int GetInt(IXLRow row, string cell, int defaultValue = 0)
         {

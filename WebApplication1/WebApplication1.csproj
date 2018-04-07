@@ -215,6 +215,7 @@
     <Compile Include="Business\Logic\Import\ExcelImportMergedModel.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportRepository.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportService.cs" />
+    <Compile Include="Business\Logic\Import\TeamMember.cs" />
     <Compile Include="Business\Logic\Import\UpdateService.cs" />
     <Compile Include="Business\Logic\Import\RequestService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
@@ -330,6 +331,34 @@
     <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.cs" />
     <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.Designer.cs">
       <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.cs" />
+    <Compile Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.Designer.cs">
+      <DependentUpon>201804020852206_AddForeignKeyFieldInVaulter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.cs" />
+    <Compile Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.Designer.cs">
+      <DependentUpon>201804020955250_AddForeignKeyFieldInVaulterNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.cs" />
+    <Compile Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.Designer.cs">
+      <DependentUpon>201804021233173_AddForeignKeyFieldInTeamNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.cs" />
+    <Compile Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.Designer.cs">
+      <DependentUpon>201804021318404_AddClubForeignKeyFieldInTeam.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804061932412_AddForeignKeyTeamlist.cs" />
+    <Compile Include="Migrations\201804061932412_AddForeignKeyTeamlist.Designer.cs">
+      <DependentUpon>201804061932412_AddForeignKeyTeamlist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804061934500_AddForeignKeyTeamlist2.cs" />
+    <Compile Include="Migrations\201804061934500_AddForeignKeyTeamlist2.Designer.cs">
+      <DependentUpon>201804061934500_AddForeignKeyTeamlist2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804071033594_foreignkeyTeamList.cs" />
+    <Compile Include="Migrations\201804071033594_foreignkeyTeamList.Designer.cs">
+      <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
@@ -501,6 +530,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.resx">
       <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.resx">
+      <DependentUpon>201804020852206_AddForeignKeyFieldInVaulter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.resx">
+      <DependentUpon>201804020955250_AddForeignKeyFieldInVaulterNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.resx">
+      <DependentUpon>201804021233173_AddForeignKeyFieldInTeamNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.resx">
+      <DependentUpon>201804021318404_AddClubForeignKeyFieldInTeam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804061932412_AddForeignKeyTeamlist.resx">
+      <DependentUpon>201804061932412_AddForeignKeyTeamlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804061934500_AddForeignKeyTeamlist2.resx">
+      <DependentUpon>201804061934500_AddForeignKeyTeamlist2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804071033594_foreignkeyTeamList.resx">
+      <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

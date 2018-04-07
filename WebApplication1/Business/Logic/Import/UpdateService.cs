@@ -113,14 +113,15 @@ namespace WebApplication1.Business.Logic.Import
                     {
                         existingVaulter.Name = vaulter.Name.Trim();
                         existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
-
-                        if (vaulter.VaultingClass != null && existingVaulter.VaultingClass?.ClassTdbId != vaulter.VaultingClass?.ClassTdbId)
+                        var vaultingClassId = GetExistingClass(vaulter.VaultingClass)?.CompetitionClassId; //TODO: borde flyttas ovanför notequal Se UpdateTeams. Annars är CompetitionClassId null på den ena
+                        if (vaultingClassId != null)
                         {
-                            existingVaulter.VaultingClass = GetExistingClass(vaulter.VaultingClass);
+                            existingVaulter.VaultingClassId = vaultingClassId;
                         }
-                        if (vaulter.VaultingClub != null && existingVaulter.VaultingClub?.ClubTdbId != vaulter.VaultingClub?.ClubTdbId)
+
+                        if (vaulter.VaultingClub != null && existingVaulter.VaultingClub?.ClubTdbId != vaulter.VaultingClub?.ClubTdbId) 
                         {
-                            existingVaulter.VaultingClub =  GetExistingClub(vaulter.VaultingClub);
+                            existingVaulter.VaultingClub =  GetExistingClub(vaulter.VaultingClub); // TODO:Borde göras om till att sätta foreignkey istället precis som i vaultingclassId
                         }
                         updatetdVaulters.Add(existingVaulter);
                     }
@@ -137,6 +138,99 @@ namespace WebApplication1.Business.Logic.Import
             newVaulters = SetClassDatabaseId(newVaulters);
             newVaulters = SetClubDatabaseId(newVaulters);
             ContestService.AddVaulters(newVaulters.ToArray());
+
+        }
+
+        public void UpdateTeamMembers(TeamMember[] teamMembers)
+        {
+            var newMember = new List<TeamList>();
+            var updatedMember = new List<TeamList>();
+
+            foreach (var member in teamMembers)
+            {
+                var existingTeam = GetExistingTeam(member.TeamName);
+                if (existingTeam == null)
+                    continue;
+                //var vaulterTdbId = member.Participant.VaulterTdbId;
+                var existingVaulter = GetExistingVaulter(member.Participant);
+                if(existingVaulter == null)
+                    continue;
+
+                var existingTeamMember = GetExistingTeamMember(existingTeam.TeamId, existingVaulter.VaulterId);
+                if (existingTeamMember == null)
+                {
+                    var newTeamMember = new TeamList
+                    {
+                        ParticipantId = existingVaulter.VaulterId,
+                        StartNumber = member.StartNumber,
+                        TeamId = existingTeam.TeamId
+                    };
+                    newMember.Add(newTeamMember);
+                    continue;
+                }
+
+                if (NotEqual(member, existingTeamMember))
+                {
+                    existingTeamMember.StartNumber = member.StartNumber;
+                    updatedMember.Add(existingTeamMember);
+
+                }
+
+
+            }
+            ContestService.UpdateTeamMembers(updatedMember.ToArray());
+
+            ContestService.AddTeamMembers(newMember.ToArray());
+        }
+
+        public void UpdateTeams(Team[] teams)
+        {
+            var newTeams = new List<Team>();
+            var updatedTeams = new List<Team>();
+            foreach (var team in teams)
+            {
+//                var existingTeamMembers = GetExistingTeamMembers(team);
+                var existingTeam = GetExistingTeam(team);
+                if (existingTeam != null)
+                {
+                    var competitionClassId = GetExistingClass(team.VaultingClass)?.CompetitionClassId;
+                    var competitionClubId = GetExistingClub(team.VaultingClub)?.ClubId;
+
+                    team.VaultingClassId = competitionClassId;
+                    team.VaultingClubId = competitionClubId;
+
+                    //foreach (var vaulter in team.TeamList)
+                    //{
+                    //    vaulter.
+                    //}
+
+                    if (NotEqual(team, existingTeam))
+                    {
+
+                        if (competitionClassId != null)
+                        {
+                            existingTeam.VaultingClassId = competitionClassId;
+                        }
+                        if (competitionClubId != null)
+                        {
+                            existingTeam.VaultingClubId = competitionClubId;
+                        }
+                    
+                        updatedTeams.Add(existingTeam);
+                    }
+                }
+                else
+                {
+
+                    newTeams.Add(team);
+                }
+            }
+
+            //updatedHorses = SetLungerDatabaseId(updatedHorses);
+            ContestService.UpdateTeams(updatedTeams.ToArray());
+
+            //newHorses = SetLungerDatabaseId(newHorses);
+            ContestService.AddTeams(newTeams.ToArray());
 
         }
 
@@ -222,6 +316,27 @@ namespace WebApplication1.Business.Logic.Import
                                     existingLunger.LungerTdbId != lunger.LungerTdbId;
         }
 
+        private static bool NotEqual(TeamList teamMember, TeamList existingTeamMember)
+        {
+            return teamMember.StartNumber != existingTeamMember.StartNumber ||
+                   teamMember.ParticipantId != existingTeamMember.ParticipantId;
+        }
+
+        private static bool NotEqual(Team team, Team existingTeam)
+        {
+            var vaulterListNotEqual = false;
+            //var vaulterListNotEqual = team.TeamList[0].ParticipantId != existingTeam.TeamList[0].ParticipantId;
+            //vaulterListNotEqual = vaulterListNotEqual || team.TeamList[1].ParticipantId != existingTeam.TeamList[1].ParticipantId;
+            //vaulterListNotEqual = vaulterListNotEqual || team.TeamList[2].ParticipantId != existingTeam.TeamList[2].ParticipantId;
+            //vaulterListNotEqual = vaulterListNotEqual || team.TeamList[3].ParticipantId != existingTeam.TeamList[3].ParticipantId;
+            //vaulterListNotEqual = vaulterListNotEqual || team.TeamList[4].ParticipantId != existingTeam.TeamList[4].ParticipantId;
+            //vaulterListNotEqual = vaulterListNotEqual || team.TeamList[5].ParticipantId != existingTeam.TeamList[5].ParticipantId;
+
+
+            return vaulterListNotEqual || (team.VaultingClubId != null && existingTeam.VaultingClubId != team.VaultingClubId) ||
+                   team.VaultingClassId != existingTeam.VaultingClassId;
+        }
+
         private static bool NotEqual(CompetitionClass competitionClass, CompetitionClass existingClass)
         {
             return existingClass.ClassName != competitionClass.ClassName ||
@@ -231,8 +346,8 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)
         {
             return vaulter.Name != existingVaulter.Name ||
-                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId|| (vaulter.VaultingClass != null &&
-                   vaulter.VaultingClass?.ClassTdbId != existingVaulter.VaultingClass?.ClassTdbId)||
+                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId|| (
+                   vaulter.VaultingClassId != existingVaulter.VaultingClassId)||
                    (vaulter.VaultingClub != null && vaulter.VaultingClub?.ClubTdbId != existingVaulter.VaultingClub?.ClubTdbId);
         }
 
@@ -248,7 +363,36 @@ namespace WebApplication1.Business.Logic.Import
                    horse.HorseTdbId != existingHorse.HorseTdbId||
                    horse.Lunger.LungerTdbId != existingHorse.Lunger.LungerTdbId;
         }
-        
+
+        private static TeamList GetExistingTeamMember(int teamId, int vaulterId)
+        {
+            //var vaulter = ContestService.GetVaulter(vaulterTdbId);
+            //if(vaulter == null)
+            //    return null;
+
+            //var vaulterId = vaulter.VaulterId;
+            var existingMember = ContestService.GetTeamMember(teamId, vaulterId);
+
+            return existingMember;
+        }
+        private static Team GetExistingTeam(Team team)
+        {
+
+            var teamName = team.Name?.Trim();
+            return GetExistingTeam(teamName);
+        }
+
+        private static Team GetExistingTeam(string teamName)
+        {
+            return ContestService.GetTeam(teamName);
+        }
+
+        //private static List<TeamList> GetExistingTeamMembers(Team team)
+        //{
+        //    var teamId = team.TeamId;
+        //    return ContestService.GetTeamMembers(teamId);
+        //}
+
         private static Horse GetExistingHorse(Horse horse)
         {
 
@@ -261,13 +405,6 @@ namespace WebApplication1.Business.Logic.Import
             var horseName = horse.HorseName?.Trim();
             existingHorse = ContestService.GetHorse(horseName, lungerTdbId);
 
-            //if (existingLunger != null)
-            //    if (lungerName != existingLunger.LungerName ||
-            //        lunger.LungerTdbId != existingLunger.LungerTdbId)
-            //    {
-            //        var updatedLunger = new Lunger() {LungerName = lungerName, LungerTdbId = lunger.LungerTdbId};
-
-            //    }
             return existingHorse;
         }
 
@@ -320,21 +457,15 @@ namespace WebApplication1.Business.Logic.Import
                 return null;
             }
 
-            var existingClub = ContestService.GetClass(competitionClass.ClassTdbId);
-            if (existingClub != null)
+            var existingClass = ContestService.GetClass(competitionClass.ClassTdbId);
+            if (existingClass != null)
             {
-                return existingClub;
+                return existingClass;
             }
             var className = competitionClass.ClassName;
-            existingClub = ContestService.GetClass(className);
-            //if (existingLunger != null)
-            //    if (lungerName != existingLunger.LungerName ||
-            //        lunger.LungerTdbId != existingLunger.LungerTdbId)
-            //    {
-            //        var updatedLunger = new Lunger() {LungerName = lungerName, LungerTdbId = lunger.LungerTdbId};
-
-            //    }
-            return existingClub;
+            existingClass = ContestService.GetClass(className);
+           
+            return existingClass;
         }
 
         private static Vaulter GetExistingVaulter(Vaulter vaulter)

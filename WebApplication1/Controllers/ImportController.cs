@@ -42,6 +42,13 @@ namespace WebApplication1.Controllers
             var vaulters = excelImportService.GetVaulters();
             updateservice.UpdateVaulters(vaulters);
 
+            var teams = excelImportService.GetTeams();
+            updateservice.UpdateTeams(teams);
+
+            var teamMembers = excelImportService.GetTeamMembers();
+            updateservice.UpdateTeamMembers(teamMembers);
+
+
             return RedirectToAction("Index");
         }
     }

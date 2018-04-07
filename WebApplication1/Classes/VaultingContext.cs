@@ -28,6 +28,7 @@ namespace WebApplication1.Classes
         public DbSet<StartListClassStep> StartListClassSteps { get; set; }
         public DbSet<Step> Steps { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamList> TeamMembers { get; set; }
         public DbSet<Vaulter> Vaulters { get; set; }
 
 

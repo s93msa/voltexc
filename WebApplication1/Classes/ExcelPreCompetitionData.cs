@@ -153,7 +153,7 @@ namespace WebApplication1.Classes
 
             _vaultersList = new SortedList<int, Vaulter>();
 
-            foreach (var vaulter in _team.VaultersList)
+            foreach (var vaulter in _team.TeamList)
             {
                 _vaultersList.Add(vaulter.StartNumber, vaulter.Participant);
             }

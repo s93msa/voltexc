@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -40,6 +41,84 @@ namespace WebApplication1.Business.Logic.Import
             var vaulters = AddTeamVaulters(individualVaulters);
 
             return vaulters.ToArray();
+        }
+
+        public TeamMember[] GetTeamMembers()
+        {
+            var mergedInfo = GetMergedInfo();
+            var teamRows = mergedInfo.Where(x => x.IsTeam).ToArray();
+            var teamMembersList = new List<TeamMember>();
+            foreach (var teamRow in teamRows)
+            {
+
+                var member1 = GetTeamMember(teamRow.VaulterName1, teamRow.VaulterId1, 1, teamRow.TeamName);
+                var member2 = GetTeamMember(teamRow.VaulterName2, teamRow.VaulterId2, 2, teamRow.TeamName);
+                var member3 = GetTeamMember(teamRow.VaulterName3, teamRow.VaulterId3, 3, teamRow.TeamName);
+                var member4 = GetTeamMember(teamRow.VaulterName4, teamRow.VaulterId4, 4, teamRow.TeamName);
+                var member5 = GetTeamMember(teamRow.VaulterName5, teamRow.VaulterId5, 5, teamRow.TeamName);
+                var member6 = GetTeamMember(teamRow.VaulterName6, teamRow.VaulterId6, 6, teamRow.TeamName);
+
+                var teamMembers = new List<TeamMember> { member1, member2, member3, member4, member5, member6 };
+                teamMembersList.AddRange(teamMembers);
+            }
+            return teamMembersList.ToArray();
+        }
+
+            public Team[] GetTeams()
+        {
+            var mergedInfo = GetMergedInfo();
+            var teamRows = mergedInfo.Where(x => x.IsTeam).ToArray();
+
+            var teamList = new List<Team>();
+
+            foreach (var teamRow in teamRows)
+            {
+                Club club = CreateClubInstance(teamRow.ClubTdbId, teamRow.ClubName);
+
+                var competitionClass = new CompetitionClass
+                {
+                    ClassTdbId = teamRow.ClassTdbId,
+                    ClassNr = teamRow.ClassNr,
+                    ClassName = teamRow.ClassName
+                };
+
+             
+
+                var newTeam = new Team
+                {
+                    Name = teamRow.TeamName,
+                    VaultingClub = club,
+                    VaultingClass = competitionClass,
+                };
+
+                teamList.Add(newTeam);
+
+            }
+            return teamList.ToArray();
+
+        }
+
+        private static Club CreateClubInstance(int clubTdbId, string clubName)
+        {
+            return new Club
+            {
+                ClubTdbId = clubTdbId,
+                ClubName = clubName
+            };
+        }
+
+        private static TeamMember GetTeamMember(string vaulterName, int vaulterTdbId, int startNumber, string teamName)
+        {
+            if (vaulterTdbId == 0)
+                return null;
+
+            var teamMember = new TeamMember()
+            {
+                Participant = new Vaulter() {Name = vaulterName, VaulterTdbId = vaulterTdbId},
+                StartNumber = startNumber,
+                TeamName = teamName
+            };
+            return teamMember;
         }
 
         private List<Vaulter> AddTeamVaulters(Vaulter[] individualVaulters)
@@ -170,7 +249,7 @@ namespace WebApplication1.Business.Logic.Import
         public Club[] GetClubs(int vaulterTdbId)
         {
             var mergedInfo = GetMergedInfo();
-            var filteredRows = mergedInfo.Where(x => !x.isTeam && x.VaulterId1 == vaulterTdbId).ToArray();
+            var filteredRows = mergedInfo.Where(x => !x.IsTeam && x.VaulterId1 == vaulterTdbId).ToArray();
 
             var clubs = new List<Club>();
 
@@ -194,7 +273,7 @@ namespace WebApplication1.Business.Logic.Import
         public CompetitionClass[] GetClasses(int vaulterTdbId)
         {
             var mergedInfo = GetMergedInfo();
-            var filteredRows = mergedInfo.Where(x => !x.isTeam && x.VaulterId1 == vaulterTdbId).ToArray();
+            var filteredRows = mergedInfo.Where(x => !x.IsTeam && x.VaulterId1 == vaulterTdbId).ToArray();
 
             var classes = new List<CompetitionClass>();
 

@@ -10,6 +10,9 @@ namespace WebApplication1.Models
 
         public string Armband { get; set; }
 
+        public int? VaultingClassId { get; set; }
+        [ForeignKey("VaultingClassId")]
+
         public virtual CompetitionClass VaultingClass { get; set; }
 
         [Index]

@@ -32,6 +32,8 @@ namespace WebApplication1.Business.Logic.Contest
         private static List<Horse> _horses = null;
         private static List<CompetitionClass> _classes;
         private static List<Vaulter> _vaulters;
+        private static List<Team> _teams;
+        private static List<TeamList> _teamMembers;
 
 
         public static Models.Contest GetContestInstance()
@@ -172,6 +174,22 @@ namespace WebApplication1.Business.Logic.Contest
             return vaulter;
         }
 
+        public static Team GetTeam(string teamName)
+        {
+
+            var teams = GetTeams();
+            var team = teams.FirstOrDefault(x => (x.Name.Trim() == teamName)); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return team;
+        }
+
+        public static TeamList GetTeamMember(int teamId, int vaulterId)
+        {
+            var allTeamMembers = GetTeamMembers();
+            var  member = allTeamMembers.FirstOrDefault(x => (x.TeamId == teamId && x.ParticipantId == vaulterId)); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return member;
+        }
 
 
         public static Horse GetHorse(int horseTdbId, int lungerTdbId)
@@ -249,6 +267,28 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static void AddTeams(Team[] teams)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.Teams.AddRange(teams);
+                db.SaveChanges();
+            }
+            _horses = null;
+
+        }
+
+        public static void AddTeamMembers(TeamList[] teamMembers)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.TeamMembers.AddRange(teamMembers);
+                db.SaveChanges();
+            }
+            _horses = null;
+
+        }
+
         public static void UpdateLungers(Lunger[] lungers)
         {
             using (var db = new VaultingContext())
@@ -305,18 +345,54 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static void UpdateTeams(Team[] teams)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var team in teams)
+                {
+                    db.Entry(team).State = EntityState.Modified; //TODO; bara uppdatera förändrade fält
+                }
+                db.SaveChanges();
+            }
+            _teams = null;
+
+        }
+
+        public static void UpdateTeamMembers(TeamList[] teamMembers)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var teamMember in teamMembers)
+                {
+                    db.Entry(teamMember).State = EntityState.Modified; //TODO; bara uppdatera förändrade fält
+                }
+                db.SaveChanges();
+            }
+            _teams = null;
+
+        }
         public static void UpdateVaulters(Vaulter[] vaulters)
         {
             using (var db = new VaultingContext())
             {
+                //var vaulters1 = db.Vaulters.ToList();
+
+                //var vaulter = vaulters1.FirstOrDefault(x => x.VaulterTdbId == vaulters[0].VaulterTdbId); //TODO: refaktorera. Hämta från databasen istället? 
+
+                //vaulter.Name = vaulter.Name + "test";
                 foreach (var vaulter in vaulters)
                 {
+                    //db.Entry(vaulter).State = EntityState.Added;
                     db.Entry(vaulter).State = EntityState.Modified;
+                    //db.Entry(vaulter).Property(x => x.VaultingClass.Steps[0].TypeOfContestId).IsModified = false;
+                    //db.Entry(vaulter).Property(x => x.VaultingClub).IsModified = false;
                     // var vaulter = vaulters[0];
-                    //var existingVaulter = GetVaulter(vaulter.VaulterTdbId);
                     //db.Vaulters.Attach(existingVaulter);
                     //db.Entry(existingVaulter).State = EntityState.Added; //TODO; bara uppdatera förändrade fält
                     //db.Entry(existingVaulter).State = EntityState.Unchanged;
+
+                    //var existingVaulter = GetVaulter(vaulter.VaulterTdbId);
                     //if (existingVaulter.VaulterTdbId != vaulter.VaulterTdbId)
                     //{
                     //    existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
@@ -325,14 +401,14 @@ namespace WebApplication1.Business.Logic.Contest
                     //{
                     //    existingVaulter.Name = vaulter.Name;
                     //}
-                    ////if (existingVaulter.VaultingClass.ClassTdbId != vaulter.VaultingClass.ClassTdbId)
-                    ////{
-                    ////    existingVaulter.VaultingClass = vaulter.VaultingClass;
-                    ////}
-                    ////if (existingVaulter.VaultingClub.ClubTdbId != vaulter.VaultingClub.ClubTdbId)
-                    ////{
-                    ////    existingVaulter.VaultingClub = vaulter.VaultingClub;
-                    ////}
+                    //if (existingVaulter.VaultingClass.ClassTdbId != vaulter.VaultingClass.ClassTdbId)
+                    //{
+                    //    existingVaulter.VaultingClass = vaulter.VaultingClass;
+                    //}
+                    //if (existingVaulter.VaultingClub.ClubTdbId != vaulter.VaultingClub.ClubTdbId)
+                    //{
+                    //    existingVaulter.VaultingClub = vaulter.VaultingClub;
+                    //}
 
 
                 }
@@ -377,8 +453,7 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 using (var db = new VaultingContext())
                 {
-                    var classes = db.CompetitionClasses.ToList();
-                    _classes = GetAllDataFromDataBase(classes);
+                    _classes = db.CompetitionClasses.ToList();
                 }
             }
 
@@ -392,8 +467,13 @@ namespace WebApplication1.Business.Logic.Contest
             {
                 using (var db = new VaultingContext())
                 {
-                     var vaulters = db.Vaulters.ToList();
-                    _vaulters = GetAllDataFromDataBase(vaulters);
+                     _vaulters = db.Vaulters.ToList();
+                    foreach (var vaulter in _vaulters)
+                    {
+                        //var dummy1 = vaulter.VaultingClass;
+                        var dummy2 = vaulter.VaultingClub;
+                    }
+                    //var dummy = GetAllDataFromDataBase<List<Vaulter>>(_vaulters); // bara för att hämta alla värden när vi är i context dvs inom using
                 }
             }
 
@@ -402,6 +482,39 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        private static List<Team> GetTeams()
+        {
+            if (_teams == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _teams = db.Teams.ToList();
+                    //foreach (var team in _teams)
+                    //{
+                    //    var dummy = team.TeamList.ToArray(); // bara för att hämta alla värden när vi är i context dvs inom using
+                    //}
+                }
+            }
+
+
+            return _teams;
+
+        }
+
+        private static List<TeamList> GetTeamMembers()
+        {
+            if (_teamMembers == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _teamMembers = db.TeamMembers.ToList();
+                }
+            }
+
+
+            return _teamMembers;
+
+        }
         private static List<Horse> GetHorses(bool forceReadFromDb = false)
         {
             if (forceReadFromDb || _horses == null)
