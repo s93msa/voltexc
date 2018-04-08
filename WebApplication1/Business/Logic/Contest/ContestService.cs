@@ -231,7 +231,7 @@ namespace WebApplication1.Business.Logic.Contest
                 db.Clubs.AddRange(clubs);
                 db.SaveChanges();
             }
-            _lungers = null;
+            _clubs = null;
 
         }
 
@@ -274,7 +274,7 @@ namespace WebApplication1.Business.Logic.Contest
                 db.Teams.AddRange(teams);
                 db.SaveChanges();
             }
-            _horses = null;
+            _teams = null;
 
         }
 
@@ -285,8 +285,7 @@ namespace WebApplication1.Business.Logic.Contest
                 db.TeamMembers.AddRange(teamMembers);
                 db.SaveChanges();
             }
-            _horses = null;
-
+            _teamMembers = null;
         }
 
         public static void UpdateLungers(Lunger[] lungers)
@@ -369,7 +368,7 @@ namespace WebApplication1.Business.Logic.Contest
                 }
                 db.SaveChanges();
             }
-            _teams = null;
+            _teamMembers = null;
 
         }
         public static void UpdateVaulters(Vaulter[] vaulters)

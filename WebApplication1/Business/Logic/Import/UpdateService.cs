@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
+using WebApplication1.Migrations;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -148,11 +149,15 @@ namespace WebApplication1.Business.Logic.Import
 
             foreach (var member in teamMembers)
             {
+                if (member == null)
+                {
+                    continue;
+                }
+
                 var existingTeam = GetExistingTeam(member.TeamName);
                 if (existingTeam == null)
                     continue;
-                //var vaulterTdbId = member.Participant.VaulterTdbId;
-                var existingVaulter = GetExistingVaulter(member.Participant);
+                var existingVaulter = GetExistingVaulter(member.VaulterTdbId,member.VaulterName);
                 if(existingVaulter == null)
                     continue;
 
@@ -316,10 +321,13 @@ namespace WebApplication1.Business.Logic.Import
                                     existingLunger.LungerTdbId != lunger.LungerTdbId;
         }
 
-        private static bool NotEqual(TeamList teamMember, TeamList existingTeamMember)
+        private static bool NotEqual(TeamMember teamMember, TeamList existingTeamMember)
         {
-            return teamMember.StartNumber != existingTeamMember.StartNumber ||
-                   teamMember.ParticipantId != existingTeamMember.ParticipantId;
+           // var teamMemberVaulterInfo = GetExistingVaulter(teamMember.VaulterTdbId, teamMember.VaulterName);
+
+            return teamMember.StartNumber != existingTeamMember.StartNumber;
+
+            //     ||                   teamMemberVaulterInfo.VaulterId != existingTeamMember.ParticipantId;
         }
 
         private static bool NotEqual(Team team, Team existingTeam)
@@ -470,13 +478,20 @@ namespace WebApplication1.Business.Logic.Import
 
         private static Vaulter GetExistingVaulter(Vaulter vaulter)
         {
-            var existingVaulter = ContestService.GetVaulter(vaulter.VaulterTdbId);
+            var vaulterTdbId = vaulter.VaulterTdbId;
+            var vaulterName = vaulter.Name;
+
+            return GetExistingVaulter(vaulterTdbId, vaulterName);
+        }
+
+        private static Vaulter GetExistingVaulter( int vaulterTdbId, string vaulterName)
+        {
+            var existingVaulter = ContestService.GetVaulter(vaulterTdbId);
             if (existingVaulter != null)
             {
                 return existingVaulter;
             }
-            var vaulterName = vaulter.Name.Trim();
-            existingVaulter = ContestService.GetVaulter(vaulterName);
+            existingVaulter = ContestService.GetVaulter(vaulterName.Trim());
 
             if (existingVaulter == null || existingVaulter.VaulterTdbId > 0) // en annan voltigör med samma namn
             {

@@ -114,7 +114,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var teamMember = new TeamMember()
             {
-                Participant = new Vaulter() {Name = vaulterName, VaulterTdbId = vaulterTdbId},
+                VaulterName = vaulterName,
+                VaulterTdbId = vaulterTdbId,
                 StartNumber = startNumber,
                 TeamName = teamName
             };

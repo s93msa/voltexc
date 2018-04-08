@@ -360,6 +360,10 @@
     <Compile Include="Migrations\201804071033594_foreignkeyTeamList.Designer.cs">
       <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804080627576_newForeignkey.cs" />
+    <Compile Include="Migrations\201804080627576_newForeignkey.Designer.cs">
+      <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -551,6 +555,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804071033594_foreignkeyTeamList.resx">
       <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080627576_newForeignkey.resx">
+      <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
