@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using AutoMapper;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using WebApplication1.Migrations;
 using WebApplication1.Models;
 
@@ -19,6 +21,67 @@ namespace WebApplication1.Business.Logic.Import
         {
             _excelImportRepository = new ExcelImportRepository(workbook);
         }
+        public HorseOrder[] GetHorseOrdersTeam(int[] competionClassesTdbIds,
+            int startListClassStepId, int teamTestnumber)
+        {
+            var steps = GetTeamHorseOrders(competionClassesTdbIds);
+            foreach (var horseOrder in steps)
+            {
+                horseOrder.StartListClassStepId = startListClassStepId;
+                horseOrder.TeamTestnumber = teamTestnumber;
+            }
+
+            return steps;
+        }
+        private HorseOrder[] GetTeamHorseOrders(int[] competionClassesTdbIds)
+        {
+            var rows = GetRows(competionClassesTdbIds);
+
+            var teamRows = rows.Where(x => x.IsTeam).ToArray();
+            List<HorseOrder> horseOrders = new List<HorseOrder>();
+            int startNumber = 1;
+            foreach (var teamRow in teamRows)
+            {
+                var lunger = new Lunger() {LungerTdbId = teamRow.LungerTdbId};
+
+                var horseOrder = new HorseOrder
+                {
+                    StartNumber = startNumber++,
+                    HorseInformation = new Horse() {HorseTdbId = teamRow.HorseTdbId, Lunger = lunger},
+                    IsActive = true,
+                    IsTeam = true,
+                    VaultingTeam = new Team() {Name = teamRow.TeamName}
+                };
+
+                horseOrders.Add(horseOrder);
+            }
+
+            return horseOrders.ToArray();
+        }
+
+       
+
+        public ExcelImportMergedModel[] GetRows(int[] classNumbers)
+        {
+            var mergedInfo = GetMergedInfo();
+            IEnumerable<ExcelImportMergedModel> rowQuery = mergedInfo;
+            foreach (var classTdbId in classNumbers)
+            {
+                rowQuery = rowQuery.Where(x => x.ClassTdbId == classTdbId);
+            }
+            return rowQuery.ToArray();
+        }
+        //public ExcelImportMergedModel[] GetRows(int[] classTdbIds, int horseTdbId)
+        //{
+        //    var mergedInfo = GetMergedInfo();
+        //    var rowQuery = mergedInfo.Where(x => x.HorseTdbId == horseTdbId);
+        //    foreach (var classTdbId in classTdbIds)
+        //    {
+        //        rowQuery = rowQuery.Where(x => x.ClassTdbId == classTdbId);
+        //    }
+        //    return rowQuery.ToArray();
+        //    //_excelImportRepository.GetVaulters(classTdbIds)
+        //}
 
 
         public Lunger[] GetLungers()
@@ -42,6 +105,7 @@ namespace WebApplication1.Business.Logic.Import
 
             return vaulters.ToArray();
         }
+
 
         public TeamMember[] GetTeamMembers()
         {

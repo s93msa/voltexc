@@ -75,7 +75,7 @@ d }) |
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName)
-                        @ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber).Name                        
+                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)                        
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
@@ -113,7 +113,7 @@ d }) |
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName)
-                                        @ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber).Name
+                                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)

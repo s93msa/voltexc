@@ -12,6 +12,8 @@ namespace WebApplication1.Models
         [Index]
         public int HorseTdbId { get; set; }
 
+        public int? LungerId { get; set; }
+        [ForeignKey("LungerId")]
         public virtual Lunger Lunger { get; set; }
 
 

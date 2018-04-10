@@ -6,6 +6,9 @@ namespace WebApplication1.Models
     {
         public int VaulterId { get; set; }
         public string Name { get; set; }
+
+        public int? VaultingClubId { get; set; }
+        [ForeignKey("VaultingClubId")]
         public virtual Club VaultingClub { get; set; }
 
         public string Armband { get; set; }

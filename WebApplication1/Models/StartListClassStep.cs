@@ -12,7 +12,9 @@ namespace WebApplication1.Models
         public int StartOrder { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
-        public virtual List<JudgeTable> JudgeTables { get; set; }
+
+       // public virtual List<CompetitionClass> CompetitionClasses { get; set; }
+    public virtual List<JudgeTable> JudgeTables { get; set; }
 
         public virtual List<HorseOrder> StartList { get; set; }
 

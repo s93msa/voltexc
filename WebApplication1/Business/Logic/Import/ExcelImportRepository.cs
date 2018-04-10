@@ -26,7 +26,7 @@ namespace WebApplication1.Business.Logic.Import
         public ExcelImportMergedModel[] GetMergedInfo()
         {
             var excelImportMergedList = new List<ExcelImportMergedModel>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Blad1");
+            var worksheet = _workbook.Worksheets?.Worksheet("ekipage");
             foreach (var row in worksheet.Rows())
             {
                 var excelImportMergedModel = GetAllRowInformation(row);
@@ -39,12 +39,12 @@ namespace WebApplication1.Business.Logic.Import
         public Horse[] GetHorses()
         {
             var horses = new List<Horse>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Hästar");
+            var worksheet = _workbook.Worksheets?.Worksheet("hästar");
             foreach (var row in worksheet.Rows())
             {
                 var horse = new Horse();
-                horse.HorseTdbId = Convert.ToInt32(row.Cell("b").Value);
-                horse.HorseName = row.Cell("c").Value.ToString();
+                horse.HorseTdbId = Convert.ToInt32(row.Cell("a").Value);
+                horse.HorseName = row.Cell("b").Value.ToString();
                 horses.Add(horse);
             }
 
@@ -54,12 +54,12 @@ namespace WebApplication1.Business.Logic.Import
         public Vaulter[] GetVaulters()
         {
             var vaulters = new List<Vaulter>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Voltigörer");
+            var worksheet = _workbook.Worksheets?.Worksheet("tävlande");
             foreach (var row in worksheet.Rows())
             {
                 var vaulter = new Vaulter();
-                vaulter.VaulterTdbId = Convert.ToInt32(row.Cell("b").Value);
-                vaulter.Name = row.Cell("c").Value.ToString();
+                vaulter.VaulterTdbId = Convert.ToInt32(row.Cell("a").Value);
+                vaulter.Name = row.Cell("b").Value.ToString();
                 vaulters.Add(vaulter);
             }
 
@@ -69,7 +69,7 @@ namespace WebApplication1.Business.Logic.Import
         public Vaulter[] GetTeamVaulters()
         {
             var vaulters = new List<Vaulter>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Blad1");
+            var worksheet = _workbook.Worksheets?.Worksheet("ekipage");
             foreach (var row in worksheet.Rows())
             {
                 vaulters = AddVaulter(row, vaulters, "l", "m");
@@ -103,13 +103,13 @@ namespace WebApplication1.Business.Logic.Import
         public Club[] GetClubs()
         {
             var clubs = new List<Club>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Klubb");
+            var worksheet = _workbook.Worksheets?.Worksheet("klubbar");
             foreach (var row in worksheet.Rows())
             {
                 var club = new Club
                 {
-                    ClubTdbId = GetInt(row, "b"),
-                    ClubName = GetString(row, "c")
+                    ClubTdbId = GetInt(row, "a"),
+                    ClubName = GetString(row, "b")
                 };
                 clubs.Add(club);
             }
@@ -120,14 +120,14 @@ namespace WebApplication1.Business.Logic.Import
         public CompetitionClass[] GetClasses()
         {
             var competitionClasses = new List<CompetitionClass>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Klasser");
+            var worksheet = _workbook.Worksheets?.Worksheet("klasser");
             foreach (var row in worksheet.Rows())
             {
                 var competitionClass = new CompetitionClass
                 {
-                    ClassTdbId = GetInt(row, "b"),
-                    ClassNr = GetInt(row, "c"),
-                    ClassName = GetString(row, "d")
+                    ClassTdbId = GetInt(row, "a"),
+                    ClassNr = GetInt(row, "b"),
+                    ClassName = GetString(row, "c")
                 };
                 competitionClasses.Add(competitionClass);
             }
@@ -138,13 +138,13 @@ namespace WebApplication1.Business.Logic.Import
         public Lunger[] GetLungers()
         {
             var lungers = new List<Lunger>();
-            var worksheet = _workbook.Worksheets?.Worksheet("Linförare");
+            var worksheet = _workbook.Worksheets?.Worksheet("linförare");
             //            var worksheet = _workbook.Worksheets?.Worksheet("Voltigörer");
             foreach (var row in worksheet.Rows())
             {
                 var lunger = new Lunger();
-                lunger.LungerTdbId = GetInt(row, "b");
-                lunger.LungerName = GetString(row, "c");
+                lunger.LungerTdbId = GetInt(row, "a");
+                lunger.LungerName = GetString(row, "b");
                 lungers.Add(lunger);
             }
 

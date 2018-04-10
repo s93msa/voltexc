@@ -48,8 +48,18 @@ namespace WebApplication1.Controllers
             var teamMembers = excelImportService.GetTeamMembers();
             updateservice.UpdateTeamMembers(teamMembers);
 
+            int StartListClassStepId;
+            int[] competionClassesTdbIds;
+            int testNumber;
+            StartListClassStepId = 4;
+            competionClassesTdbIds = new int[1] { 350446 };
+            testNumber = 1;
+            var horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
+            updateservice.UpdateTeamHorseOrders(horseOrders);
 
             return RedirectToAction("Index");
         }
+
+        
     }
 }

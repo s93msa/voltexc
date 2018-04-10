@@ -364,6 +364,26 @@
     <Compile Include="Migrations\201804080627576_newForeignkey.Designer.cs">
       <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804081419045_HorseAddLungerForeignKey.cs" />
+    <Compile Include="Migrations\201804081419045_HorseAddLungerForeignKey.Designer.cs">
+      <DependentUpon>201804081419045_HorseAddLungerForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804081439521_VaultersAddClubForeignKey.cs" />
+    <Compile Include="Migrations\201804081439521_VaultersAddClubForeignKey.Designer.cs">
+      <DependentUpon>201804081439521_VaultersAddClubForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091938273_HorseOrderAddForeignKey.cs" />
+    <Compile Include="Migrations\201804091938273_HorseOrderAddForeignKey.Designer.cs">
+      <DependentUpon>201804091938273_HorseOrderAddForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091947551_HorseOrderStartListClassID.cs" />
+    <Compile Include="Migrations\201804091947551_HorseOrderStartListClassID.Designer.cs">
+      <DependentUpon>201804091947551_HorseOrderStartListClassID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091950566_VaulterOrderForeignKey.cs" />
+    <Compile Include="Migrations\201804091950566_VaulterOrderForeignKey.Designer.cs">
+      <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -558,6 +578,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804080627576_newForeignkey.resx">
       <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081419045_HorseAddLungerForeignKey.resx">
+      <DependentUpon>201804081419045_HorseAddLungerForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081439521_VaultersAddClubForeignKey.resx">
+      <DependentUpon>201804081439521_VaultersAddClubForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091938273_HorseOrderAddForeignKey.resx">
+      <DependentUpon>201804091938273_HorseOrderAddForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091947551_HorseOrderStartListClassID.resx">
+      <DependentUpon>201804091947551_HorseOrderStartListClassID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091950566_VaulterOrderForeignKey.resx">
+      <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

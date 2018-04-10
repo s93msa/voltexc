@@ -7,14 +7,14 @@ namespace WebApplication1.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.TeamLists", "TeamName", c => c.String());
-            AddColumn("dbo.TeamLists", "Discriminator", c => c.String(nullable: false, maxLength: 128));
+            //AddColumn("dbo.TeamLists", "TeamName", c => c.String());
+            //AddColumn("dbo.TeamLists", "Discriminator", c => c.String(nullable: false, maxLength: 128));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.TeamLists", "Discriminator");
-            DropColumn("dbo.TeamLists", "TeamName");
+            //DropColumn("dbo.TeamLists", "Discriminator");
+            //DropColumn("dbo.TeamLists", "TeamName");
         }
     }
 }
