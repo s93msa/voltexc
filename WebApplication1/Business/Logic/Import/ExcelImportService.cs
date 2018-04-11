@@ -21,19 +21,73 @@ namespace WebApplication1.Business.Logic.Import
         {
             _excelImportRepository = new ExcelImportRepository(workbook);
         }
+
+        public HorseOrder[] GetHorseOrderIndividual(int[] competionClassesTdbIds,
+            int startListClassStepId, int vaulterTestnumber)
+        {
+            var horseOrderList = GetIndividualHorseOrders(competionClassesTdbIds);
+            foreach (var horseOrder in horseOrderList)
+            {
+                horseOrder.StartListClassStepId = startListClassStepId;
+                horseOrder.Vaulters.ForEach(x => x.Testnumber = vaulterTestnumber);
+            }
+
+            return horseOrderList;
+        }
+
         public HorseOrder[] GetHorseOrdersTeam(int[] competionClassesTdbIds,
             int startListClassStepId, int teamTestnumber)
         {
-            var steps = GetTeamHorseOrders(competionClassesTdbIds);
-            foreach (var horseOrder in steps)
+            var horseOrderList = GetTeamHorseOrders(competionClassesTdbIds);
+            foreach (var horseOrder in horseOrderList)
             {
                 horseOrder.StartListClassStepId = startListClassStepId;
                 horseOrder.TeamTestnumber = teamTestnumber;
             }
 
-            return steps;
+            return horseOrderList;
         }
-        private HorseOrder[] GetTeamHorseOrders(int[] competionClassesTdbIds)
+
+        private HorseOrder[] GetIndividualHorseOrders(int[] competionClassesTdbIds)
+        {
+            var rows = GetRows(competionClassesTdbIds);
+            var individualRows = rows.Where(x => x.IsTeam == false).ToArray();
+            var listofDistinctHorseTdbIds = individualRows.GroupBy(x => new { x.HorseTdbId, x.LungerTdbId}).Select(h => h.First());
+            var horseOrders = new List<HorseOrder>();
+            foreach (var row in listofDistinctHorseTdbIds)
+            {
+                var vaultersRows = individualRows.Where(x => x.HorseTdbId == row.HorseTdbId && x.LungerTdbId == row.LungerTdbId);
+                var lunger = new Lunger() { LungerTdbId = row.LungerTdbId };
+
+                var vaultersOrder = new List<VaulterOrder>();
+                int vaulterStartOrder = 1;
+                foreach (var vaultersRow in vaultersRows)
+                {
+                    var vaulter = new Vaulter() {VaulterTdbId = vaultersRow.VaulterId1, Name = vaultersRow.VaulterName1};
+                    var vaulterOrder = new VaulterOrder() {StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true};
+                    vaultersOrder.Add(vaulterOrder);
+                }
+
+                int startNumber = 1;
+                var horseOrder = new HorseOrder
+                {
+                    StartNumber = startNumber++,
+                    HorseInformation = new Horse() { HorseTdbId = row.HorseTdbId, Lunger = lunger },
+                    IsActive = true,
+                    IsTeam = false,
+                    VaultingTeam = new Team() { Name = row.TeamName },
+                    Vaulters = vaultersOrder
+                };
+                horseOrders.Add(horseOrder);
+
+            }
+
+            return horseOrders.ToArray();
+
+
+        }
+
+    private HorseOrder[] GetTeamHorseOrders(int[] competionClassesTdbIds)
         {
             var rows = GetRows(competionClassesTdbIds);
 
@@ -65,10 +119,10 @@ namespace WebApplication1.Business.Logic.Import
         {
             var mergedInfo = GetMergedInfo();
             IEnumerable<ExcelImportMergedModel> rowQuery = mergedInfo;
-            foreach (var classTdbId in classNumbers)
-            {
-                rowQuery = rowQuery.Where(x => x.ClassTdbId == classTdbId);
-            }
+            //foreach (var classTdbId in classNumbers)
+            //{
+            //}
+            rowQuery = rowQuery.Where(x => classNumbers.Contains(x.ClassTdbId));
             return rowQuery.ToArray();
         }
         //public ExcelImportMergedModel[] GetRows(int[] classTdbIds, int horseTdbId)

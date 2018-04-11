@@ -51,11 +51,26 @@ namespace WebApplication1.Controllers
             int StartListClassStepId;
             int[] competionClassesTdbIds;
             int testNumber;
-            StartListClassStepId = 4;
             competionClassesTdbIds = new int[1] { 350446 };
+
+            StartListClassStepId = 18; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             var horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
             updateservice.UpdateTeamHorseOrders(horseOrders);
+
+            StartListClassStepId = 7; //Svår klass lag seniorer klass 1 – Kür
+            testNumber = 2;
+            horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
+            updateservice.UpdateTeamHorseOrders(horseOrders);
+
+            competionClassesTdbIds = new int[3] { 350449,350450,350451 };
+
+            StartListClassStepId = 1; // Svår klass lag seniorer klass 1 -Grund 
+            testNumber = 1;
+
+            horseOrders =
+                excelImportService.GetHorseOrderIndividual(competionClassesTdbIds, StartListClassStepId, testNumber);
+
 
             return RedirectToAction("Index");
         }
