@@ -12,6 +12,8 @@ namespace WebApplication1.Models
 
 
         public int StartOrder { get; set; }
+        public int? VaulterId { get; set; }
+        [ForeignKey("VaulterId")]
         public virtual Vaulter Participant { get; set; }
         public int Testnumber { get; set; }
 

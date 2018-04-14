@@ -65,7 +65,7 @@ namespace WebApplication1.Controllers
 
             competionClassesTdbIds = new int[3] { 350449,350450,350451 };
 
-            StartListClassStepId = 1; // Svår klass lag seniorer klass 1 -Grund 
+            StartListClassStepId = 1; // Svår klass individuella Juniorer-Miniorer-senior (ej tekn)  klass 4, 5,6 – Grund
             testNumber = 1;
 
             horseOrders =

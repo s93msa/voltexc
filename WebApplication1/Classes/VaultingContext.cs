@@ -38,6 +38,7 @@ namespace WebApplication1.Classes
 
         public DbSet<StepType> StepTypes { get; set; }
 
+        public DbSet<VaulterOrder> VaulterOrders { get; set; }
 
     }
 }

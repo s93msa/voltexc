@@ -75,7 +75,6 @@ namespace WebApplication1.Business.Logic.Import
                     HorseInformation = new Horse() { HorseTdbId = row.HorseTdbId, Lunger = lunger },
                     IsActive = true,
                     IsTeam = false,
-                    VaultingTeam = new Team() { Name = row.TeamName },
                     Vaulters = vaultersOrder
                 };
                 horseOrders.Add(horseOrder);

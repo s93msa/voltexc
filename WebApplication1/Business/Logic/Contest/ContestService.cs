@@ -35,6 +35,7 @@ namespace WebApplication1.Business.Logic.Contest
         private static List<Team> _teams;
         private static List<TeamList> _teamMembers;
         private static List<HorseOrder> _horseOrders;
+        private static List<VaulterOrder> _vaulterOrders;
 
 
         public static Models.Contest GetContestInstance()
@@ -110,6 +111,19 @@ namespace WebApplication1.Business.Logic.Contest
 
             return null;
         }
+
+        public static HorseOrder[] GetHorseOrder(int? startListClassStepId, int? horseId)
+        {
+            var horseOrders = GetHorseOrders();
+            var horseOrder =
+                horseOrders.FindAll(x => x.StartListClassStepId == startListClassStepId &&
+                                                x.HorseId == horseId);
+
+
+            return horseOrder.ToArray();
+        }
+
+        
 
         public static HorseOrder GetHorseOrder(int? startListClassStepId, int? horseId, int? vaultingTeamId)
         {
@@ -214,6 +228,17 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static VaulterOrder GetVaulterOrder(int[] horseOrderIds, int vaulterId, int testNumber)
+        {
+
+            var vaulterOrders = GetVaulterOrders();
+            var vaulterOrder = vaulterOrders.FirstOrDefault(x => horseOrderIds.Contains(x.HorseOrderId??-1) && x.VaulterId == vaulterId && x.Testnumber == testNumber); //TODO: refaktorera. Hämta från databasen istället? 
+
+            return vaulterOrder;
+
+        }
+        
+
         public static Horse GetHorse(string horseName, int lungerTdbId)
         {
 
@@ -287,6 +312,17 @@ namespace WebApplication1.Business.Logic.Contest
                 db.SaveChanges();
             }
             _horseOrders = null;
+
+        }
+
+        public static void AddVaulterOrders(VaulterOrder[] vaulterOrders)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.VaulterOrders.AddRange(vaulterOrders);
+                db.SaveChanges();
+            }
+            _vaulterOrders = null;
 
         }
 
@@ -579,6 +615,20 @@ namespace WebApplication1.Business.Logic.Contest
             }
 
             return _horses;
+
+        }
+
+        private static List<VaulterOrder> GetVaulterOrders(bool forceReadFromDb = false)
+        {
+            if (forceReadFromDb || _vaulterOrders == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _vaulterOrders = db.VaulterOrders.ToList();
+                }
+            }
+
+            return _vaulterOrders;
 
         }
 

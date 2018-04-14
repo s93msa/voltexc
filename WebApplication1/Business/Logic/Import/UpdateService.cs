@@ -243,13 +243,89 @@ namespace WebApplication1.Business.Logic.Import
 
         }
 
+        public void UpdateIndividualHorseOrders(HorseOrder[] horseOrders)
+        {
+            var newHorseOrders = GetMissingHorseOrders(horseOrders);
+
+            ContestService.AddHorseOrders(newHorseOrders.ToArray());
+
+
+            var newVaulterOrders = GetMissingVaulterOrders(horseOrders);
+            ContestService.AddVaulterOrders(newVaulterOrders.ToArray());
+
+           // ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
+
+        }
+
+        private static List<VaulterOrder> GetMissingVaulterOrders(HorseOrder[] horseOrders)
+        {
+            var newVaulterOrders = new List<VaulterOrder>();
+            foreach (var horseOrder in horseOrders)
+            {
+                var existingHorseOrders = GetExistingHorseOrderIndividual(horseOrder);
+//                var existingHorse = GetExistingHorse(horseOrder.HorseInformation);
+
+                // kolla om horseOrder Finns. Är den förändrad?
+
+                //var existingHorse = GetExistingHorse(horse);
+                var horseOrderIds = existingHorseOrders.Select(x => x.HorseOrderId).ToArray();
+
+                foreach (var importedVaulterOrder in horseOrder.Vaulters)
+                {
+                    var existingVaulterOrder = GetExistingVaulterOrder(horseOrderIds, importedVaulterOrder);
+                    if (existingVaulterOrder == null)
+                    {
+                        var vaulterTdbId = importedVaulterOrder.Participant.VaulterTdbId;
+                        var vaulterName = importedVaulterOrder.Participant.Name;
+                        var vaulterId = GetExistingVaulter(vaulterTdbId, vaulterName).VaulterId;
+                        var testNumber = importedVaulterOrder.Testnumber;
+
+                        var vaulterOrder = new VaulterOrder()
+                        {
+                            HorseOrderId = horseOrderIds.FirstOrDefault(),
+                            VaulterId = vaulterId,
+                            IsActive = true,
+                            StartOrder = 1,
+                            Testnumber = testNumber
+                        };
+                        newVaulterOrders.Add(vaulterOrder);
+                    }
+                }
+            }
+            return newVaulterOrders;
+        }
+
+        private static List<HorseOrder> GetMissingHorseOrders(HorseOrder[] horseOrders)
+        {
+            var newHorseOrders = new List<HorseOrder>();
+            foreach (var horseOrder in horseOrders)
+            {
+                var existingHorseOrders = GetExistingHorseOrderIndividual(horseOrder);
+                var horseId = GetExistingHorse(horseOrder.HorseInformation).HorseId;
+                if (existingHorseOrders == null || existingHorseOrders.Length == 0)
+                {
+                    var newHorseOrder = new HorseOrder()
+                    {
+                        HorseId = horseId,
+                        IsActive = true,
+                        IsTeam = false,
+                        StartListClassStepId = horseOrder.StartListClassStepId,
+                        StartNumber = horseOrder.StartNumber
+                    };
+                    newHorseOrders.Add(newHorseOrder);
+                }
+            }
+
+            return newHorseOrders;
+        }
+
         public void UpdateTeamHorseOrders(HorseOrder[] horseOrders)
         {
             var newHorseOrders = new List<HorseOrder>();
             var updatedHorseOrders = new List<HorseOrder>();
             foreach (var horseOrder in horseOrders)
             {
-                var existingHorseOrder = GetExistingHorseOrder(horseOrder);
+                var existingHorseOrder = GetExistingHorseOrderTeam(horseOrder);
 
                 var existingTeam = GetExistingTeam(horseOrder.VaultingTeam.Name);
 
@@ -468,6 +544,17 @@ namespace WebApplication1.Business.Logic.Import
             return existingHorse;
         }
 
+        private static VaulterOrder GetExistingVaulterOrder( int[] horseOrderIds, VaulterOrder importedVaulterOrder) 
+        {
+            var vaulterId = importedVaulterOrder.VaulterId;
+            if (vaulterId == null)
+                return null;
+
+            var testNumber = importedVaulterOrder.Testnumber;
+
+            return ContestService.GetVaulterOrder(horseOrderIds, (int) vaulterId, testNumber);
+        }
+
         private static Lunger GetExistingLunger(Lunger lunger)
         {
             var existingLunger = ContestService.GetLunger(lunger.LungerTdbId);
@@ -487,7 +574,7 @@ namespace WebApplication1.Business.Logic.Import
             return existingLunger;
         }
 
-        private static HorseOrder GetExistingHorseOrder(HorseOrder horseOrder)
+        private static HorseOrder GetExistingHorseOrderTeam(HorseOrder horseOrder)
         {
             var startlistClassStepId = horseOrder.StartListClassStepId;
             var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
@@ -496,6 +583,16 @@ namespace WebApplication1.Business.Logic.Import
            
             return existingHorseOrder;
            
+        }
+
+        private static HorseOrder[] GetExistingHorseOrderIndividual(HorseOrder horseOrder)
+        {
+            var startlistClassStepId = horseOrder.StartListClassStepId;
+            var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
+//            var vaultingTeamId = GetExistingHorseOrderIndivual(horseOrder.VaultingTeam.Name)?.TeamId;
+            var existingHorseOrders = ContestService.GetHorseOrder(startlistClassStepId, horseId);
+
+            return existingHorseOrders;
         }
 
         private static Club GetExistingClub(Club club)
