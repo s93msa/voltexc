@@ -384,6 +384,10 @@
     <Compile Include="Migrations\201804091950566_VaulterOrderForeignKey.Designer.cs">
       <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.cs" />
+    <Compile Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.Designer.cs">
+      <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -593,6 +597,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804091950566_VaulterOrderForeignKey.resx">
       <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.resx">
+      <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
