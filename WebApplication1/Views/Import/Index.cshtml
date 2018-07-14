@@ -1,0 +1,17 @@
+﻿@model WebApplication1.Models.Vaulter
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+@using (Html.BeginForm("Upload", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="File" value="C:\Temp\Tävling exempel Listor.xlsx" />
+    <input type="submit" name="Submit" id="Submit" value="Upload" />
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

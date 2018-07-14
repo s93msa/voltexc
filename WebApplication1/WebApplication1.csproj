@@ -45,9 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="ClosedXML, Version=0.87.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
@@ -93,6 +92,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -212,11 +212,18 @@
     <Compile Include="Business\Logic\Excel\ExcelBaseService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelIndividualService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportMergedModel.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportRepository.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportService.cs" />
+    <Compile Include="Business\Logic\Import\TeamMember.cs" />
+    <Compile Include="Business\Logic\Import\UpdateService.cs" />
+    <Compile Include="Business\Logic\Import\RequestService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
     <Compile Include="Controllers\HorseOrdersController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.Designer.cs">
       <DependentUpon>201705072114391_InitialCreate.cs</DependentUpon>
@@ -297,6 +304,90 @@
     <Compile Include="Migrations\201710091838304_overrideexcelfilename.Designer.cs">
       <DependentUpon>201710091838304_overrideexcelfilename.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802181758321_AddTdbIdToLunger.cs" />
+    <Compile Include="Migrations\201802181758321_AddTdbIdToLunger.Designer.cs">
+      <DependentUpon>201802181758321_AddTdbIdToLunger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803171407362_addHorseTdbId.cs" />
+    <Compile Include="Migrations\201803171407362_addHorseTdbId.Designer.cs">
+      <DependentUpon>201803171407362_addHorseTdbId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803181209318_addClubTDbId.cs" />
+    <Compile Include="Migrations\201803181209318_addClubTDbId.Designer.cs">
+      <DependentUpon>201803181209318_addClubTDbId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803192049188_addClassTdbId.cs" />
+    <Compile Include="Migrations\201803192049188_addClassTdbId.Designer.cs">
+      <DependentUpon>201803192049188_addClassTdbId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803301106347_AddVaulterTdbID.cs" />
+    <Compile Include="Migrations\201803301106347_AddVaulterTdbID.Designer.cs">
+      <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.cs" />
+    <Compile Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.Designer.cs">
+      <DependentUpon>201804011232194_AddForeignKeyFieldInSteps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.cs" />
+    <Compile Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.Designer.cs">
+      <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.cs" />
+    <Compile Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.Designer.cs">
+      <DependentUpon>201804020852206_AddForeignKeyFieldInVaulter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.cs" />
+    <Compile Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.Designer.cs">
+      <DependentUpon>201804020955250_AddForeignKeyFieldInVaulterNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.cs" />
+    <Compile Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.Designer.cs">
+      <DependentUpon>201804021233173_AddForeignKeyFieldInTeamNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.cs" />
+    <Compile Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.Designer.cs">
+      <DependentUpon>201804021318404_AddClubForeignKeyFieldInTeam.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804061932412_AddForeignKeyTeamlist.cs" />
+    <Compile Include="Migrations\201804061932412_AddForeignKeyTeamlist.Designer.cs">
+      <DependentUpon>201804061932412_AddForeignKeyTeamlist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804061934500_AddForeignKeyTeamlist2.cs" />
+    <Compile Include="Migrations\201804061934500_AddForeignKeyTeamlist2.Designer.cs">
+      <DependentUpon>201804061934500_AddForeignKeyTeamlist2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804071033594_foreignkeyTeamList.cs" />
+    <Compile Include="Migrations\201804071033594_foreignkeyTeamList.Designer.cs">
+      <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804080627576_newForeignkey.cs" />
+    <Compile Include="Migrations\201804080627576_newForeignkey.Designer.cs">
+      <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804081419045_HorseAddLungerForeignKey.cs" />
+    <Compile Include="Migrations\201804081419045_HorseAddLungerForeignKey.Designer.cs">
+      <DependentUpon>201804081419045_HorseAddLungerForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804081439521_VaultersAddClubForeignKey.cs" />
+    <Compile Include="Migrations\201804081439521_VaultersAddClubForeignKey.Designer.cs">
+      <DependentUpon>201804081439521_VaultersAddClubForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091938273_HorseOrderAddForeignKey.cs" />
+    <Compile Include="Migrations\201804091938273_HorseOrderAddForeignKey.Designer.cs">
+      <DependentUpon>201804091938273_HorseOrderAddForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091947551_HorseOrderStartListClassID.cs" />
+    <Compile Include="Migrations\201804091947551_HorseOrderStartListClassID.Designer.cs">
+      <DependentUpon>201804091947551_HorseOrderStartListClassID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091950566_VaulterOrderForeignKey.cs" />
+    <Compile Include="Migrations\201804091950566_VaulterOrderForeignKey.Designer.cs">
+      <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.cs" />
+    <Compile Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.Designer.cs">
+      <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -372,9 +463,11 @@
     <Content Include="Views\HorseOrders\Details.cshtml" />
     <Content Include="Views\HorseOrders\Edit.cshtml" />
     <Content Include="Views\HorseOrders\Index.cshtml" />
+    <Content Include="Views\Import\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Business\Logic\RequestService\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -444,6 +537,69 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710091838304_overrideexcelfilename.resx">
       <DependentUpon>201710091838304_overrideexcelfilename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802181758321_AddTdbIdToLunger.resx">
+      <DependentUpon>201802181758321_AddTdbIdToLunger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803171407362_addHorseTdbId.resx">
+      <DependentUpon>201803171407362_addHorseTdbId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181209318_addClubTDbId.resx">
+      <DependentUpon>201803181209318_addClubTDbId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803192049188_addClassTdbId.resx">
+      <DependentUpon>201803192049188_addClassTdbId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803301106347_AddVaulterTdbID.resx">
+      <DependentUpon>201803301106347_AddVaulterTdbID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804011232194_AddForeignKeyFieldInSteps.resx">
+      <DependentUpon>201804011232194_AddForeignKeyFieldInSteps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804011245022_AddForeignKeyFieldInStepsNewName.resx">
+      <DependentUpon>201804011245022_AddForeignKeyFieldInStepsNewName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804020852206_AddForeignKeyFieldInVaulter.resx">
+      <DependentUpon>201804020852206_AddForeignKeyFieldInVaulter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804020955250_AddForeignKeyFieldInVaulterNullable.resx">
+      <DependentUpon>201804020955250_AddForeignKeyFieldInVaulterNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804021233173_AddForeignKeyFieldInTeamNullable.resx">
+      <DependentUpon>201804021233173_AddForeignKeyFieldInTeamNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804021318404_AddClubForeignKeyFieldInTeam.resx">
+      <DependentUpon>201804021318404_AddClubForeignKeyFieldInTeam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804061932412_AddForeignKeyTeamlist.resx">
+      <DependentUpon>201804061932412_AddForeignKeyTeamlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804061934500_AddForeignKeyTeamlist2.resx">
+      <DependentUpon>201804061934500_AddForeignKeyTeamlist2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804071033594_foreignkeyTeamList.resx">
+      <DependentUpon>201804071033594_foreignkeyTeamList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080627576_newForeignkey.resx">
+      <DependentUpon>201804080627576_newForeignkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081419045_HorseAddLungerForeignKey.resx">
+      <DependentUpon>201804081419045_HorseAddLungerForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804081439521_VaultersAddClubForeignKey.resx">
+      <DependentUpon>201804081439521_VaultersAddClubForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091938273_HorseOrderAddForeignKey.resx">
+      <DependentUpon>201804091938273_HorseOrderAddForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091947551_HorseOrderStartListClassID.resx">
+      <DependentUpon>201804091947551_HorseOrderStartListClassID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091950566_VaulterOrderForeignKey.resx">
+      <DependentUpon>201804091950566_VaulterOrderForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.resx">
+      <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

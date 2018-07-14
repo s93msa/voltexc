@@ -45,7 +45,7 @@ namespace WebApplication1.Controllers
         public ActionResult CompetitionClasses()
         {
 
-           // var contest = ContestService.GetInstance();
+           // var contest = ContestService.GetContestInstance();
             var judges = ContestService.GetJudgesPerStep();
 
             var competitionClassesViewModel = new CompetitionClassesViewModel();
@@ -143,7 +143,7 @@ namespace WebApplication1.Controllers
         {
             var rows = new List<string[]>();   
 
-            var contest = ContestService.GetInstance();
+            var contest = ContestService.GetContestInstance();
             foreach (var startListClassStep in contest.StartListClassStep.OrderBy(x => x.StartOrder))
             {
                 foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
@@ -195,13 +195,13 @@ namespace WebApplication1.Controllers
 
         public ActionResult StartList()
         {
-                var contest = ContestService.GetInstance();
+                var contest = ContestService.GetContestInstance();
                 return View(contest);
         }
 
         public ActionResult CopyExcel()
         {
-            var contest = ContestService.GetInstance();
+            var contest = ContestService.GetContestInstance();
            
             var startListClassesSteps = contest?.StartListClassStep ?? new List<StartListClassStep>();
         

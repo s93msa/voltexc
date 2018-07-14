@@ -15,6 +15,7 @@ namespace WebApplication1.Classes
             Configuration.LazyLoadingEnabled = true;
         }
 
+
         public DbSet<Club> Clubs { get; set; }
         public DbSet<CompetitionClass> CompetitionClasses { get; set; }
         public DbSet<Contest> Contests { get; set; }
@@ -27,8 +28,17 @@ namespace WebApplication1.Classes
         public DbSet<StartListClassStep> StartListClassSteps { get; set; }
         public DbSet<Step> Steps { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamList> TeamMembers { get; set; }
         public DbSet<Vaulter> Vaulters { get; set; }
 
+
         public System.Data.Entity.DbSet<WebApplication1.Models.HorseOrder> HorseOrders { get; set; }
+
+        public DbSet<ContestType> ContestTypes { get; set; }
+
+        public DbSet<StepType> StepTypes { get; set; }
+
+        public DbSet<VaulterOrder> VaulterOrders { get; set; }
+
     }
 }
