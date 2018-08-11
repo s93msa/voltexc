@@ -7,7 +7,7 @@ namespace WebApplication1.Models
     public class CompetitionClass
     {
         public int CompetitionClassId { get; set; }
-        public int ClassNr { get; set; }
+        public string ClassNr { get; set; }
         public string ClassName { get; set; }
 
         [Index]

@@ -126,7 +126,7 @@ namespace WebApplication1.Business.Logic.Import
                 var competitionClass = new CompetitionClass
                 {
                     ClassTdbId = GetInt(row, "a"),
-                    ClassNr = GetInt(row, "b"),
+                    ClassNr = GetString(row, "b"),
                     ClassName = GetString(row, "c")
                 };
                 competitionClasses.Add(competitionClass);
@@ -163,7 +163,7 @@ namespace WebApplication1.Business.Logic.Import
             var excelImportMergedModel = new ExcelImportMergedModel
             {
                 ClassTdbId = GetInt(row, "a"),
-                ClassNr = GetInt(row, "b"),
+                ClassNr = GetString(row, "b"),
                 ClassName = className,
                 LungerTdbId = GetInt(row, "d"),
                 LungerName = GetString(row, "e"),

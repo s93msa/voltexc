@@ -388,6 +388,10 @@
     <Compile Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.Designer.cs">
       <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807142130522_ChangeClassNrToString.cs" />
+    <Compile Include="Migrations\201807142130522_ChangeClassNrToString.Designer.cs">
+      <DependentUpon>201807142130522_ChangeClassNrToString.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -600,6 +604,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804140906383_AddForeignKeyVaultersOrder.resx">
       <DependentUpon>201804140906383_AddForeignKeyVaultersOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807142130522_ChangeClassNrToString.resx">
+      <DependentUpon>201807142130522_ChangeClassNrToString.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

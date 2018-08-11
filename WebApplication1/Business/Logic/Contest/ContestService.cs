@@ -125,12 +125,12 @@ namespace WebApplication1.Business.Logic.Contest
 
         
 
-        public static HorseOrder GetHorseOrder(int? startListClassStepId, int? horseId, int? vaultingTeamId, int testnumber)
+        public static HorseOrder GetHorseOrder(int? startListClassStepId, int? vaultingTeamId, int testnumber)
         {
             var horseOrders = GetHorseOrders();
             var horseOrder =
                 horseOrders.FirstOrDefault(x => x.StartListClassStepId == startListClassStepId &&
-                                                x.HorseId == horseId && x.VaultingTeamId == vaultingTeamId && x.TeamTestnumber == testnumber);
+                                                 x.VaultingTeamId == vaultingTeamId && x.TeamTestnumber == testnumber);
 
 
             return horseOrder;

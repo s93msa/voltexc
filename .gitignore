@@ -241,3 +241,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /mallar - innan byte av text musik
+/mallar/import/jälla.xlsx

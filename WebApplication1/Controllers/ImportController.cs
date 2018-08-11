@@ -35,27 +35,28 @@ namespace WebApplication1.Controllers
             var workbook = _requestService.GetWorkbook();
             var excelImportService = new ExcelImportService(workbook);
             //var _updateService = new UpdateService();
+            Changed changedItems;
             var lungers = excelImportService.GetLungers();
-            _updateService.UpdateLungers(lungers);
+            changedItems = _updateService.UpdateLungers(lungers);
 
             var horses = excelImportService.GetHorses();
-            _updateService.UpdateHorses(horses);
+            changedItems = _updateService.UpdateHorses(horses);
 
             var clubs = excelImportService.GetClubs();
-            _updateService.UpdateClubs(clubs);
+            changedItems = _updateService.UpdateClubs(clubs);
 
             var classes = excelImportService.GetClasses();
-            _updateService.UpdateClasses(classes);
+            changedItems = _updateService.UpdateClasses(classes);
 
 
             var vaulters = excelImportService.GetVaulters();
-            _updateService.UpdateVaulters(vaulters);
+            changedItems = _updateService.UpdateVaulters(vaulters);
 
             var teams = excelImportService.GetTeams();
-            _updateService.UpdateTeams(teams);
+            changedItems = _updateService.UpdateTeams(teams);
 
             var teamMembers = excelImportService.GetTeamMembers();
-            _updateService.UpdateTeamMembers(teamMembers);
+            changedItems = _updateService.UpdateTeamMembers(teamMembers); //Observera att den inte tar bort teammembers. Bara lägger till eller ändrar ordning
 
             
             ImportTeams(excelImportService);

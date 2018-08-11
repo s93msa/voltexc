@@ -22,7 +22,7 @@ namespace WebApplication1.Business.Logic.Import
 
         
 
-        public void UpdateLungers(Lunger[] lungers)
+        public Changed UpdateLungers(Lunger[] lungers)
         {
             var newLungers = new List<Lunger>();
             var updatedLungers = new List<Lunger>();
@@ -44,11 +44,20 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
+
             ContestService.UpdateLungers(updatedLungers.ToArray());
             ContestService.AddLungers(newLungers.ToArray());
+
+            var changed = new Changed
+            {
+                New = updatedLungers.Count,
+                Updated = newLungers.Count
+            };
+
+            return changed;
         }
 
-        public void UpdateClubs(Club[] clubs)
+        public Changed UpdateClubs(Club[] clubs)
         {
             var newClubs = new List<Club>();
             var updatedClubs = new List<Club>();
@@ -72,9 +81,17 @@ namespace WebApplication1.Business.Logic.Import
 
             ContestService.UpdateClubs(updatedClubs.ToArray());
             ContestService.AddClubs(newClubs.ToArray());
+
+            var changed = new Changed
+            {
+                New = updatedClubs.Count,
+                Updated = newClubs.Count
+            };
+
+            return changed;
         }
 
-        public void UpdateClasses(CompetitionClass[] classes)
+        public Changed UpdateClasses(CompetitionClass[] classes)
         {
             var newClasses = new List<CompetitionClass>();
             var updatedClasses = new List<CompetitionClass>();
@@ -99,9 +116,16 @@ namespace WebApplication1.Business.Logic.Import
 
             ContestService.UpdateClasses(updatedClasses.ToArray());
             ContestService.AddClasses(newClasses.ToArray());
+            var changed = new Changed
+            {
+                New = updatedClasses.Count,
+                Updated = newClasses.Count
+            };
+
+            return changed;
         }
 
-        public void UpdateVaulters(Vaulter[] vaulters)
+        public Changed UpdateVaulters(Vaulter[] vaulters)
         {
             var newVaulters = new List<Vaulter>();
             var updatetdVaulters = new List<Vaulter>();
@@ -110,6 +134,8 @@ namespace WebApplication1.Business.Logic.Import
                 var existingVaulter = GetExistingVaulter(vaulter);
                 var vaultingClassId = GetExistingClass(vaulter.VaultingClass)?.CompetitionClassId;
                 var vaultingClubId = GetExistingClub(vaulter.VaultingClub)?.ClubId;
+                vaulter.VaultingClassId = vaultingClassId;
+                vaulter.VaultingClubId = vaultingClubId;
                 if (existingVaulter != null)
                 {
                     if (NotEqual(vaulter, existingVaulter))
@@ -118,10 +144,12 @@ namespace WebApplication1.Business.Logic.Import
                         existingVaulter.VaulterTdbId = vaulter.VaulterTdbId;
                         if (vaultingClassId != null)
                         {
+                            existingVaulter.VaultingClass = null;
                             existingVaulter.VaultingClassId = vaultingClassId;
                         }
-                        if (vaulter.VaultingClubId != null) 
+                        if (vaultingClubId != null)
                         {
+                            existingVaulter.VaultingClub = null;
                             existingVaulter.VaultingClubId = vaultingClubId; 
                         }
                         updatetdVaulters.Add(existingVaulter);
@@ -144,9 +172,17 @@ namespace WebApplication1.Business.Logic.Import
             //newVaulters = SetClubDatabaseId(newVaulters);
             ContestService.AddVaulters(newVaulters.ToArray());
 
+
+            var changed = new Changed
+            {
+                New = updatetdVaulters.Count,
+                Updated = newVaulters.Count
+            };
+
+            return changed;
         }
 
-        public void UpdateTeamMembers(TeamMember[] teamMembers)
+        public Changed UpdateTeamMembers(TeamMember[] teamMembers)
         {
             var newMember = new List<TeamList>();
             var updatedMember = new List<TeamList>();
@@ -190,9 +226,17 @@ namespace WebApplication1.Business.Logic.Import
             ContestService.UpdateTeamMembers(updatedMember.ToArray());
 
             ContestService.AddTeamMembers(newMember.ToArray());
+
+            var changed = new Changed
+            {
+                New = updatedMember.Count,
+                Updated = newMember.Count
+            };
+
+            return changed;
         }
 
-        public void UpdateTeams(Team[] teams)
+        public Changed UpdateTeams(Team[] teams)
         {
             var newTeams = new List<Team>();
             var updatedTeams = new List<Team>();
@@ -241,9 +285,17 @@ namespace WebApplication1.Business.Logic.Import
             //newHorses = SetLungerDatabaseId(newHorses);
             ContestService.AddTeams(newTeams.ToArray());
 
+            var changed = new Changed
+            {
+                New = updatedTeams.Count,
+                Updated = newTeams.Count
+            };
+
+            return changed;
+
         }
 
-        public void UpdateIndividualHorseOrders(HorseOrder[] horseOrders)
+        public NewHordeorders UpdateIndividualHorseOrders(HorseOrder[] horseOrders)
         {
             var newHorseOrders = GetMissingHorseOrders(horseOrders);
 
@@ -253,7 +305,22 @@ namespace WebApplication1.Business.Logic.Import
             var newVaulterOrders = GetMissingVaulterOrders(horseOrders);
             ContestService.AddVaulterOrders(newVaulterOrders.ToArray());
 
-           // ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
+            // ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
+
+            var changed = new NewHordeorders
+            {
+                newHorseOrders = newHorseOrders.Count,
+                newVaulterOrders = newVaulterOrders.Count
+            };
+
+            return changed;
+
+        }
+
+        public struct NewHordeorders
+        {
+            public int newHorseOrders;
+            public int newVaulterOrders;
 
         }
 
@@ -340,9 +407,9 @@ namespace WebApplication1.Business.Logic.Import
                 {
                     if (NotEqual(horseOrder, existingHorseOrder))
                     {
-                        existingHorseOrder.StartNumber = horseOrder.StartNumber;
+//                        existingHorseOrder.StartNumber = horseOrder.StartNumber;
                         existingHorseOrder.HorseId = existingHorse.HorseId;
-                        existingHorseOrder.VaultingTeamId = existingTeam.TeamId;
+//                       existingHorseOrder.VaultingTeamId = existingTeam.TeamId;
                         updatedHorseOrders.Add(existingHorseOrder);
                     }
                 }
@@ -361,7 +428,7 @@ namespace WebApplication1.Business.Logic.Import
 
         }
 
-        public void UpdateHorses(Horse[] horses)
+        public Changed UpdateHorses(Horse[] horses)
         {
             var newHorses = new List<Horse>();
             var updatedHorses = new List<Horse>();
@@ -393,7 +460,13 @@ namespace WebApplication1.Business.Logic.Import
 
             //newHorses = SetLungerDatabaseId(newHorses);
             ContestService.AddHorses(newHorses.ToArray());
+            var changed = new Changed
+            {
+                New = updatedHorses.Count,
+                Updated = newHorses.Count
+            };
 
+            return changed;
         }
 
         //private static List<Horse> SetLungerDatabaseId(List<Horse> newHorses)
@@ -479,9 +552,9 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)
         {
             return vaulter.Name != existingVaulter.Name ||
-                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId|| (
+                   vaulter.VaulterTdbId != existingVaulter.VaulterTdbId|| (vaulter.VaultingClassId != null &&
                    vaulter.VaultingClassId != existingVaulter.VaultingClassId)||
-                   (vaulter.VaultingClub != null && vaulter.VaultingClub?.ClubTdbId != existingVaulter.VaultingClub?.ClubTdbId);
+                   (vaulter.VaultingClubId != null && vaulter.VaultingClubId != existingVaulter.VaultingClubId);
         }
 
         private static bool NotEqual(Club club, Club existingClub)
@@ -499,7 +572,7 @@ namespace WebApplication1.Business.Logic.Import
 
         private static bool NotEqual(HorseOrder horseOrder, HorseOrder existingHorseOrder)
         {
-            return horseOrder.StartNumber != existingHorseOrder.StartNumber;
+            return horseOrder.HorseId != existingHorseOrder.HorseId;
         }
 
         private static TeamList GetExistingTeamMember(int teamId, int vaulterId)
@@ -548,11 +621,7 @@ namespace WebApplication1.Business.Logic.Import
 
         private static VaulterOrder GetExistingVaulterOrder( int[] horseOrderIds, int vaulterId, int testNumber) 
         {
-            if (vaulterId == null)
-                return null;
-
-
-            return ContestService.GetVaulterOrder(horseOrderIds, (int) vaulterId, testNumber);
+            return ContestService.GetVaulterOrder(horseOrderIds, vaulterId, testNumber);
         }
 
         private static Lunger GetExistingLunger(Lunger lunger)
@@ -577,10 +646,10 @@ namespace WebApplication1.Business.Logic.Import
         private static HorseOrder GetExistingHorseOrderTeam(HorseOrder horseOrder)
         {
             var startlistClassStepId = horseOrder.StartListClassStepId;
-            var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
+            //var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
             var vaultingTeamId = GetExistingTeam(horseOrder.VaultingTeam.Name)?.TeamId;
             var testnumber = horseOrder.TeamTestnumber;
-            var existingHorseOrder = ContestService.GetHorseOrder(startlistClassStepId, horseId, vaultingTeamId, testnumber);
+            var existingHorseOrder = ContestService.GetHorseOrder(startlistClassStepId, vaultingTeamId, testnumber);
            
             return existingHorseOrder;
            
@@ -666,5 +735,12 @@ namespace WebApplication1.Business.Logic.Import
 
        
       
+    }
+
+    public struct Changed
+    {
+        public int Updated;
+        public int New;
+
     }
 }

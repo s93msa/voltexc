@@ -9,7 +9,7 @@ namespace WebApplication1.Business.Logic.Import
     public class ExcelImportMergedModel
     {
         public int ClassTdbId { get; set; }
-        public int ClassNr { get; set; }
+        public string ClassNr { get; set; }
         public string ClassName { get; set; }
         public int LungerTdbId { get; set; }
         public string LungerName { get; set; }
