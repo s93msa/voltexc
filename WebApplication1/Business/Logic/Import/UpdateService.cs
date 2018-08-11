@@ -70,6 +70,11 @@ namespace WebApplication1.Business.Logic.Import
                     {
                         existingClub.ClubName = club.ClubName;
                         existingClub.ClubTdbId = club.ClubTdbId;
+                        var newCountry = club.Country;
+                        if (!string.IsNullOrWhiteSpace(newCountry))
+                        {
+                            existingClub.Country = newCountry;
+                        }
                         updatedClubs.Add(existingClub);
                     }
                 }
@@ -560,7 +565,8 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(Club club, Club existingClub)
         {
             return existingClub.ClubName != club.ClubName ||
-                   existingClub.ClubTdbId != club.ClubTdbId;
+                   existingClub.ClubTdbId != club.ClubTdbId ||
+                   (!string.IsNullOrWhiteSpace(club.Country) && existingClub.Country != club.Country);
         }
 
         private static bool NotEqual(Horse horse, Horse existingHorse)

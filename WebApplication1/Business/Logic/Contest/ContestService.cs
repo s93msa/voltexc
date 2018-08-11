@@ -159,7 +159,7 @@ namespace WebApplication1.Business.Logic.Contest
         public static Club GetClub(string clubName)
         {
             var clubs = GetClubs();
-            var club = clubs.FirstOrDefault(x => x.ClubName.Trim() == clubName);
+            var club = clubs.FirstOrDefault(x => x.ClubName.Trim() == clubName.Trim());
            
 
             return club;

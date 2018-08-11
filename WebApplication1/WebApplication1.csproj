@@ -392,6 +392,10 @@
     <Compile Include="Migrations\201807142130522_ChangeClassNrToString.Designer.cs">
       <DependentUpon>201807142130522_ChangeClassNrToString.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808111732313_AddCountryToClub.cs" />
+    <Compile Include="Migrations\201808111732313_AddCountryToClub.Designer.cs">
+      <DependentUpon>201808111732313_AddCountryToClub.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -607,6 +611,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807142130522_ChangeClassNrToString.resx">
       <DependentUpon>201807142130522_ChangeClassNrToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808111732313_AddCountryToClub.resx">
+      <DependentUpon>201808111732313_AddCountryToClub.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

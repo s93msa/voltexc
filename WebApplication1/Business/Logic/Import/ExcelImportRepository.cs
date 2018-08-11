@@ -109,7 +109,8 @@ namespace WebApplication1.Business.Logic.Import
                 var club = new Club
                 {
                     ClubTdbId = GetInt(row, "a"),
-                    ClubName = GetString(row, "b")
+                    ClubName = GetString(row, "b"),
+                    Country  = GetString(row,"c")
                 };
                 clubs.Add(club);
             }
