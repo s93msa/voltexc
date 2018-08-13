@@ -66,9 +66,9 @@ namespace WebApplication1.Classes
             StartVaulterNumber = startVaulterNumber;
             Vaulter1 = vaulterOrder.Participant;
             VaulterName = Vaulter1?.Name?.Trim();
-            Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
             ArmNumber = Vaulter1?.Armband;
             VaultingClass = Vaulter1?.VaultingClass;
+            Country = Vaulter1?.VaultingClub?.Country;
 
             TestNumber = vaulterOrder.Testnumber;
             Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
@@ -108,7 +108,7 @@ namespace WebApplication1.Classes
             _team = team;
             TeamName = team?.Name?.Trim();
             Team1 = team;
-            Country = contest1?.Country; //TODO: country ska hämtas från klubben eller voltigören inte tävlingen
+            Country = team?.VaultingClub?.Country;
             //ArmNumber = Vaulter1?.Armband;
             VaultingClass = team?.VaultingClass;
             

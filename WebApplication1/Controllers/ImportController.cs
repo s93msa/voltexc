@@ -77,60 +77,71 @@ namespace WebApplication1.Controllers
 
 
             //senior lag
-            competionClassesTdbIds = new int[1] { 350446 };
-            StartListClassStepId = 18; // Svår klass lag seniorer klass 1 -Grund 
+            competionClassesTdbIds = new []{ 367695, 367779 };
+            StartListClassStepId = 1059; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 7; //Svår klass lag seniorer klass 1 – Kür
+            StartListClassStepId = 1061; //Svår klass lag seniorer klass 1 – Kür
             testNumber = 2;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+
+            StartListClassStepId = 6; //Svår klass lag seniorer grund 2
+            testNumber = 3;
+            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+
+
             //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
             //_updateService.UpdateTeamHorseOrders(horseOrders);
 
             //Junior lag
-            competionClassesTdbIds = new [] { 350447 };
-            StartListClassStepId = 16; // Svår klass juniorlag klass 2 -Grund  
+            competionClassesTdbIds = new [] { 367768, 367780};
+            StartListClassStepId = 5; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 10; //Svår klass lag seniorer klass 1 – Kür
+            StartListClassStepId = 1062; //Svår klass lag seniorer klass 1 – Kür
             testNumber = 2;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+
+            StartListClassStepId = 1063; //Svår klass lag seniorer klass 1 – Kür
+            testNumber = 3;
+            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+
 
             //Mellanklass lag
-            competionClassesTdbIds = new[] { 350456 };
-            StartListClassStepId = 55; // Mellanklass lag klass 9 - Grund 
-            testNumber = 1;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //competionClassesTdbIds = new[] { 350456 };
+            //StartListClassStepId = 55; // Mellanklass lag klass 9 - Grund 
+            //testNumber = 1;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 56; //Mellanklass klass 9 - Kür
-            testNumber = 2;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //StartListClassStepId = 56; //Mellanklass klass 9 - Kür
+            //testNumber = 2;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            //Lätt klass Lag galopp klass 12
-            competionClassesTdbIds = new[] { 350458};
-            StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 grund
-            testNumber = 1;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
-            //_updateService.UpdateTeamHorseOrders(horseOrders);
+            ////Lätt klass Lag galopp klass 12
+            //competionClassesTdbIds = new[] { 350458};
+            //StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 grund
+            //testNumber = 1;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            ////horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
+            ////_updateService.UpdateTeamHorseOrders(horseOrders);
 
-            StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 kür
-            testNumber = 2;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
-            //_updateService.UpdateTeamHorseOrders(horseOrders);
+            //StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 kür
+            //testNumber = 2;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            ////horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
+            ////_updateService.UpdateTeamHorseOrders(horseOrders);
 
-            //Lätt klass Lag galopp klass 13
-            competionClassesTdbIds = new[] { 350459};
-            StartListClassStepId = 40; // Lätt klass Lag galopp klass 13 grund
-            testNumber = 1;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            ////Lätt klass Lag galopp klass 13
+            //competionClassesTdbIds = new[] { 350459};
+            //StartListClassStepId = 40; // Lätt klass Lag galopp klass 13 grund
+            //testNumber = 1;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 40; // Lätt klass Lag galopp klass 13 kür
-            testNumber = 2;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //StartListClassStepId = 40; // Lätt klass Lag galopp klass 13 kür
+            //testNumber = 2;
+            //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
 
         }
@@ -144,49 +155,58 @@ namespace WebApplication1.Controllers
 
             // individuella
             //Svår klass
-            competionClassesTdbIds = new [] { 350449, 350450, 350451 }; //Svår klass individuella Juniorer-Miniorer-senior(utan tekn)
+            competionClassesTdbIds = new [] {367773, 367782, 367774, 367775, 368081}; //Svår klass individuella Juniorer-Miniorer
 
-            StartListClassStepId = 1; // Svår klass individuella Juniorer-Miniorer-senior  klass 3, 4, 5,6 – Grund
+            StartListClassStepId = 1066; 
             testNumber = 1;
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 2; // Svår klass individuella Juniorer-Miniorer-seniorklass 3, 4, 5,6 – Kür
+            StartListClassStepId = 9; // Svår klass individuella Juniorer-Miniorer – Kür
             testNumber = 2;
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            competionClassesTdbIds = new [] { 350448}; // senior individuell (med tekn)
+            StartListClassStepId = 8; // Svår klass individuella Juniorer-Miniorer – Kür
+            testNumber = 3;
+            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 1; // Svår klass individuella Juniorer-Miniorer-senior  klass 3, 4, 5,6 – Grund
+            StartListClassStepId = 1065; // Svår klass individuella Juniorer-Miniorer – Kür
+            testNumber = 4;
+            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+
+
+            competionClassesTdbIds = new [] { 367781 }; // senior individuell 
+
+            StartListClassStepId = 19; // senior   Grund
             testNumber = 1;
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 1; // Svår klass individuella Juniorer-Miniorer-seniorklass 3, 4, 5,6 – Kür
+            StartListClassStepId = 1060; // Svår klass individuella senior– teknKür
             testNumber = 2; //tekn kür
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 2; // Svår klass individuella Juniorer-Miniorer-seniorklass 3, 4, 5,6 – Kür
+            StartListClassStepId = 1064; // Svår klass individuella seniorklass Kür
             testNumber = 3;
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
 
 
-            competionClassesTdbIds = new [] { 350452};
-            StartListClassStepId = 46; // Lätt klass individuell galopp klass 7
-            testNumber = 1;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //competionClassesTdbIds = new [] { 350452};
+            //StartListClassStepId = 46; // Lätt klass individuell galopp klass 7
+            //testNumber = 1;
+            //ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 46; // Lätt klass individuell galopp klass 7
-            testNumber = 2;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //StartListClassStepId = 46; // Lätt klass individuell galopp klass 7
+            //testNumber = 2;
+            //ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            competionClassesTdbIds = new [] { 350455 };
-            StartListClassStepId = 39; // Lätt klass individuell galopp klass 8
-            testNumber = 1;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //competionClassesTdbIds = new [] { 350455 };
+            //StartListClassStepId = 39; // Lätt klass individuell galopp klass 8
+            //testNumber = 1;
+            //ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-            StartListClassStepId = 39; // Lätt klass individuell galopp klass 8
-            testNumber = 2;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //StartListClassStepId = 39; // Lätt klass individuell galopp klass 8
+            //testNumber = 2;
+            //ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
         }
 
