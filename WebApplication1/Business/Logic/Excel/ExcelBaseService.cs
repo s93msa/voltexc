@@ -76,7 +76,7 @@ namespace WebApplication1.Business.Logic.Excel
 
             secondcell.CellAbove(1).Value = startNumber;
             secondcell.Value = tableName;
-            secondcell.CellBelow(1).Value = _competitionData.VaultingClass.ClassNr.ToString();
+            secondcell.CellBelow(1).SetValue( _competitionData.VaultingClass.ClassNr);
             secondcell.CellBelow(2).Value = _competitionData.MomentName;
             SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
             //secondcell.CellBelow(3).Value = _competitionData.ArmNumber;
