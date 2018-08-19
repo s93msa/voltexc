@@ -51,6 +51,7 @@ namespace WebApplication1.Controllers
             var competitionClassesViewModel = new CompetitionClassesViewModel();
             using (var db = new VaultingContext())
             {
+                var contest = ContestService.GetContestInstance();
                 var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
                 var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
 
@@ -58,6 +59,11 @@ namespace WebApplication1.Controllers
 
                 foreach (var competitionClass in competitionClasses.ToList())
                 {
+                    if(competitionClass.ClassNr == "0")
+                        continue;
+                    if(competitionClass.GetCompetitionSteps(contest.TypeOfContest).Count == 0)
+                        continue;
+
                     var classNumber = competitionClass.ClassNr.ToString();
                     var className = competitionClass.ClassName;
                     var numberOfJudges = "0";
@@ -159,6 +165,7 @@ namespace WebApplication1.Controllers
                         var vaultingClassNr = vaultingClass?.ClassNr.ToString();
                         var teamName = startListItem.VaultingTeam.Name;
                         var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
+                        clubName += ", " + startListItem.VaultingTeam.VaultingClub.Country;
                        // var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
                         var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam);
                         var row = new string[] { vaultingClassNr, teamName, lungerName, clubName, horseName, teamId };
@@ -172,10 +179,11 @@ namespace WebApplication1.Controllers
                             if (testnumber > 1) continue;
 
                             var vaultingClass = participant.Participant.VaultingClass;
-                            var vaultingClassNr = vaultingClass?.ClassNr.ToString();
+                            var vaultingClassNr = vaultingClass?.ClassNr;
                             var vaulterName = participant.Participant.Name;
                             var clubName = participant.Participant.VaultingClub?.ClubName;
-                            
+                            clubName += ", " + participant.Participant.VaultingClub?.Country;
+
                             //var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
                             string vaulterId = ContestService.GetVaulterExcelId(participant.Participant);
                             var row = new string[] { vaultingClassNr, vaulterName, lungerName, clubName, horseName, vaulterId };
