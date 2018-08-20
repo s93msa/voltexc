@@ -165,7 +165,7 @@ namespace WebApplication1.Controllers
                         var vaultingClassNr = vaultingClass?.ClassNr.ToString();
                         var teamName = startListItem.VaultingTeam.Name;
                         var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
-                        clubName += ", " + startListItem.VaultingTeam.VaultingClub.Country;
+                        clubName += " (" + startListItem.VaultingTeam.VaultingClub.Country + ")";
                        // var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
                         var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam);
                         var row = new string[] { vaultingClassNr, teamName, lungerName, clubName, horseName, teamId };
@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
                             var vaultingClassNr = vaultingClass?.ClassNr;
                             var vaulterName = participant.Participant.Name;
                             var clubName = participant.Participant.VaultingClub?.ClubName;
-                            clubName += ", " + participant.Participant.VaultingClub?.Country;
+                            clubName += " (" + participant.Participant.VaultingClub?.Country + ")";
 
                             //var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
                             string vaulterId = ContestService.GetVaulterExcelId(participant.Participant);

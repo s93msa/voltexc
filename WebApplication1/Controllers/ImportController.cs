@@ -77,7 +77,7 @@ namespace WebApplication1.Controllers
 
 
             //senior lag
-            competionClassesTdbIds = new []{ 367695, 367779 };
+            competionClassesTdbIds = new []{ 367695, 367766, 367779 };
             StartListClassStepId = 1059; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
             //_updateService.UpdateTeamHorseOrders(horseOrders);
 
             //Junior lag
-            competionClassesTdbIds = new [] { 367768, 367780};
+            competionClassesTdbIds = new [] { 367763, 367768, 367780};
             StartListClassStepId = 5; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -155,7 +155,7 @@ namespace WebApplication1.Controllers
 
             // individuella
             //Svår klass
-            competionClassesTdbIds = new [] {367773, 367782, 367774, 367775, 368081}; //Svår klass individuella Juniorer-Miniorer
+            competionClassesTdbIds = new [] { 367772, 367773, 367782, 367774, 367775, 368081}; //Svår klass individuella Juniorer-Miniorer
 
             StartListClassStepId = 1066; 
             testNumber = 1;
@@ -174,7 +174,7 @@ namespace WebApplication1.Controllers
             ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
 
-            competionClassesTdbIds = new [] { 367781 }; // senior individuell 
+            competionClassesTdbIds = new [] { 367769, 367770, 367781 }; // senior individuell 
 
             StartListClassStepId = 19; // senior   Grund
             testNumber = 1;

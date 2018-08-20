@@ -53,13 +53,23 @@ namespace WebApplication1.Business.Logic.Import
 
         public Vaulter[] GetVaulters()
         {
+            int vaulterTdbId;
             var vaulters = new List<Vaulter>();
             var worksheet = _workbook.Worksheets?.Worksheet("tävlande");
             foreach (var row in worksheet.Rows())
             {
-                var vaulter = new Vaulter();
-                vaulter.VaulterTdbId = Convert.ToInt32(row.Cell("a").Value);
-                vaulter.Name = row.Cell("b").Value.ToString();
+
+                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                {
+                    continue;
+                }
+                vaulterTdbId = Convert.ToInt32(row.Cell("a").Value);
+
+                var vaulter = new Vaulter
+                {
+                    VaulterTdbId = vaulterTdbId,
+                    Name = row.Cell("b").Value.ToString()
+                };
                 vaulters.Add(vaulter);
             }
 
