@@ -268,10 +268,12 @@ namespace WebApplication1.Business.Logic.Import
                         if (competitionClassId != null)
                         {
                             existingTeam.VaultingClassId = competitionClassId;
+                            existingTeam.VaultingClass = null;
                         }
                         if (competitionClubId != null)
                         {
                             existingTeam.VaultingClubId = competitionClubId;
+                            existingTeam.VaultingClub = null;
                         }
                     
                         updatedTeams.Add(existingTeam);
@@ -448,6 +450,7 @@ namespace WebApplication1.Business.Logic.Import
                     {
                         existingHorse.HorseName = horse.HorseName;
                         existingHorse.HorseTdbId = horse.HorseTdbId;
+                        existingHorse.Lunger = null;
                         existingHorse.LungerId = lungerId; 
                         updatedHorses.Add(existingHorse);
                     }

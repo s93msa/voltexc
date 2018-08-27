@@ -55,7 +55,12 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void CreateExcelFromValues(string excelWorksheetNameJudgesTable, JudgeTable judgeTable)
         {
-            if (excelWorksheetNameJudgesTable == null || judgeTable == null)
+            if (judgeTable == null)
+            {
+                judgeTable = new JudgeTable();
+                judgeTable.JudgeTableName = JudgeTableNames.Okänd;
+            }
+            if (excelWorksheetNameJudgesTable == null)
                 return;
             var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
 
