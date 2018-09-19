@@ -1,4 +1,5 @@
-﻿@model WebApplication1.Models.Vaulter
+﻿@using WebApplication1.Business.Logic.Import
+@model WebApplication1.ViewModels.ImportViewModel
 
 @{
     ViewBag.Title = "View";
@@ -9,9 +10,71 @@
 @using (Html.BeginForm("Upload", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <input type="file" name="File" value="C:\Temp\Tävling exempel Listor.xlsx" />
-    <input type="submit" name="Submit" id="Submit" value="Upload" />
+    <label for="AddNewCheckbox">Lägg till nya</label><input type="checkbox" name="addNewCheckbox" id="AddNewCheckbox" />
+    <label for="UpdateCheckbox">Uppdatera redan existerande</label><input type="checkbox" name="updateCheckbox" id="UpdateCheckbox" />
+    <label for="UpdateCheckbox">Gör ingen koll av startlistan </label><input type="checkbox" name="excludeStartlist" id="excludeStartlist" checked="checked"/>
+
+    
+    <input type = "submit" name = "Submit" id = "Submit" value = "Upload" />
 }
 
 <div>
     @Html.ActionLink("Back to List", "Index")
+</div>
+
+<div>
+    <div>
+        Nya longörer: @Html.DisplayFor(modelItem => modelItem.NewLungers) <br />
+        Uppdaterade longörer: @Html.DisplayFor(modelItem => modelItem.NewLungers)
+    </div>
+    <div>
+        Nya hästar: @Html.DisplayFor(m => m.NewHorses) <br />
+        Updaterade hästar: @Html.DisplayFor(m => m.UpdatedHorses)
+    </div>
+    <div>
+
+        Nya klubbar: @Html.DisplayFor(m => m.NewClubs) <br />
+        Updaterade klubbar:  @Html.DisplayFor(m => m.UpdatedClubs)
+    </div>
+    <div>
+
+        Nya klasser: @Html.DisplayFor(m => m.NewClasses) <br />
+        Updaterade klasser: @Html.DisplayFor(m => m.UpdatedClasses)
+    </div>
+    <div>
+
+        Nya voltigörer: @Html.DisplayFor(m => m.NewVaulters) <br />
+        Updaterade voltigörer: @Html.DisplayFor(m => m.UpdatedVaulters)
+    </div>
+    <div>
+
+        Nya lag: @Html.DisplayFor(m => m.NewTeams) <br />
+        Updaterade lag: @Html.DisplayFor(m => m.UpdatedTeams)
+    </div>
+    <div>
+
+        Nya lagmedlemmar: @Html.DisplayFor(m => m.NewTeamMembers) <br />
+        Updaterade lagmedlemmar: @Html.DisplayFor(m => m.UpdatedTeamMembers)
+    </div>
+    <div>
+
+        @foreach (var item in Model?.ChangedStartListTeamList ?? new Dictionary<int, Changed>())
+        {
+            <div>
+                <label>Startlisteklass</label>@Html.DisplayFor(m => item.Key) <br />
+                <label>Ny startlista för lag</label>@Html.DisplayFor(m => item.Value.New) <br />
+                <label>Ändrad startlista för lag</label>@Html.DisplayFor(m => item.Value.Updated)
+            </div>
+        }
+    </div>
+    <div>
+        @foreach (var item in Model?.ChangedStartListIndividualList ?? new Dictionary<int, UpdateService.NewHordeorders>())
+        {
+            <div>
+                <label>Startlisteklass</label>@Html.DisplayFor(m => item.Key) <br />
+                <label>Ny startlista för häst</label>@Html.DisplayFor(m => item.Value.NewHorseOrders) <br />
+                <label>Ändrad startlista för Individuell</label>@Html.DisplayFor(m => item.Value.NewVaulterOrders)
+            </div>
+        }
+    </div>
 </div>

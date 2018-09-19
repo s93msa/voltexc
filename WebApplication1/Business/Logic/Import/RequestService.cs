@@ -12,20 +12,21 @@ namespace WebApplication1.Business.Logic.Import
             _request = request;
         }
 
-        public XLWorkbook GetWorkbook()
+        public XLWorkbook GetWorkbook(HttpPostedFileBase file)
         {
-            if (_request.Files.Count > 0)
+
+            if (file != null && file.ContentLength > 0)
             {
-                var file = _request.Files[0];
-
-                if (file != null && file.ContentLength > 0)
-                {
-                    return new XLWorkbook(file.InputStream);
-                }
-
+                return new XLWorkbook(file.InputStream);
             }
 
+
             return null;
+        }
+
+        public bool IsCheckboxChecked(string checkboxValue)
+        {
+            return checkboxValue == "on";
         }
     }
 }

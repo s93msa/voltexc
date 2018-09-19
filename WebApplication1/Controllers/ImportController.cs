@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Import;
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -22,6 +24,8 @@ namespace WebApplication1.Controllers
 
         }
 
+
+
         // GET: Import
         public ActionResult Index()
         {
@@ -29,66 +33,95 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload()
+        public ActionResult Upload(ImportViewModel model, HttpPostedFileBase file, string addNewCheckbox, string updateCheckbox, string excludeStartlist)
         {
+
+
+
             _requestService = new RequestService(Request);
-            var workbook = _requestService.GetWorkbook();
+            _updateService.AddNew = _requestService.IsCheckboxChecked(addNewCheckbox);
+            _updateService.UpdateExisting = _requestService.IsCheckboxChecked(updateCheckbox);
+            _updateService.ExcludeStartlist = _requestService.IsCheckboxChecked(excludeStartlist);
+
+            var workbook = _requestService.GetWorkbook(file);
             var excelImportService = new ExcelImportService(workbook);
             //var _updateService = new UpdateService();
             Changed changedItems;
             var lungers = excelImportService.GetLungers();
             changedItems = _updateService.UpdateLungers(lungers);
 
+            model.NewLungers = changedItems.New;
+            model.UppdatedLungers = changedItems.Updated;
+
+
             var horses = excelImportService.GetHorses();
             changedItems = _updateService.UpdateHorses(horses);
+            model.NewHorses = changedItems.New;
+            model.UpdatedHorses = changedItems.Updated;
 
             var clubs = excelImportService.GetClubs();
             changedItems = _updateService.UpdateClubs(clubs);
+            model.NewClubs = changedItems.New;
+            model.UpdatedClubs = changedItems.Updated;
 
             var classes = excelImportService.GetClasses();
             changedItems = _updateService.UpdateClasses(classes);
-
+            model.NewClasses = changedItems.New;
+            model.UpdatedClasses = changedItems.Updated;
 
             var vaulters = excelImportService.GetVaulters();
             changedItems = _updateService.UpdateVaulters(vaulters);
+            model.NewVaulters = changedItems.New;
+            model.UpdatedVaulters = changedItems.Updated;
 
             var teams = excelImportService.GetTeams();
             changedItems = _updateService.UpdateTeams(teams);
+            model.NewTeams = changedItems.New;
+            model.UpdatedTeams = changedItems.Updated;
 
             var teamMembers = excelImportService.GetTeamMembers();
             changedItems = _updateService.UpdateTeamMembers(teamMembers); //Observera att den inte tar bort teammembers. Bara lägger till eller ändrar ordning
+            model.NewTeamMembers = changedItems.New;
+            model.UpdatedTeamMembers = changedItems.Updated;
 
-            
-            ImportTeams(excelImportService);
+            if (!_updateService.ExcludeStartlist)
+            {
+                var changedStartlist = ImportTeams(excelImportService);
+                model.ChangedStartListTeamList = changedStartlist;
 
-            ImportIndividuals(excelImportService);
+                var changedStartlistIndividual = ImportIndividuals(excelImportService);
+                model.ChangedStartListIndividualList = changedStartlistIndividual;
+            }
 
-
-            return RedirectToAction("Index");
+            return View("Index", model);
         }
 
-        
 
-        private void ImportTeams(ExcelImportService excelImportService)
+
+        private Dictionary<int, Changed> ImportTeams(ExcelImportService excelImportService)
         {
             int StartListClassStepId;
             int[] competionClassesTdbIds;
             int testNumber;
+            Dictionary<int, Changed> TeamsStartlistChanged = new Dictionary<int, Changed>();
+            Changed changed;
 
-
-            //senior lag
-            competionClassesTdbIds = new []{ 367695, 367766, 367779 };
+        //senior lag
+        competionClassesTdbIds = new []{ 367695, 367766, 367779 };
             StartListClassStepId = 1059; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
             StartListClassStepId = 1061; //Svår klass lag seniorer klass 1 – Kür
             testNumber = 2;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
             StartListClassStepId = 6; //Svår klass lag seniorer grund 2
             testNumber = 3;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
 
             //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -98,15 +131,18 @@ namespace WebApplication1.Controllers
             competionClassesTdbIds = new [] { 367763, 367768, 367780};
             StartListClassStepId = 5; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
             StartListClassStepId = 1062; //Svår klass lag seniorer klass 1 – Kür
             testNumber = 2;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
             StartListClassStepId = 1063; //Svår klass lag seniorer klass 1 – Kür
             testNumber = 3;
-            ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged.Add(StartListClassStepId, changed);
 
 
             //Mellanklass lag
@@ -143,15 +179,16 @@ namespace WebApplication1.Controllers
             //testNumber = 2;
             //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
-
+            return TeamsStartlistChanged;
         }
 
-        private void ImportIndividuals(ExcelImportService excelImportService)
+        private Dictionary<int, UpdateService.NewHordeorders> ImportIndividuals(ExcelImportService excelImportService)
         {
             int StartListClassStepId;
             int[] competionClassesTdbIds;
             int testNumber;
-
+            var individualStartlistChanged = new Dictionary<int, UpdateService.NewHordeorders>();
+            UpdateService.NewHordeorders newHordeorders;
 
             // individuella
             //Svår klass
@@ -159,34 +196,41 @@ namespace WebApplication1.Controllers
 
             StartListClassStepId = 1066; 
             testNumber = 1;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId,newHordeorders);
 
             StartListClassStepId = 9; // Svår klass individuella Juniorer-Miniorer – Kür
             testNumber = 2;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
             StartListClassStepId = 8; // Svår klass individuella Juniorer-Miniorer – Kür
             testNumber = 3;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
             StartListClassStepId = 1065; // Svår klass individuella Juniorer-Miniorer – Kür
             testNumber = 4;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
 
             competionClassesTdbIds = new [] { 367769, 367770, 367781 }; // senior individuell 
 
             StartListClassStepId = 19; // senior   Grund
             testNumber = 1;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
             StartListClassStepId = 1060; // Svår klass individuella senior– teknKür
             testNumber = 2; //tekn kür
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
             StartListClassStepId = 1064; // Svår klass individuella seniorklass Kür
             testNumber = 3;
-            ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
 
 
@@ -208,23 +252,25 @@ namespace WebApplication1.Controllers
             //testNumber = 2;
             //ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
 
+            return individualStartlistChanged;
         }
 
-        private void ImportIndividual(ExcelImportService excelImportService, int[] competionClassesTdbIds,
-            int StartListClassStepId, int testNumber)
+        private UpdateService.NewHordeorders ImportIndividual(ExcelImportService excelImportService, int[] competionClassesTdbIds,
+            int startListClassStepId, int testNumber)
         {
-            HorseOrder[] horseOrders;
-            horseOrders =
-                excelImportService.GetHorseOrderIndividual(competionClassesTdbIds, StartListClassStepId, testNumber);
+            var horseOrders = excelImportService.GetHorseOrderIndividual(competionClassesTdbIds, startListClassStepId, testNumber);
 
-            _updateService.UpdateIndividualHorseOrders(horseOrders);
+           var newHordeorders = _updateService.UpdateIndividualHorseOrders(horseOrders);
+
+            return newHordeorders;
         }
 
-        private void ImportTeam(ExcelImportService excelImportService, int[] competionClassesTdbIds, int startListClassStepId,
+        private Changed ImportTeam(ExcelImportService excelImportService, int[] competionClassesTdbIds, int startListClassStepId,
             int testNumber)
         {
             var horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, startListClassStepId, testNumber);
-            _updateService.UpdateTeamHorseOrders(horseOrders);
+            var changed = _updateService.UpdateTeamHorseOrders(horseOrders);
+            return changed;
         }
     }
 }

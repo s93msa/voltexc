@@ -1,6 +1,5 @@
-﻿@model WebApplication1.Models.HorseOrder
+﻿@model WebApplication1.ViewModels.CompetitionClassesViewModel
 
-@{
     ViewBag.Title = "Index";
 }
 
@@ -23,23 +22,24 @@
         <th></th>
     </tr>
 
-@*@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsTeam)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TeamTestnumber)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.HorseOrderId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.HorseOrderId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.HorseOrderId })
-        </td>
-    </tr>
-}*@
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsTeam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamTestnumber)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.HorseOrderId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.HorseOrderId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.HorseOrderId })
+            </td>
+        </tr>
+    }
 
 </table>

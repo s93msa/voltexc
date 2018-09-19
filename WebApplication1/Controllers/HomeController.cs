@@ -216,9 +216,17 @@ namespace WebApplication1.Controllers
             var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
             foreach (var startListClassStep in startListClassStepOrdered)
             {
-                //if (startListClassStep.Date > new DateTime(2017,7,7,23,0,0) && startListClassStep.Date < new DateTime(2017, 7, 8, 13, 0, 0))
-                //if (startListClassStep.StartListClassStepId == 18)
-                    SaveInExcel(contest, startListClassStep);
+                //if (startListClassStep.Date > new DateTime(2018, 9, 7, 22, 0, 0) &&
+                //    startListClassStep.Date < new DateTime(2018, 9, 8, 23, 0, 0))
+                //if (startListClassStep.StartListClassStepId == 8) // junior minior grund final sm 2018
+                //if (startListClassStep.StartListClassStepId == 1080) // junior minior kur final sm 2018
+                //if (startListClassStep.StartListClassStepId == 6) // Svår klass Lag seniorer – kür final
+                if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
+                //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
+                //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
+                {
+                        SaveInExcel(contest, startListClassStep);
+                }
             }
                 
             return View();

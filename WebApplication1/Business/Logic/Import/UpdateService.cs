@@ -20,7 +20,9 @@ namespace WebApplication1.Business.Logic.Import
         //    return new Horse[0];
         //}
 
-        
+        public bool UpdateExisting { get; set; }
+        public bool AddNew { get; set; }
+        public bool ExcludeStartlist { get; set; }
 
         public Changed UpdateLungers(Lunger[] lungers)
         {
@@ -44,14 +46,19 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
-
-            ContestService.UpdateLungers(updatedLungers.ToArray());
-            ContestService.AddLungers(newLungers.ToArray());
+            if (UpdateExisting)
+            {
+                ContestService.UpdateLungers(updatedLungers.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddLungers(newLungers.ToArray());
+            }
 
             var changed = new Changed
             {
-                New = updatedLungers.Count,
-                Updated = newLungers.Count
+                Updated = updatedLungers.Count,
+                New = newLungers.Count
             };
 
             return changed;
@@ -84,8 +91,14 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
+            if (UpdateExisting)
+            {
             ContestService.UpdateClubs(updatedClubs.ToArray());
-            ContestService.AddClubs(newClubs.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddClubs(newClubs.ToArray());
+            }
 
             var changed = new Changed
             {
@@ -119,8 +132,15 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
-            ContestService.UpdateClasses(updatedClasses.ToArray());
-            ContestService.AddClasses(newClasses.ToArray());
+            if (UpdateExisting)
+            {
+                ContestService.UpdateClasses(updatedClasses.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddClasses(newClasses.ToArray());
+            }
+
             var changed = new Changed
             {
                 New = updatedClasses.Count,
@@ -170,13 +190,14 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
-            //updatetdVaulters = SetClassDatabaseId(updatetdVaulters);
-            //updatetdVaulters = SetClubDatabaseId(updatetdVaulters);
-            ContestService.UpdateVaulters(updatetdVaulters.ToArray());
-            //newVaulters = SetClassDatabaseId(newVaulters);
-            //newVaulters = SetClubDatabaseId(newVaulters);
-            ContestService.AddVaulters(newVaulters.ToArray());
-
+            if (UpdateExisting)
+            {
+                ContestService.UpdateVaulters(updatetdVaulters.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddVaulters(newVaulters.ToArray());
+            }
 
             var changed = new Changed
             {
@@ -228,9 +249,14 @@ namespace WebApplication1.Business.Logic.Import
 
 
             }
+            if (UpdateExisting)
+            {
             ContestService.UpdateTeamMembers(updatedMember.ToArray());
-
-            ContestService.AddTeamMembers(newMember.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddTeamMembers(newMember.ToArray());
+            }
 
             var changed = new Changed
             {
@@ -286,11 +312,14 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
-            //updatedHorses = SetLungerDatabaseId(updatedHorses);
-            ContestService.UpdateTeams(updatedTeams.ToArray());
-
-            //newHorses = SetLungerDatabaseId(newHorses);
-            ContestService.AddTeams(newTeams.ToArray());
+            if (UpdateExisting)
+            {
+                ContestService.UpdateTeams(updatedTeams.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddTeams(newTeams.ToArray());
+            }
 
             var changed = new Changed
             {
@@ -305,31 +334,132 @@ namespace WebApplication1.Business.Logic.Import
         public NewHordeorders UpdateIndividualHorseOrders(HorseOrder[] horseOrders)
         {
             var newHorseOrders = GetMissingHorseOrders(horseOrders);
-
-            ContestService.AddHorseOrders(newHorseOrders.ToArray());
+            if (AddNew)
+            {
+                ContestService.AddHorseOrders(newHorseOrders.ToArray());
+            }
 
 
             var newVaulterOrders = GetMissingVaulterOrders(horseOrders);
-            ContestService.AddVaulterOrders(newVaulterOrders.ToArray());
+            if (AddNew)
+            {
+                ContestService.AddVaulterOrders(newVaulterOrders.ToArray());
+            }
 
             // ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
 
             var changed = new NewHordeorders
             {
-                newHorseOrders = newHorseOrders.Count,
-                newVaulterOrders = newVaulterOrders.Count
+                NewHorseOrders = newHorseOrders.Count,
+                NewVaulterOrders = newVaulterOrders.Count
             };
 
             return changed;
 
         }
-
         public struct NewHordeorders
         {
-            public int newHorseOrders;
-            public int newVaulterOrders;
+            public int NewHorseOrders;
+            public int NewVaulterOrders;
 
         }
+
+        public Changed UpdateTeamHorseOrders(HorseOrder[] horseOrders)
+        {
+            var newHorseOrders = new List<HorseOrder>();
+            var updatedHorseOrders = new List<HorseOrder>();
+            foreach (var horseOrder in horseOrders)
+            {
+                var existingHorseOrder = GetExistingHorseOrderTeam(horseOrder);
+
+                var existingTeam = GetExistingTeam(horseOrder.VaultingTeam.Name);
+
+                var existingHorse = GetExistingHorse(horseOrder.HorseInformation);
+
+                // kolla om horseOrder Finns. Är den förändrad?
+
+                //var existingHorse = GetExistingHorse(horse);
+                if (existingHorseOrder != null)
+                {
+                    if (NotEqual(horseOrder, existingHorseOrder))
+                    {
+                        //                        existingHorseOrder.StartNumber = horseOrder.StartNumber;
+                        existingHorseOrder.HorseId = existingHorse.HorseId;
+                        //                       existingHorseOrder.VaultingTeamId = existingTeam.TeamId;
+                        updatedHorseOrders.Add(existingHorseOrder);
+                    }
+                }
+                else
+                {
+                    horseOrder.HorseId = existingHorse.HorseId;
+                    horseOrder.HorseInformation = null;
+                    horseOrder.VaultingTeamId = existingTeam.TeamId;
+                    horseOrder.VaultingTeam = null;
+                    newHorseOrders.Add(horseOrder);
+                }
+            }
+            if (UpdateExisting)
+            {
+                ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddHorseOrders(newHorseOrders.ToArray());
+            }
+            var changed = new Changed
+            {
+                New = updatedHorseOrders.Count,
+                Updated = newHorseOrders.Count
+            };
+
+            return changed;
+        }
+
+        public Changed UpdateHorses(Horse[] horses)
+        {
+            var newHorses = new List<Horse>();
+            var updatedHorses = new List<Horse>();
+            foreach (var horse in horses)
+            {
+                var lungerId = GetExistingLunger(horse.Lunger)?.LungerId;
+
+                var existingHorse = GetExistingHorse(horse);
+                if (existingHorse != null)
+                {
+                    if (NotEqual(horse, existingHorse))
+                    {
+                        existingHorse.HorseName = horse.HorseName;
+                        existingHorse.HorseTdbId = horse.HorseTdbId;
+                        existingHorse.Lunger = null;
+                        existingHorse.LungerId = lungerId;
+                        updatedHorses.Add(existingHorse);
+                    }
+                }
+                else
+                {
+                    horse.LungerId = lungerId;
+                    horse.Lunger = null;
+                    newHorses.Add(horse);
+                }
+            }
+            if (UpdateExisting)
+            {
+                ContestService.UpdateHorses(updatedHorses.ToArray());
+            }
+            if (AddNew)
+            {
+                ContestService.AddHorses(newHorses.ToArray());
+            }
+
+            var changed = new Changed
+            {
+                New = updatedHorses.Count,
+                Updated = newHorses.Count
+            };
+
+            return changed;
+        }
+
 
         private static List<VaulterOrder> GetMissingVaulterOrders(HorseOrder[] horseOrders)
         {
@@ -395,88 +525,7 @@ namespace WebApplication1.Business.Logic.Import
             return newHorseOrders;
         }
 
-        public void UpdateTeamHorseOrders(HorseOrder[] horseOrders)
-        {
-            var newHorseOrders = new List<HorseOrder>();
-            var updatedHorseOrders = new List<HorseOrder>();
-            foreach (var horseOrder in horseOrders)
-            {
-                var existingHorseOrder = GetExistingHorseOrderTeam(horseOrder);
-
-                var existingTeam = GetExistingTeam(horseOrder.VaultingTeam.Name);
-
-                var existingHorse = GetExistingHorse(horseOrder.HorseInformation);
-
-                // kolla om horseOrder Finns. Är den förändrad?
-
-                //var existingHorse = GetExistingHorse(horse);
-                if (existingHorseOrder != null)
-                {
-                    if (NotEqual(horseOrder, existingHorseOrder))
-                    {
-//                        existingHorseOrder.StartNumber = horseOrder.StartNumber;
-                        existingHorseOrder.HorseId = existingHorse.HorseId;
-//                       existingHorseOrder.VaultingTeamId = existingTeam.TeamId;
-                        updatedHorseOrders.Add(existingHorseOrder);
-                    }
-                }
-                else
-                {
-                    horseOrder.HorseId = existingHorse.HorseId;
-                    horseOrder.HorseInformation = null;
-                    horseOrder.VaultingTeamId = existingTeam.TeamId;
-                    horseOrder.VaultingTeam = null;
-                    newHorseOrders.Add(horseOrder);
-                }
-            }
-
-            ContestService.UpdateHorseOrder(updatedHorseOrders.ToArray());
-            ContestService.AddHorseOrders(newHorseOrders.ToArray());
-
-        }
-
-        public Changed UpdateHorses(Horse[] horses)
-        {
-            var newHorses = new List<Horse>();
-            var updatedHorses = new List<Horse>();
-            foreach (var horse in horses)
-            {
-                var lungerId = GetExistingLunger(horse.Lunger)?.LungerId;
-
-                var existingHorse = GetExistingHorse(horse);
-                if (existingHorse != null)
-                {
-                    if (NotEqual(horse, existingHorse))
-                    {
-                        existingHorse.HorseName = horse.HorseName;
-                        existingHorse.HorseTdbId = horse.HorseTdbId;
-                        existingHorse.Lunger = null;
-                        existingHorse.LungerId = lungerId; 
-                        updatedHorses.Add(existingHorse);
-                    }
-                }
-                else
-                {
-                    horse.LungerId = lungerId;
-                    horse.Lunger = null;
-                    newHorses.Add(horse);
-                }
-            }
-
-            //updatedHorses = SetLungerDatabaseId(updatedHorses);
-            ContestService.UpdateHorses(updatedHorses.ToArray());
-
-            //newHorses = SetLungerDatabaseId(newHorses);
-            ContestService.AddHorses(newHorses.ToArray());
-            var changed = new Changed
-            {
-                New = updatedHorses.Count,
-                Updated = newHorses.Count
-            };
-
-            return changed;
-        }
-
+  
         //private static List<Horse> SetLungerDatabaseId(List<Horse> newHorses)
         //{
         //    foreach (var newHorse in newHorses)
