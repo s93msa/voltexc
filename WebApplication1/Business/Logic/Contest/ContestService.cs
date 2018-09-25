@@ -6,10 +6,12 @@
 //using WebApplication1.Classes;
 //using WebApplication1.Models;
 
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
@@ -111,6 +113,17 @@ namespace WebApplication1.Business.Logic.Contest
 
             return null;
         }
+
+        public static HorseOrder GetHorseOrder(int horseOrderId)
+        {
+            var horseOrders = GetHorseOrders();
+            var horseOrder =
+                horseOrders.FindAll(x => x.HorseOrderId == horseOrderId);
+
+
+            return horseOrder.FirstOrDefault();
+        }
+
 
         public static HorseOrder[] GetHorseOrder(int? startListClassStepId, int? horseId)
         {
@@ -403,6 +416,13 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static void UpdateHorseOrder(HorseOrder horseOrder)
+        {
+            var horseOrders = new HorseOrder[]{ horseOrder };
+            
+            UpdateHorseOrder(horseOrders);
+        }
+
         public static void UpdateHorseOrder(HorseOrder[] horseOrders)
         {
             using (var db = new VaultingContext())
@@ -547,7 +567,7 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
-        private static List<Vaulter> GetVaulters()
+        public static List<Vaulter> GetVaulters()
         {
             if (_vaulters == null)
             {
@@ -556,7 +576,7 @@ namespace WebApplication1.Business.Logic.Contest
                      _vaulters = db.Vaulters.ToList();
                     foreach (var vaulter in _vaulters)
                     {
-                        //var dummy1 = vaulter.VaultingClass;
+                        var dummy1 = vaulter.VaultingClass;
                         var dummy2 = vaulter.VaultingClub;
                     }
                     //var dummy = GetAllDataFromDataBase<List<Vaulter>>(_vaulters); // bara för att hämta alla värden när vi är i context dvs inom using
@@ -568,7 +588,7 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
-        private static List<Team> GetTeams()
+        public static List<Team> GetTeams()
         {
             if (_teams == null)
             {
@@ -601,7 +621,7 @@ namespace WebApplication1.Business.Logic.Contest
             return _teamMembers;
 
         }
-        private static List<Horse> GetHorses(bool forceReadFromDb = false)
+        public static List<Horse> GetHorses(bool forceReadFromDb = false)
         {
             if (forceReadFromDb || _horses == null)
             {

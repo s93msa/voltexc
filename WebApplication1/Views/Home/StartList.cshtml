@@ -61,6 +61,9 @@ d }) |
 
                 <tr>
                     <td>
+                        @Html.ActionLink("Ändra", "Edit", "HorseOrders", new { id = startListItem.HorseOrderId }, null) |
+                    </td>
+                    <td>
                         @startnumber.ToString()
                     </td>
                     <td>
@@ -74,19 +77,20 @@ d }) |
                         @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) - 
-                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)                        
+                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) -
+                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
                         (@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.Country))
-                        <br />Voltigörer: <br />
+                        <br/>Voltigörer: <br/>
                         @foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
                         {
-                            @(vaulter.Participant.Name )
-                            <br />
+                            @(vaulter.Participant.Name)
+                            <br/>
 
                         }
+
                     </td>
                 </tr>
 
@@ -95,11 +99,13 @@ d }) |
             {
                                 foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
                                 {
+                                    
 
                                     startnumber++;
 
                 <tr>
                     <td>
+                        @Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)
                         @startnumber.ToString()
                     </td>
                     <td>

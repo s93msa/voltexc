@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -93,7 +95,128 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(horseOrder);
+
+            var horseOrderSelectList = GetHorsesSelectList(horseOrder);
+
+            var stepsSelectList = GetStepsSelectList(horseOrder);
+
+            var contest = ContestService.GetContestInstance();
+
+            var startListClassesSteps = contest?.StartListClassStep ?? new List<StartListClassStep>();
+
+            var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
+            var startListClassStepsSelectList = new SelectList(startListClassStepOrdered, "StartListClassStepId", "Name", horseOrder.StartListClassStepId);
+
+            var teams = ContestService.GetTeams().OrderBy(x => x.Name);
+            var teamsSelectList = new SelectList(teams, "TeamId", "Name", horseOrder.VaultingTeamId);
+
+
+            var horseOrderViewModel =
+                new HorseOrderViewModel
+                {
+                    HorseOrder = horseOrder,
+                    HorsesLungersSelectList = horseOrderSelectList,
+                    StepsSelectList = stepsSelectList,
+                    StartListClassStepsSelectList = startListClassStepsSelectList,
+                    TeamsSelectList = teamsSelectList
+                };
+
+            return View(horseOrderViewModel);
+        }
+
+        // GET: HorseOrders/Edit/5
+        public ActionResult EditVaulterOrder(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            VaulterOrder vaulterOrder = db.VaulterOrders.Find(id);
+            if (vaulterOrder == null)
+            {
+                return HttpNotFound();
+            }
+
+
+
+            //var horseOrderSelectList = GetHorsesSelectList(horseOrder);
+
+            //var stepsSelectList = GetStepsSelectList(horseOrder);
+
+            //var contest = ContestService.GetContestInstance();
+
+            //var startListClassesSteps = contest?.StartListClassStep ?? new List<StartListClassStep>();
+
+            //var startListClassStepOrdered = startListClassesSteps.OrderBy(x => x.StartOrder);
+            //var startListClassStepsSelectList = new SelectList(startListClassStepOrdered, "StartListClassStepId", "Name", horseOrder.StartListClassStepId);
+
+            //var teams = ContestService.GetTeams().OrderBy(x => x.Name);
+            //var teamsSelectList = new SelectList(teams, "TeamId", "Name", horseOrder.VaultingTeamId);
+
+
+            var vaultersOrderViewModel =
+                new VaultersOrderViewModel();
+            {
+                //    HorseOrder = horseOrder,
+                //    HorsesLungersSelectList = horseOrderSelectList,
+                //    StepsSelectList = stepsSelectList,
+                //    StartListClassStepsSelectList = startListClassStepsSelectList,
+                //    TeamsSelectList = teamsSelectList
+            };
+            vaultersOrderViewModel.VaulterOrder = vaulterOrder;
+            vaultersOrderViewModel.VaulterSelectList = GetVaultersSelectList(vaulterOrder);
+
+            return View(vaultersOrderViewModel);
+        }
+
+        private SelectList GetStepsSelectList(HorseOrder horseOrder)
+        {
+            var teamClass = horseOrder.VaultingTeam.VaultingClass;
+            var contest = ContestService.GetContestInstance();
+
+            var classSteps = teamClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
+
+            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", horseOrder.TeamTestnumber);
+            return stepsSelectList;
+        }
+
+        private SelectList GetVaultersSelectList(VaulterOrder vaulterOrder)
+        {
+            var vaulters = ContestService.GetVaulters().OrderBy(x => x.Name);
+            var vaulterId = vaulterOrder.VaulterId;
+            var vaultersSelectList = new List<KeyValuePair<int, string>>();
+            foreach (var vaulterPair in vaulters)
+            {
+                if(vaulterPair == null)
+                    continue;
+
+                var key = vaulterPair.VaulterId;
+                var value = vaulterPair.Name + " (Klubb: " + vaulterPair.VaultingClub?.ClubName + " klass: " + vaulterPair.VaultingClass?.ClassName +")";
+                var pair = new KeyValuePair<int, string>(key, value);
+                vaultersSelectList.Add(pair);
+
+            }
+
+            var stepsSelectList = new SelectList(vaultersSelectList, "key", "value", vaulterId);
+            return stepsSelectList;
+        }
+
+        private SelectList GetHorsesSelectList(HorseOrder horseOrder)
+        {
+            var horses = ContestService.GetHorses().OrderBy(x => x.HorseName);
+            var horsesSelectList = new List<KeyValuePair<int, string>>();
+            foreach (var horse in horses)
+            {
+                if (horse == null)
+                    continue;
+                var key = horse.HorseId;
+                var value = horse.HorseName + " " + horse.Lunger?.LungerName;
+                var pair = new KeyValuePair<int, string>(key, value);
+                horsesSelectList.Add(pair);
+            }
+
+            var horseOrderSelectList = new SelectList(horsesSelectList, "key", "value", horseOrder.HorseId);
+            return horseOrderSelectList;
         }
 
         // POST: HorseOrders/Edit/5
@@ -101,15 +224,24 @@ namespace WebApplication1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "HorseOrderId,StartNumber,IsTeam,TeamTestnumber")] HorseOrder horseOrder)
+        public ActionResult Edit([Bind(Exclude = "HorsesLungersSelectList")]  HorseOrderViewModel horseOrderViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(horseOrder).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var horseOrder = horseOrderViewModel.HorseOrder;
+                var existingHorseOrder = ContestService.GetHorseOrder(horseOrder.HorseOrderId);
+                existingHorseOrder.StartNumber = horseOrder.StartNumber;
+                existingHorseOrder.HorseId = horseOrder.HorseId;
+                existingHorseOrder.VaultingTeamId = horseOrder.VaultingTeamId;
+                existingHorseOrder.TeamTestnumber = horseOrder.TeamTestnumber;
+                existingHorseOrder.IsActive = horseOrder.IsActive;
+                existingHorseOrder.StartListClassStepId = horseOrder.StartListClassStepId;
+
+                ContestService.UpdateHorseOrder(existingHorseOrder);
+                ContestService.GetNewDataFromDatabase();
+                return RedirectToAction("StartList", "Home");
             }
-            return View(horseOrder);
+            return View(horseOrderViewModel);
         }
 
         // GET: HorseOrders/Delete/5
