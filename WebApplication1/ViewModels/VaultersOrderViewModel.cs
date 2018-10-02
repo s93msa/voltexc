@@ -20,5 +20,7 @@ namespace WebApplication1.ViewModels
 
         public SelectList VaulterSelectList { get; set; }
 
+        public SelectList StepsSelectList { get; set; }
+
     }
 }

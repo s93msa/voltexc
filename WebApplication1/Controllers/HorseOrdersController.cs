@@ -141,7 +141,7 @@ namespace WebApplication1.Controllers
 
             //var horseOrderSelectList = GetHorsesSelectList(horseOrder);
 
-            //var stepsSelectList = GetStepsSelectList(horseOrder);
+            var stepsSelectList = GetStepsSelectList(vaulterOrder);
 
             //var contest = ContestService.GetContestInstance();
 
@@ -155,17 +155,17 @@ namespace WebApplication1.Controllers
 
 
             var vaultersOrderViewModel =
-                new VaultersOrderViewModel();
-            {
-                //    HorseOrder = horseOrder,
-                //    HorsesLungersSelectList = horseOrderSelectList,
-                //    StepsSelectList = stepsSelectList,
-                //    StartListClassStepsSelectList = startListClassStepsSelectList,
-                //    TeamsSelectList = teamsSelectList
-            };
-            vaultersOrderViewModel.VaulterOrder = vaulterOrder;
-            vaultersOrderViewModel.VaulterSelectList = GetVaultersSelectList(vaulterOrder);
-
+                new VaultersOrderViewModel
+                {
+                    StepsSelectList = stepsSelectList,
+                    VaulterOrder = vaulterOrder,
+                    VaulterSelectList = GetVaultersSelectList(vaulterOrder),
+                    //    HorseOrder = horseOrder,
+                    //    HorsesLungersSelectList = horseOrderSelectList,
+                    //    StepsSelectList = stepsSelectList,
+                    //    StartListClassStepsSelectList = startListClassStepsSelectList,
+                    //    TeamsSelectList = teamsSelectList
+                };
             return View(vaultersOrderViewModel);
         }
 
@@ -180,7 +180,19 @@ namespace WebApplication1.Controllers
             return stepsSelectList;
         }
 
-        private SelectList GetVaultersSelectList(VaulterOrder vaulterOrder)
+        private SelectList GetStepsSelectList(VaulterOrder vaulterOrder)
+        {
+            var vaulterClass = vaulterOrder.Participant.VaultingClass;
+            var contest = ContestService.GetContestInstance();
+
+            var classSteps = vaulterClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
+
+            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", vaulterOrder.Testnumber);
+            return stepsSelectList;
+        }
+
+
+    private SelectList GetVaultersSelectList(VaulterOrder vaulterOrder)
         {
             var vaulters = ContestService.GetVaulters().OrderBy(x => x.Name);
             var vaulterId = vaulterOrder.VaulterId;

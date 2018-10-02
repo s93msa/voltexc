@@ -43,7 +43,11 @@ namespace WebApplication1.Business.Logic.Import
             foreach (var row in worksheet.Rows())
             {
                 var horse = new Horse();
-                horse.HorseTdbId = Convert.ToInt32(row.Cell("a").Value);
+                var tdbId = row.Cell("a").Value?.ToString();
+                if (!string.IsNullOrWhiteSpace(tdbId))
+                {
+                    horse.HorseTdbId = Convert.ToInt32(tdbId);
+                }
                 horse.HorseName = row.Cell("b").Value.ToString();
                 horses.Add(horse);
             }
