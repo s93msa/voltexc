@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(ImportViewModel model, HttpPostedFileBase file, string addNewCheckbox, string updateCheckbox, string excludeStartlist)
+        public ActionResult Upload(ImportViewModel model, HttpPostedFileBase file, string addNewCheckbox, string updateCheckbox, string excludeStartlist, string excludeTeam)
         {
 
 
@@ -42,7 +42,8 @@ namespace WebApplication1.Controllers
             _updateService.AddNew = _requestService.IsCheckboxChecked(addNewCheckbox);
             _updateService.UpdateExisting = _requestService.IsCheckboxChecked(updateCheckbox);
             _updateService.ExcludeStartlist = _requestService.IsCheckboxChecked(excludeStartlist);
-
+            _updateService.ExcludeTeam = _requestService.IsCheckboxChecked(excludeTeam);
+            
             var workbook = _requestService.GetWorkbook(file);
             var excelImportService = new ExcelImportService(workbook);
             //var _updateService = new UpdateService();
@@ -74,20 +75,26 @@ namespace WebApplication1.Controllers
             model.NewVaulters = changedItems.New;
             model.UpdatedVaulters = changedItems.Updated;
 
-            var teams = excelImportService.GetTeams();
-            changedItems = _updateService.UpdateTeams(teams);
-            model.NewTeams = changedItems.New;
-            model.UpdatedTeams = changedItems.Updated;
+            if (!_updateService.ExcludeTeam)
+            {
+                var teams = excelImportService.GetTeams();
+                changedItems = _updateService.UpdateTeams(teams);
+                model.NewTeams = changedItems.New;
+                model.UpdatedTeams = changedItems.Updated;
 
-            var teamMembers = excelImportService.GetTeamMembers();
-            changedItems = _updateService.UpdateTeamMembers(teamMembers); //Observera att den inte tar bort teammembers. Bara lägger till eller ändrar ordning
-            model.NewTeamMembers = changedItems.New;
-            model.UpdatedTeamMembers = changedItems.Updated;
+                var teamMembers = excelImportService.GetTeamMembers();
+                changedItems = _updateService.UpdateTeamMembers(teamMembers); //Observera att den inte tar bort teammembers. Bara lägger till eller ändrar ordning
+                model.NewTeamMembers = changedItems.New;
+                model.UpdatedTeamMembers = changedItems.Updated;
+            }
 
             if (!_updateService.ExcludeStartlist)
             {
-                var changedStartlist = ImportTeams(excelImportService);
-                model.ChangedStartListTeamList = changedStartlist;
+                if (!_updateService.ExcludeTeam)
+                {
+                    var changedStartlist = ImportTeams(excelImportService);
+                    model.ChangedStartListTeamList = changedStartlist;
+                }
 
                 var changedStartlistIndividual = ImportIndividuals(excelImportService);
                 model.ChangedStartListIndividualList = changedStartlistIndividual;

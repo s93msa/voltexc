@@ -12,10 +12,11 @@
     <input type="file" name="File" value="C:\Temp\Tävling exempel Listor.xlsx" />
     <label for="AddNewCheckbox">Lägg till nya</label><input type="checkbox" name="addNewCheckbox" id="AddNewCheckbox" />
     <label for="UpdateCheckbox">Uppdatera redan existerande</label><input type="checkbox" name="updateCheckbox" id="UpdateCheckbox" />
-    <label for="UpdateCheckbox">Gör ingen koll av startlistan </label><input type="checkbox" name="excludeStartlist" id="excludeStartlist" checked="checked"/>
+    <label for="UpdateCheckbox">Gör ingen koll av startlistan </label><input type="checkbox" name="excludeStartlist" id="excludeStartlist" checked="checked" />
+    <label for="excludeTeam">Updatera eller lägg inte till lag </label><input type="checkbox" name="excludeTeam" id="excludeTeam" checked="checked" />
 
-    
-    <input type = "submit" name = "Submit" id = "Submit" value = "Upload" />
+
+    <input type="submit" name="Submit" id="Submit" value="Upload" />
 }
 
 <div>
@@ -25,7 +26,7 @@
 <div>
     <div>
         Nya longörer: @Html.DisplayFor(modelItem => modelItem.NewLungers) <br />
-        Uppdaterade longörer: @Html.DisplayFor(modelItem => modelItem.NewLungers)
+        Uppdaterade longörer: @Html.DisplayFor(modelItem => modelItem.UppdatedLungers)
     </div>
     <div>
         Nya hästar: @Html.DisplayFor(m => m.NewHorses) <br />
@@ -73,8 +74,10 @@
             <div>
                 <label>Startlisteklass</label>@Html.DisplayFor(m => item.Key) <br />
                 <label>Ny startlista för häst</label>@Html.DisplayFor(m => item.Value.NewHorseOrders) <br />
-                <label>Ändrad startlista för Individuell</label>@Html.DisplayFor(m => item.Value.NewVaulterOrders)
+                <label>Nya Individuell på häst</label>@Html.DisplayFor(m => item.Value.NewVaulterOrders)
             </div>
         }
     </div>
+
+
 </div>

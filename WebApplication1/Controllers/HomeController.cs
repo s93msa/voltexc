@@ -221,7 +221,7 @@ namespace WebApplication1.Controllers
                 //if (startListClassStep.StartListClassStepId == 8) // junior minior grund final sm 2018
                 //if (startListClassStep.StartListClassStepId == 1080) // junior minior kur final sm 2018
                 //if (startListClassStep.StartListClassStepId == 6) // Svår klass Lag seniorer – kür final
-                if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
+                //if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
                 //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
                 //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
                 {

@@ -77,7 +77,7 @@ d }) |
                         @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) -
+                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) klass: @startListItem.VaultingTeam.VaultingClass.ClassNr-
                         @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)
                     </td>
                     <td>
@@ -119,8 +119,8 @@ d }) |
                         @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName) - 
-                                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
+                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName) (@vaulters.Participant.VaultingClass.ClassNr)-
+                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)

@@ -23,13 +23,18 @@ namespace WebApplication1.Business.Logic.Import
         public bool UpdateExisting { get; set; }
         public bool AddNew { get; set; }
         public bool ExcludeStartlist { get; set; }
-
+        public bool ExcludeTeam { get; set; }
+        
         public Changed UpdateLungers(Lunger[] lungers)
         {
             var newLungers = new List<Lunger>();
             var updatedLungers = new List<Lunger>();
             foreach (var lunger in lungers)
             {
+                if (string.IsNullOrWhiteSpace(lunger.LungerName))
+                {
+                    continue;
+                }
                 var existingLunger = GetExistingLunger(lunger);
                 if (existingLunger != null)
                 {
@@ -102,8 +107,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatedClubs.Count,
-                Updated = newClubs.Count
+                Updated = updatedClubs.Count,
+                New = newClubs.Count
             };
 
             return changed;
@@ -143,8 +148,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatedClasses.Count,
-                Updated = newClasses.Count
+                Updated = updatedClasses.Count,
+                New = newClasses.Count
             };
 
             return changed;
@@ -201,8 +206,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatetdVaulters.Count,
-                Updated = newVaulters.Count
+                Updated = updatetdVaulters.Count,
+                New = newVaulters.Count
             };
 
             return changed;
@@ -260,8 +265,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatedMember.Count,
-                Updated = newMember.Count
+                Updated = updatedMember.Count,
+                New = newMember.Count
             };
 
             return changed;
@@ -323,8 +328,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatedTeams.Count,
-                Updated = newTeams.Count
+                Updated = updatedTeams.Count,
+                New = newTeams.Count
             };
 
             return changed;
@@ -393,7 +398,7 @@ namespace WebApplication1.Business.Logic.Import
                 {
                     horseOrder.HorseId = existingHorse.HorseId;
                     horseOrder.HorseInformation = null;
-                    horseOrder.VaultingTeamId = existingTeam.TeamId;
+                    horseOrder.VaultingTeamId = existingTeam?.TeamId;
                     horseOrder.VaultingTeam = null;
                     newHorseOrders.Add(horseOrder);
                 }
@@ -408,8 +413,8 @@ namespace WebApplication1.Business.Logic.Import
             }
             var changed = new Changed
             {
-                New = updatedHorseOrders.Count,
-                Updated = newHorseOrders.Count
+                Updated = updatedHorseOrders.Count,
+                New = newHorseOrders.Count
             };
 
             return changed;
@@ -422,9 +427,13 @@ namespace WebApplication1.Business.Logic.Import
             foreach (var horse in horses)
             {
                 var lungerId = GetExistingLunger(horse.Lunger)?.LungerId;
+                if (lungerId == null)
+                {
+                    continue;
+                }
 
                 var existingHorse = GetExistingHorse(horse);
-                if (existingHorse != null)
+                if (existingHorse != null )
                 {
                     if (NotEqual(horse, existingHorse))
                     {
@@ -453,8 +462,8 @@ namespace WebApplication1.Business.Logic.Import
 
             var changed = new Changed
             {
-                New = updatedHorses.Count,
-                Updated = newHorses.Count
+                Updated = updatedHorses.Count,
+                New = newHorses.Count
             };
 
             return changed;
@@ -664,7 +673,10 @@ namespace WebApplication1.Business.Logic.Import
 
         private static Horse GetExistingHorse(Horse horse)
         {
-
+            if (horse.Lunger == null)
+            {
+                return null;
+            }
             var lungerTdbId = horse.Lunger.LungerTdbId;
             var existingHorse = ContestService.GetHorse(horse.HorseTdbId, lungerTdbId);
             if (existingHorse != null)
@@ -684,6 +696,10 @@ namespace WebApplication1.Business.Logic.Import
 
         private static Lunger GetExistingLunger(Lunger lunger)
         {
+            if (lunger == null)
+            {
+                return null;
+            }
             var existingLunger = ContestService.GetLunger(lunger.LungerTdbId);
             if (existingLunger != null)
             {
