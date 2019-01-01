@@ -102,6 +102,24 @@ namespace WebApplication1.Business.Logic.Contest
             return 0;
         }
 
+        public static bool IsTraHastTavling()
+        {
+            bool isTraHastTavling;
+            if (bool.TryParse(ConfigurationManager.AppSettings["Trahasttavling"], out isTraHastTavling))
+                return isTraHastTavling;
+
+            return false;
+        }
+
+        public static float HorsePointTraHastTavling()
+        {
+            float contestId;
+            if (float.TryParse(ConfigurationManager.AppSettings["HorsePointTraHastTavling"], out contestId))
+                return contestId;
+
+            return 0;
+        }
+
         public static Lunger GetLunger(string lungerName)
         {
             Lunger lunger;

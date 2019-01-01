@@ -17,28 +17,14 @@ namespace WebApplication1.Models
         public string Country { get; set; } //TODO: Country of club not contest
         public virtual List<StartListClassStep> StartListClassStep { get; set; }
 
+        public List<StartListClassStep> GetActiveStartListClassStep()
+        {
+            return StartListClassStep.FindAll(x => x.StartOrder > 0);
+        }
 
-        //public object Clone()
-        //{
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        if (this.GetType().IsSerializable)
-        //        {
-        //            BinaryFormatter formatter = new BinaryFormatter();
-        //            formatter.Serialize(stream, this);
-        //            stream.Position = 0;
-        //            return formatter.Deserialize(stream);
-        //        }
-        //        return null;
-        //    }
-        //}
+
+
     }
 
-    //public enum ContestType
-    //{
-    //    Endagarstavling3Domare,
-    //    Endagarstavling4Domare,
-    //    Tvådagarstavling3Domare,
-    //    Diamonds
-    //}
+  
 }

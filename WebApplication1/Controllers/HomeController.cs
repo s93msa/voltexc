@@ -54,17 +54,20 @@ namespace WebApplication1.Controllers
                 var contest = ContestService.GetContestInstance();
                 var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
                 var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
-
+                var classesList = GetAllClassesWithAtleastOneParticipant(db);
 
 
                 foreach (var competitionClass in competitionClasses.ToList())
                 {
+              
                     if(competitionClass.ClassNr == "0")
                         continue;
                     if(competitionClass.GetCompetitionSteps(contest.TypeOfContest).Count == 0)
                         continue;
+                    if(!classesList.Contains(competitionClass.CompetitionClassId))
+                    { continue;}
 
-                    var classNumber = competitionClass.ClassNr.ToString();
+                    var classNumber = competitionClass.ClassNr;
                     var className = competitionClass.ClassName;
                     var numberOfJudges = "0";
                     var steps = new string[4];
@@ -113,6 +116,23 @@ namespace WebApplication1.Controllers
             return View(competitionClassesViewModel);
         }
 
+        private static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
+        {
+            var classesList = GetAllClassesWithAtLeastOneVaulter(db);
+            classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
+            return classesList;
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
+        {
+            return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
+        {
+            return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        }
+
         private static List<Step> GetStepsForThisTypeOfCompetition(CompetitionClass competitionClass)
         {
             var currentContestTypeId = ContestService.GetContestTypeId();
@@ -136,7 +156,7 @@ namespace WebApplication1.Controllers
 
             int startliststep;
             StartListClassStep startListClassStep = null;
-            if(stepsrelation.TryGetValue(classNumber + "_" + testNumber.ToString(), out startliststep))
+            if(stepsrelation.TryGetValue(classNumber + "_" + testNumber, out startliststep))
                 startListClassSteps.TryGetValue(startliststep, out startListClassStep);
             var judgeName = startListClassStep?.GetJudgeName(judgeTableName);
             if (string.IsNullOrWhiteSpace(judgeName))
@@ -207,7 +227,11 @@ namespace WebApplication1.Controllers
                 return View(contest);
         }
 
-        public ActionResult CopyExcel()
+        public ActionResult CopyExcelWithStartnumber()
+        {
+            return CopyExcel(true);
+        }
+        public ActionResult CopyExcel(bool startNumberInFileName = false)
         {
             var contest = ContestService.GetContestInstance();
            
@@ -224,15 +248,16 @@ namespace WebApplication1.Controllers
                 //if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
                 //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
                 //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
+                //if (startListClassStep.StartListClassStepId == 46) 
                 {
-                        SaveInExcel(contest, startListClassStep);
+                    SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
             }
                 
             return View();
         }
 
-        private static void SaveInExcel(Contest contest, StartListClassStep startListClassStep)
+        private static void SaveInExcel(Contest contest, StartListClassStep startListClassStep, bool startNumberInFileName = false)
         {
 
             //{ 'Häst, individuell'!A1:XFD1048576}
@@ -257,7 +282,8 @@ namespace WebApplication1.Controllers
                         startListNumber++;
                         var teamInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
                                 startListNumber, horseOrder.VaultingTeam);
-                        var excelTeamService = new ExcelTeamService(teamInformation);
+                        var excelTeamService =
+                            new ExcelTeamService(teamInformation) {StartOrderInfileName = startNumberInFileName};
                         excelTeamService.CreateExcelforIndividual();
                     }
 
@@ -271,6 +297,7 @@ namespace WebApplication1.Controllers
                             var vaulterInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
                                 startListNumber, vaulter);
                             var excelIndividualService = new ExcelIndividualService(vaulterInformation);
+                            excelIndividualService.StartOrderInfileName = startNumberInFileName;
                             excelIndividualService.CreateExcelforIndividual();
 
                             //CreateExcelforIndividual(contest, startListClassStep, startListNumber, horseOrder, startListNumber, vaulter);  

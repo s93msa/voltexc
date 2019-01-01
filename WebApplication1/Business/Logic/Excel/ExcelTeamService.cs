@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Web;
 using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Contest;
@@ -67,12 +68,26 @@ namespace WebApplication1.Business.Logic.Excel
             SetWorksheetTeam(worksheet, judgeTable);
 
             ShowOnlyWorksheet(worksheet);
-            var fileOutputname = GetOutputFilename(judgeTable);
+            string fileOutputname;
+            if (StartOrderInfileName)
+            {
+                fileOutputname = GetOutputFilename(judgeTable, _competitionData.StartVaulterNumber.ToString());
+            }
+            else
+            {
+                fileOutputname = GetOutputFilename(judgeTable);
+
+            }
             SaveExcelFile(fileOutputname);
         }
 
         private void SetWorksheetTeam(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
+            if (ContestService.IsTraHastTavling())
+            {
+                SetHorsePoints(worksheet);
+            }
+
             SetIdInSheet(worksheet, judgeTable);
            
             switch (worksheet.Name)
@@ -112,6 +127,8 @@ namespace WebApplication1.Business.Logic.Excel
 
 
         }
+
+   
 
         private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {

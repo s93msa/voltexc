@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using ClosedXML.Excel;
+using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
 
@@ -10,12 +12,38 @@ namespace WebApplication1.Business.Logic.Excel
 {
     public abstract class ExcelBaseService
     {
-        private ExcelPreCompetitionData _competitionData;
+        public bool StartOrderInfileName { get; set; } = false;
 
-        public ExcelBaseService(ExcelPreCompetitionData competitionInformation)
+        private readonly ExcelPreCompetitionData _competitionData;
+
+        protected ExcelBaseService(ExcelPreCompetitionData competitionInformation)
         {
             _competitionData = competitionInformation;
         }
+
+        protected void SetHorsePoints(IXLWorksheet worksheet)
+        {
+            var horseSheetNames = new string[] { "Häst, individuell", "Häst, lag", "Pas-de-Deux Häst" };
+
+            if (IsSheetNameInArray(worksheet, horseSheetNames))
+            {
+                SetAJudgeResult(worksheet);
+            }
+            else
+            {
+                var lattClassWorksheetNames = new string[]
+                    {"Lätt grund", "Lätt lagkür 1", "Lätt lagkür 2", "Lätt ind grund", "Lätt ind kür"};
+                var mellanClassWorksheetNames = new string[]
+                    {"Skritt mellan grund", "Skritt jrlag grund", "Skritt srlag grund", "Skritt lagkür"};
+
+                var horseIsPartOfSheet = ConcatArrays(lattClassWorksheetNames, mellanClassWorksheetNames);
+                if (IsSheetNameInArray(worksheet, horseIsPartOfSheet))
+                {
+                    SetLattClassHorseResult(worksheet);
+                }
+            }
+        }
+
 
         protected void ShowOnlyWorksheet(IXLWorksheet worksheet)
         {
@@ -34,6 +62,31 @@ namespace WebApplication1.Business.Logic.Excel
                     currrentWorksheet.Hide(); //.Visibility = XLWorksheetVisibility.Hidden;
             }
         }
+
+        protected void SetAJudgeResult(IXLWorksheet worksheet)
+        {
+            var result = GetNamedCell(worksheet, "result");
+            result.Value = ContestService.HorsePointTraHastTavling();
+        }
+        protected void SetLattClassHorseResult(IXLWorksheet worksheet)
+        {
+            var result = GetNamedCell(worksheet, "Hästpoäng");
+            result.Value = ContestService.HorsePointTraHastTavling();
+        }
+
+        protected static bool IsSheetNameInArray(IXLWorksheet worksheet, string[] lattClassWorksheetName)
+        {
+            return lattClassWorksheetName.Contains(worksheet.Name.Trim());
+        }
+
+        protected static string[] ConcatArrays(string[] lattClassWorksheetNames, string[] mellanClassWorksheetNames)
+        {
+            var horseIsPartOfSheet = new string[lattClassWorksheetNames.Length + mellanClassWorksheetNames.Length];
+            lattClassWorksheetNames.CopyTo(horseIsPartOfSheet, 0);
+            mellanClassWorksheetNames.CopyTo(horseIsPartOfSheet, lattClassWorksheetNames.Length);
+            return horseIsPartOfSheet;
+        }
+
 
         protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
         {
@@ -94,25 +147,31 @@ namespace WebApplication1.Business.Logic.Excel
         {
             if (outputFileName == null)
                 return;
+            outputFileName = outputFileName.Replace("&", "och");
 
             string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + outputFileName;
             _competitionData.Workbook.SaveAs(fileoutputname);
         }
 
-        protected string GetOutputFilename(JudgeTable judgeTabel)
+        protected string GetOutputFilename(JudgeTable judgeTabel, string fileNamePrefix = "")
         {
+            string pathPrefix = "";
             if (judgeTabel == null)
                 return null;
+            if (fileNamePrefix.Length > 0)
+            {
+                pathPrefix = "utskrift_";
+            }
 
             var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
             fileName = fileName + '_' + judgeTabel.JudgeTableName+
             "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName;
 
-            var path = _competitionData.ListClassStep.Date.ToShortDateString() +
+            var path = pathPrefix + _competitionData.ListClassStep.Date.ToShortDateString() +
                        @"\" + judgeTabel.JudgeTableName + @"\" +
-                       _competitionData.ListClassStep.Name.Replace("–", "") + @"\";
+                       _competitionData.ListClassStep.Name.Trim().Replace("–", "") + @"\";
 
-            return path + fileName + ".xlsx";
+            return path + fileNamePrefix+ fileName + ".xlsx";
         }
 
         protected IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)

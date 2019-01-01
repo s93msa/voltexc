@@ -71,7 +71,16 @@ namespace WebApplication1.Business.Logic.Excel
             SetWorksheetIndividuell(worksheet, judgeTable);
 
             ShowOnlyWorksheet(worksheet);
-            var fileOutputname = GetOutputFilename(judgeTable);
+            string fileOutputname;
+            if (StartOrderInfileName)
+            {
+                fileOutputname = GetOutputFilename(judgeTable, _competitionData.StartVaulterNumber.ToString());
+            }
+            else
+            {
+                fileOutputname = GetOutputFilename(judgeTable);
+
+            }
             SaveExcelFile(fileOutputname);
         }
 
@@ -81,6 +90,11 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetWorksheetIndividuell(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
             SetIdInSheet(worksheet, judgeTable);
+            if (ContestService.IsTraHastTavling())
+            {
+                SetHorsePoints(worksheet);
+            }
+
             switch (worksheet.Name)
 
             {
@@ -119,6 +133,9 @@ namespace WebApplication1.Business.Logic.Excel
 
         }
 
+        
+
+
         private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
@@ -136,10 +153,15 @@ namespace WebApplication1.Business.Logic.Excel
 
             SetVaulterInformation(worksheet, judgeTable, 1);
      
-            SetJudgeName(worksheet, 29, judgeTable);   
+            SetJudgeName(worksheet, 29, judgeTable);
+
+           
         }
 
-        
+       
+
+       
+
 
         private void SetWorksheetIndividuellMiniorGrund1(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
