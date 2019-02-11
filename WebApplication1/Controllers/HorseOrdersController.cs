@@ -169,67 +169,30 @@ namespace WebApplication1.Controllers
             return View(vaultersOrderViewModel);
         }
 
-        private SelectList GetStepsSelectList(HorseOrder horseOrder)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public ActionResult EditVaulterOrder([Bind(Exclude = "HorsesLungersSelectList")]  VaultersOrderViewModel vaultersOrderViewModel)
+        public ActionResult EditVaulterOrder(  VaultersOrderViewModel vaultersOrderViewModel)
         {
-            var teamClass = horseOrder.VaultingTeam.VaultingClass;
-            var contest = ContestService.GetContestInstance();
-
-            var classSteps = teamClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
-
-            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", horseOrder.TeamTestnumber);
-            return stepsSelectList;
-        }
-
-        private SelectList GetStepsSelectList(VaulterOrder vaulterOrder)
-        {
-            var vaulterClass = vaulterOrder.Participant.VaultingClass;
-            var contest = ContestService.GetContestInstance();
-
-            var classSteps = vaulterClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
-
-            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", vaulterOrder.Testnumber);
-            return stepsSelectList;
-        }
-
-
-    private SelectList GetVaultersSelectList(VaulterOrder vaulterOrder)
-        {
-            var vaulters = ContestService.GetVaulters().OrderBy(x => x.Name);
-            var vaulterId = vaulterOrder.VaulterId;
-            var vaultersSelectList = new List<KeyValuePair<int, string>>();
-            foreach (var vaulterPair in vaulters)
+            if (ModelState.IsValid)
             {
-                if(vaulterPair == null)
-                    continue;
+                //var horseOrder = vaultersOrderViewModel.VaulterSelectList.s;
+                //var existingHorseOrder = ContestService.GetHorseOrder(horseOrder.HorseOrderId);
+                //existingHorseOrder.StartNumber = horseOrder.StartNumber;
+                //existingHorseOrder.HorseId = horseOrder.HorseId;
+                //existingHorseOrder.VaultingTeamId = horseOrder.VaultingTeamId;
+                //existingHorseOrder.TeamTestnumber = horseOrder.TeamTestnumber;
+                //existingHorseOrder.IsActive = horseOrder.IsActive;
+                //existingHorseOrder.StartListClassStepId = horseOrder.StartListClassStepId;
 
-                var key = vaulterPair.VaulterId;
-                var value = vaulterPair.Name + " (Klubb: " + vaulterPair.VaultingClub?.ClubName + " klass: " + vaulterPair.VaultingClass?.ClassName +")";
-                var pair = new KeyValuePair<int, string>(key, value);
-                vaultersSelectList.Add(pair);
-
+                //ContestService.UpdateHorseOrder(existingHorseOrder);
+                //ContestService.GetNewDataFromDatabase();
+                //return RedirectToAction("StartList", "Home");
             }
-
-            var stepsSelectList = new SelectList(vaultersSelectList, "key", "value", vaulterId);
-            return stepsSelectList;
+            return View(vaultersOrderViewModel);
         }
 
-        private SelectList GetHorsesSelectList(HorseOrder horseOrder)
-        {
-            var horses = ContestService.GetHorses().OrderBy(x => x.HorseName);
-            var horsesSelectList = new List<KeyValuePair<int, string>>();
-            foreach (var horse in horses)
-            {
-                if (horse == null)
-                    continue;
-                var key = horse.HorseId;
-                var value = horse.HorseName + " " + horse.Lunger?.LungerName;
-                var pair = new KeyValuePair<int, string>(key, value);
-                horsesSelectList.Add(pair);
-            }
-
-            var horseOrderSelectList = new SelectList(horsesSelectList, "key", "value", horseOrder.HorseId);
-            return horseOrderSelectList;
-        }
+      
 
         // POST: HorseOrders/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -255,6 +218,12 @@ namespace WebApplication1.Controllers
             }
             return View(horseOrderViewModel);
         }
+
+
+        // POST: HorseOrders/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
 
         // GET: HorseOrders/Delete/5
         public ActionResult Delete(int? id)
@@ -289,6 +258,68 @@ namespace WebApplication1.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private SelectList GetStepsSelectList(HorseOrder horseOrder)
+        {
+            var teamClass = horseOrder.VaultingTeam.VaultingClass;
+            var contest = ContestService.GetContestInstance();
+
+            var classSteps = teamClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
+
+            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", horseOrder.TeamTestnumber);
+            return stepsSelectList;
+        }
+
+        private SelectList GetStepsSelectList(VaulterOrder vaulterOrder)
+        {
+            var vaulterClass = vaulterOrder.Participant.VaultingClass;
+            var contest = ContestService.GetContestInstance();
+
+            var classSteps = vaulterClass.GetCompetitionSteps(contest.TypeOfContest)?.OrderBy(x => x.TestNumber);
+
+            var stepsSelectList = new SelectList(classSteps, "TestNumber", "Name", vaulterOrder.Testnumber);
+            return stepsSelectList;
+        }
+
+
+        private SelectList GetVaultersSelectList(VaulterOrder vaulterOrder)
+        {
+            var vaulters = ContestService.GetVaulters().OrderBy(x => x.Name);
+            var vaulterId = vaulterOrder.VaulterId;
+            var vaultersSelectList = new List<KeyValuePair<int, string>>();
+            foreach (var vaulterPair in vaulters)
+            {
+                if (vaulterPair == null)
+                    continue;
+
+                var key = vaulterPair.VaulterId;
+                var value = vaulterPair.Name + " (Klubb: " + vaulterPair.VaultingClub?.ClubName + " klass: " + vaulterPair.VaultingClass?.ClassName + ")";
+                var pair = new KeyValuePair<int, string>(key, value);
+                vaultersSelectList.Add(pair);
+
+            }
+
+            var stepsSelectList = new SelectList(vaultersSelectList, "key", "value", vaulterId);
+            return stepsSelectList;
+        }
+
+        private SelectList GetHorsesSelectList(HorseOrder horseOrder)
+        {
+            var horses = ContestService.GetHorses().OrderBy(x => x.HorseName);
+            var horsesSelectList = new List<KeyValuePair<int, string>>();
+            foreach (var horse in horses)
+            {
+                if (horse == null)
+                    continue;
+                var key = horse.HorseId;
+                var value = horse.HorseName + " " + horse.Lunger?.LungerName;
+                var pair = new KeyValuePair<int, string>(key, value);
+                horsesSelectList.Add(pair);
+            }
+
+            var horseOrderSelectList = new SelectList(horsesSelectList, "key", "value", horseOrder.HorseId);
+            return horseOrderSelectList;
         }
     }
 }
