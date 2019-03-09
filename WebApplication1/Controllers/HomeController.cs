@@ -135,9 +135,8 @@ namespace WebApplication1.Controllers
 
         private static List<Step> GetStepsForThisTypeOfCompetition(CompetitionClass competitionClass)
         {
-            var currentContestTypeId = ContestService.GetContestTypeId();
-
-            return competitionClass.Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestTypeId);
+            var contest = ContestService.GetContestInstance();
+            return competitionClass.GetCompetitionSteps(contest.TypeOfContest);
         }
 
 

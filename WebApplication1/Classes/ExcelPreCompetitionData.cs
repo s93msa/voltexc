@@ -90,7 +90,7 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.Excelfile;
+            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //var vaulter = horseOrder.Participant;
@@ -132,7 +132,7 @@ namespace WebApplication1.Classes
             //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
             //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
             //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.Excelfile;
+            InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.Excelfile;
             var workingdirectory = HttpContext.Current.Server.MapPath("~");
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
             //WorkbookOverrideA = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);

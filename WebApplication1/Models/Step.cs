@@ -6,9 +6,9 @@ namespace WebApplication1.Models
     public class Step
     {
         public int StepId { get; set; }
-        public int TypeOfContestId { get; set; }
-        [ForeignKey("TypeOfContestId")]
-        public virtual ContestType TypeOfContest { get; set; }
+        //public int TypeOfContestId { get; set; }
+        //[ForeignKey("TypeOfContestId")]
+        //public virtual ContestType TypeOfContest { get; set; }
         public virtual StepType TypeOfStep { get; set; }
 
         public int TestNumber { get; set; }

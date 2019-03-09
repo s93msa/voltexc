@@ -396,6 +396,22 @@
     <Compile Include="Migrations\201808111732313_AddCountryToClub.Designer.cs">
       <DependentUpon>201808111732313_AddCountryToClub.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902112143108_AddScoreSheets.cs" />
+    <Compile Include="Migrations\201902112143108_AddScoreSheets.Designer.cs">
+      <DependentUpon>201902112143108_AddScoreSheets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902122107156_Remove_Step_TypeOfContestId.cs" />
+    <Compile Include="Migrations\201902122107156_Remove_Step_TypeOfContestId.Designer.cs">
+      <DependentUpon>201902122107156_Remove_Step_TypeOfContestId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902122115523_Change_StepsToScoreSheet.cs" />
+    <Compile Include="Migrations\201902122115523_Change_StepsToScoreSheet.Designer.cs">
+      <DependentUpon>201902122115523_Change_StepsToScoreSheet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902122202434_AddScoreSheetId.cs" />
+    <Compile Include="Migrations\201902122202434_AddScoreSheetId.Designer.cs">
+      <DependentUpon>201902122202434_AddScoreSheetId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -404,6 +420,7 @@
     <Compile Include="Models\Horse.cs" />
     <Compile Include="Models\JudgeTable.cs" />
     <Compile Include="Models\Lunger.cs" />
+    <Compile Include="Models\ScoreSheets.cs" />
     <Compile Include="Models\StartListClass.cs" />
     <Compile Include="Models\HorseOrder.cs" />
     <Compile Include="Models\StartListClassStep.cs" />
@@ -411,6 +428,7 @@
     <Compile Include="Models\StepType.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\TeamList.cs" />
+    <Compile Include="Models\TestMoment.cs" />
     <Compile Include="Models\Vaulter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -619,6 +637,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808111732313_AddCountryToClub.resx">
       <DependentUpon>201808111732313_AddCountryToClub.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902112143108_AddScoreSheets.resx">
+      <DependentUpon>201902112143108_AddScoreSheets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902122107156_Remove_Step_TypeOfContestId.resx">
+      <DependentUpon>201902122107156_Remove_Step_TypeOfContestId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902122115523_Change_StepsToScoreSheet.resx">
+      <DependentUpon>201902122115523_Change_StepsToScoreSheet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902122202434_AddScoreSheetId.resx">
+      <DependentUpon>201902122202434_AddScoreSheetId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

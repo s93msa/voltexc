@@ -13,14 +13,19 @@ namespace WebApplication1.Models
         [Index]
         public int ClassTdbId { get; set; }
 
+        public int ScoreSheetId { get; set; }
+        [ForeignKey("ScoreSheetId")]
+        public virtual ScoreSheets ScoreSheet  { get; set; }
 
-        public string Excelfile { get; set; }
+        //  public string Excelfile { get; set; }
 
-        public virtual List<Step> Steps { get; set; }
+        //  public virtual List<Step> Steps { get; set; }
 
+        //TODO: remove currentContestType from method
         public List<Step> GetCompetitionSteps(ContestType currentContestType)
         {
-            return Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestType.ContestTypeId);
+            return ScoreSheet.TestMomentList;
+//            return Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestType.ContestTypeId);
         }
        
         //public CompetitionClass(int classNr, string className, List<Step> steps)

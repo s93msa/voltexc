@@ -10,7 +10,7 @@ namespace WebApplication1.Classes
 {
     public class VaultingContext : DbContext
     {
-        public VaultingContext()
+        public VaultingContext() //: base("name=VaultingDB")
         {
             Configuration.LazyLoadingEnabled = true;
         }
