@@ -278,15 +278,18 @@ namespace WebApplication1.Business.Logic.Import
             var updatedTeams = new List<Team>();
             foreach (var team in teams)
             {
-//                var existingTeamMembers = GetExistingTeamMembers(team);
+                var competitionClassId = GetExistingClass(team.VaultingClass)?.CompetitionClassId;
+                var competitionClubId = GetExistingClub(team.VaultingClub)?.ClubId;
+
+                team.VaultingClassId = competitionClassId;
+                team.VaultingClubId = competitionClubId;
+                team.VaultingClass = null;
+                team.VaultingClub = null;
+
+                //                var existingTeamMembers = GetExistingTeamMembers(team);
                 var existingTeam = GetExistingTeam(team);
                 if (existingTeam != null)
                 {
-                    var competitionClassId = GetExistingClass(team.VaultingClass)?.CompetitionClassId;
-                    var competitionClubId = GetExistingClub(team.VaultingClub)?.ClubId;
-
-                    team.VaultingClassId = competitionClassId;
-                    team.VaultingClubId = competitionClubId;
 
                     //foreach (var vaulter in team.TeamList)
                     //{
