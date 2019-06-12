@@ -711,12 +711,12 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
         
-        public static string GetVaulterExcelId(Vaulter participant, int testNumber = 0, JudgeTable judgeTable = null)
+        public static string GetVaulterExcelId(Vaulter participant, int horseId, int testNumber = 0, JudgeTable judgeTable = null)
         {
             //var classId = participant.VaultingClass?.CompetitionClassId;
             var vaulterId = participant.VaulterId;
             var classnr = participant.VaultingClass?.ClassNr;
-            var returnString = "id_" + vaulterId + "_" + classnr;
+            var returnString = "id_" + vaulterId + "_" + classnr + "_" + horseId;
 
             //var stepTypeString = GetStepTypeString(stepType);
             if (testNumber > 0 && judgeTable != null)
@@ -728,13 +728,13 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
 
-        public static string GetTeamExcelId(Team team, int testNumber = 0, JudgeTable judgeTable = null)
+        public static string GetTeamExcelId(Team team, int horseId, int testNumber = 0, JudgeTable judgeTable = null)
         {
             // var stepTypeString = GetStepTypeString(stepType);
             //var classId = team.VaultingClass?.CompetitionClassId;
             var vaulterId = team.TeamId;
             var classnr = team.VaultingClass?.ClassNr;
-            var returnString = "id_" + vaulterId + "_" + classnr;
+            var returnString = "id_" + vaulterId + "_" + classnr + "_" + horseId;
 
             //var stepTypeString = GetStepTypeString(stepType);
             if (testNumber > 0 && judgeTable != null)

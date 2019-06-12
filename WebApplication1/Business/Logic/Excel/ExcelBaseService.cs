@@ -165,7 +165,7 @@ namespace WebApplication1.Business.Logic.Excel
 
             var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
             fileName = fileName + '_' + judgeTabel.JudgeTableName+
-            "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName;
+            "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName + "_" + _competitionData.Horse1.HorseName;
 
             var path = pathPrefix + _competitionData.ListClassStep.Date.ToShortDateString() +
                        @"\" + judgeTabel.JudgeTableName + @"\" +

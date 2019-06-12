@@ -59,7 +59,7 @@ namespace WebApplication1.Business.Logic.Import
         {
             int vaulterTdbId;
             var vaulters = new List<Vaulter>();
-            var worksheet = _workbook.Worksheets?.Worksheet("tävlande");
+            var worksheet = _workbook.Worksheets?.Worksheet("voltigörer");
             foreach (var row in worksheet.Rows())
             {
 

@@ -174,6 +174,7 @@ namespace WebApplication1.Controllers
                 foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
                 {
                     var horseName = startListItem.HorseInformation?.HorseName;
+                    var horseId = startListItem.HorseInformation?.HorseId ?? 0;
                     var lungerName = startListItem.HorseInformation?.Lunger?.LungerName;
 
                     if (startListItem.IsTeam)
@@ -186,7 +187,7 @@ namespace WebApplication1.Controllers
                         var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
                         clubName += " (" + startListItem.VaultingTeam.VaultingClub.Country + ")";
                        // var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
-                        var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam);
+                        var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam, horseId);
                         var row = new string[] { vaultingClassNr, teamName, lungerName, clubName, horseName, teamId };
                         rows.Add(row);
                     }
@@ -204,7 +205,7 @@ namespace WebApplication1.Controllers
                             clubName += " (" + participant.Participant.VaultingClub?.Country + ")";
 
                             //var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
-                            string vaulterId = ContestService.GetVaulterExcelId(participant.Participant);
+                            string vaulterId = ContestService.GetVaulterExcelId(participant.Participant, horseId);
                             var row = new string[] { vaultingClassNr, vaulterName, lungerName, clubName, horseName, vaulterId };
 
                             rows.Add(row);
