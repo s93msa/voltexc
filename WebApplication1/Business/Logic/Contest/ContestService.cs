@@ -143,20 +143,29 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
 
-        public static HorseOrder[] GetHorseOrder(int? startListClassStepId, int? horseId)
+        public static HorseOrder[] GetHorseOrders(int startListClassStepId)
+        {
+            var horseOrders = GetHorseOrders();
+            var horseOrder =
+                horseOrders.FindAll(x => x.StartListClassStepId == startListClassStepId);
+            
+            return horseOrder.ToArray();
+        }
+
+        public static HorseOrder[] GetHorseOrders(int? startListClassStepId, int? horseId)
         {
             var horseOrders = GetHorseOrders();
             var horseOrder =
                 horseOrders.FindAll(x => x.StartListClassStepId == startListClassStepId &&
-                                                x.HorseId == horseId);
+                                         x.HorseId == horseId);
 
 
             return horseOrder.ToArray();
         }
 
-        
 
-        public static HorseOrder GetHorseOrder(int? startListClassStepId, int? vaultingTeamId, int testnumber)
+
+        public static HorseOrder GetHorseOrders(int? startListClassStepId, int? vaultingTeamId, int testnumber)
         {
             var horseOrders = GetHorseOrders();
             var horseOrder =
@@ -550,6 +559,11 @@ namespace WebApplication1.Business.Logic.Contest
                 using (var db = new VaultingContext())
                 {
                     _horseOrders = db.HorseOrders.ToList();
+
+                    foreach (var horseOrder in _horseOrders)
+                    {
+                        var dummy1 = horseOrder.HorseInformation.Lunger;
+                    }
                 }
             }
 

@@ -83,11 +83,12 @@ d }) |
                     <td>
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
                         (@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.Country))
-                        <br/>Voltigörer: <br/>
+                        <br />Voltigörer: <br />
                         @foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
                         {
+                            @(vaulter.StartNumber)
                             @(vaulter.Participant.Name)
-                            <br/>
+                            <br />
 
                         }
 
@@ -97,40 +98,39 @@ d }) |
             }
             else
             {
-                                foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
-                                {
-                                    
+                foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
+                {
+                    startnumber++;
 
-                                    startnumber++;
+                    <tr>
+                        <td>
+                            @Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)
+                            @startnumber.ToString()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => vaulters.Participant.Name)
+                            (@Html.DisplayFor(modelItem => vaulters.Participant.Armband))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => vaulters.StartOrder).
+                            @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName) (@vaulters.Participant.VaultingClass.ClassNr)-
+                            @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
+                            (@Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.Country))
+                        </td>
+                    </tr>
+                }
+            }
 
-                <tr>
-                    <td>
-                        @Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)
-                        @startnumber.ToString()
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => vaulters.Participant.Name)
-                        (@Html.DisplayFor(modelItem => vaulters.Participant.Armband))
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName) (@vaulters.Participant.VaultingClass.ClassNr)-
-                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
-                        (@Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.Country))
-                    </td>
-                </tr>
-                                }
-                            }
-
-                        }
+        }
 
     @*}*@
     }

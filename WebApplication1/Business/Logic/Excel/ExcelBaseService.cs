@@ -163,7 +163,7 @@ namespace WebApplication1.Business.Logic.Excel
                 pathPrefix = "utskrift_";
             }
 
-            var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
+            var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", ""); //https://www.pdfen.com/merge/merge-files-to-pdf
             fileName = fileName + '_' + judgeTabel.JudgeTableName+
             "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName + "_" + _competitionData.Horse1.HorseName;
 

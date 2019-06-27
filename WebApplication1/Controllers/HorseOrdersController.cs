@@ -124,7 +124,7 @@ namespace WebApplication1.Controllers
             return View(horseOrderViewModel);
         }
 
-        // GET: HorseOrders/Edit/5
+        // GET: HorseOrders/EditVaulterOrder/19
         public ActionResult EditVaulterOrder(int? id)
         {
             if (id == null)
@@ -310,8 +310,6 @@ namespace WebApplication1.Controllers
             var horsesSelectList = new List<KeyValuePair<int, string>>();
             foreach (var horse in horses)
             {
-                if (horse == null)
-                    continue;
                 var key = horse.HorseId;
                 var value = horse.HorseName + " " + horse.Lunger?.LungerName;
                 var pair = new KeyValuePair<int, string>(key, value);

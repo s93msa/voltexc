@@ -222,6 +222,7 @@
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
+    <Compile Include="Controllers\EditVaulterHorseController.cs" />
     <Compile Include="Controllers\HorseOrdersController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Migrations\201705072114391_InitialCreate.cs" />
@@ -441,6 +442,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CompetitionClassesViewModel.cs" />
+    <Compile Include="ViewModels\EditVaulterHorseViewModel.cs" />
     <Compile Include="ViewModels\HorseOrderViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\VaultersOrderViewModel.cs" />
@@ -494,6 +496,7 @@
     <Content Include="Views\HorseOrders\Index.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\HorseOrders\EditVaulterOrder.cshtml" />
+    <Content Include="Views\EditVaulterHorse\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

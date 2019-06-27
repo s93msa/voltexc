@@ -1,0 +1,30 @@
+﻿@model WebApplication1.ViewModels.EditVaulterHorseViewModel
+
+@{
+    ViewBag.Title = "EditVaulterHorse";
+}
+
+<h2>Ändra häst för voltigör</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.LabelFor(model => model.StartListClassStepsSelectList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(model => model.StartListClassStepId, Model.StartListClassStepsSelectList)
+        @Html.DropDownListFor(model => model.HorseOrderId, Model.HorseOrderSelectList)
+
+
+    </div>
+
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+}
