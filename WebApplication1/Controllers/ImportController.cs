@@ -113,9 +113,9 @@ namespace WebApplication1.Controllers
             Dictionary<int, Changed> TeamsStartlistChanged = new Dictionary<int, Changed>();
             Changed changed;
 
-        //TeamsStartlistChanged = TeamOneDayTraHast(excelImportService, TeamsStartlistChanged);
-//        TeamsStartlistChanged = TeamOneDayCompetion(excelImportService, TeamsStartlistChanged);
-        TeamsStartlistChanged = TeamSMCompetion(excelImportService, TeamsStartlistChanged);
+            //TeamsStartlistChanged = TeamOneDayTraHast(excelImportService, TeamsStartlistChanged);
+    //        TeamsStartlistChanged = TeamOneDayCompetion(excelImportService, TeamsStartlistChanged);
+            TeamsStartlistChanged = TeamSMCompetion(excelImportService, TeamsStartlistChanged);
 
             return TeamsStartlistChanged;
         }
@@ -453,20 +453,26 @@ namespace WebApplication1.Controllers
             int StartListClassStepId;
             int testNumber;
             UpdateService.NewHordeorders newHordeorders;
-            // individuella
-            //Svår klass alla klasser
-            competionClassesTdbIds =
-                new[] { 425385, 425386}; //Svår klass 3,4 individuella senior med och utan tekn
 
-            StartListClassStepId = 19;
+
+            competionClassesTdbIds =
+                new[] { 425385, 425386,
+                    425387, 425388,
+                    425393, 425394}; //individuella 
+
+            StartListClassStepId = 1066;
             testNumber = 1;
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 1060; // Svår klass individuella senior – Kür
+            StartListClassStepId = 9; // Svår klass individuella senior – Kür
             testNumber = 2;
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            competionClassesTdbIds =
+                new[] { 425385, 425386,
+                    425387, 425388}; //individuella exlusive nationella
 
 
             StartListClassStepId = 1064; // Svår klass individuella senior – tekn Kür och grund för ej tekn
@@ -475,47 +481,79 @@ namespace WebApplication1.Controllers
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
 
-            StartListClassStepId = 1080; // Svår klass individuella senior – Kür final
+            StartListClassStepId = 1065; // Svår klass individuella senior – Kür final
             testNumber = 4;
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
 
-            competionClassesTdbIds =
-                new[] { 425387, 425388}; //Svår klass 5,6 individuella  Juniorer-Miniorer
 
-            StartListClassStepId = 1066; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
-            testNumber = 1;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 9; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Kür
-            testNumber = 2;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 8; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund final
-            testNumber = 3;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 1065; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Kür final
-            testNumber = 4;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+            //// individuella
+            ////Svår klass alla klasser
+            //competionClassesTdbIds =
+            //    new[] { 425385, 425386}; //Svår klass 3,4 individuella senior med och utan tekn
 
-            competionClassesTdbIds =
-                new[] { 425393, 425394 }; //Svår klass 12,13 individuella  Juniorer-Miniorer Nationell
+            //StartListClassStepId = 19;
+            //testNumber = 1;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 1075; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
-            testNumber = 1;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+            //StartListClassStepId = 1060; // Svår klass individuella senior – Kür
+            //testNumber = 2;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 1077; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
-            testNumber = 2;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //StartListClassStepId = 1064; // Svår klass individuella senior – tekn Kür och grund för ej tekn
+            //testNumber = 3;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+
+            //StartListClassStepId = 1080; // Svår klass individuella senior – Kür final
+            //testNumber = 4;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+
+            //competionClassesTdbIds =
+            //    new[] { 425387, 425388}; //Svår klass 5,6 individuella  Juniorer-Miniorer
+
+            //StartListClassStepId = 1066; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
+            //testNumber = 1;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //StartListClassStepId = 9; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Kür
+            //testNumber = 2;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //StartListClassStepId = 8; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund final
+            //testNumber = 3;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //StartListClassStepId = 1065; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Kür final
+            //testNumber = 4;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //competionClassesTdbIds =
+            //    new[] { 425393, 425394 }; //Svår klass 12,13 individuella  Juniorer-Miniorer Nationell
+
+            //StartListClassStepId = 1075; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
+            //testNumber = 1;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            //StartListClassStepId = 1077; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Grund
+            //testNumber = 2;
+            //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
 
             return individualStartlistChanged;
