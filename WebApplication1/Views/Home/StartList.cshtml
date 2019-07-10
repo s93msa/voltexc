@@ -86,8 +86,7 @@ d }) |
                         <br />Voltigörer: <br />
                         @foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
                         {
-                            @(vaulter.StartNumber)
-                            @(vaulter.Participant.Name)
+                            @(vaulter.StartNumber.ToString() + " " + vaulter.Participant.Name) 
                             <br />
 
                         }

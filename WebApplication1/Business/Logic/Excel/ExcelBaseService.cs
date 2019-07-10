@@ -164,8 +164,10 @@ namespace WebApplication1.Business.Logic.Excel
             }
 
             var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", ""); //https://www.pdfen.com/merge/merge-files-to-pdf
-            fileName = fileName.Trim() + '_' + judgeTabel.JudgeTableName+
-            "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName + "_" + _competitionData.Horse1.HorseName.Trim();
+            fileName = fileName.Trim() + '_' + judgeTabel.JudgeTableName +
+                       "_klass" + _competitionData.VaultingClass.ClassNr + '_' + _competitionData.MomentName + "_" +
+                       _competitionData.Horse1.HorseName.Trim() + '_' +
+                       _competitionData.ListClassStep.Date.DayOfWeek.ToString().Substring(0,2);
 
             var path = pathPrefix + _competitionData.ListClassStep.Date.ToShortDateString() +
                        @"\" + judgeTabel.JudgeTableName + @"\" +

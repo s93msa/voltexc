@@ -489,7 +489,7 @@ namespace WebApplication1.Business.Logic.Import
             var newVaulterOrders = new List<VaulterOrder>();
             var existingHorseOrders = GetExistingHorseOrderIndividual(horseOrder);
             var horseOrderIds = existingHorseOrders.Select(x => x.HorseOrderId).ToArray();
-
+            var startOrder = 1;
             foreach (var importedVaulterOrder in horseOrder.Vaulters)
             {
                 var vaulterId = GetExistingVaulter(importedVaulterOrder.Participant).VaulterId;
@@ -504,7 +504,7 @@ namespace WebApplication1.Business.Logic.Import
                     HorseOrderId = horseOrderIds.FirstOrDefault(),
                     VaulterId = vaulterId,
                     IsActive = true,
-                    StartOrder = 1,
+                    StartOrder = startOrder++,
                     Testnumber = testNumber
                 };
                 newVaulterOrders.Add(vaulterOrder);

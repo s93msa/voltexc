@@ -74,6 +74,11 @@ namespace WebApplication1.Business.Logic.Import
                     VaulterTdbId = vaulterTdbId,
                     Name = row.Cell("b").Value.ToString()
                 };
+                var armBand = (string) row.Cell("c").Value;
+                if (!string.IsNullOrWhiteSpace(armBand))
+                {
+                    vaulter.Armband = armBand;
+                }
                 vaulters.Add(vaulter);
             }
 
