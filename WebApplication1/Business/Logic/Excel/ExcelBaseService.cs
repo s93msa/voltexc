@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc.Routing.Constraints;
 using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
@@ -99,7 +100,7 @@ namespace WebApplication1.Business.Logic.Excel
             firstcell.CellBelow(2).Value = _competitionData.GetName();
             firstcell.CellBelow(3).Value = _competitionData.VaultingClubName;
             firstcell.CellBelow(4).Value = _competitionData.Country;
-            firstcell.CellBelow(5).Value = _competitionData.HorseName;
+            firstcell.CellBelow(5).Value = RemoveNumberFromEnd(_competitionData.HorseName);
             firstcell.CellBelow(6).Value = _competitionData.LungerName;
             //SetValueInWorksheet(worksheet, startRow, "c", _competitionData.GetStepDate());
             //SetValueInWorksheet(worksheet, startRow + 1, "c", _competitionData.EventLocation);
@@ -108,6 +109,27 @@ namespace WebApplication1.Business.Logic.Excel
             //SetValueInWorksheet(worksheet, startRow + 4, "c", _competitionData.Country);
             //SetValueInWorksheet(worksheet, startRow + 5, "c", _competitionData.HorseName);
             //SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData.LungerName);
+        }
+
+        private string RemoveNumberFromEnd(string horseName)
+        {
+            if (horseName == null)
+            {
+                return null;
+            }
+
+            var length = horseName.Length;
+            if (length > 1)
+            {
+                var lastChar = horseName.Substring(horseName.Length - 1, 1);
+                int lastCharInt;
+                if (int.TryParse(lastChar, out  lastCharInt))
+                {
+                    horseName = horseName.Substring(0, length - 1);
+                }
+            }
+
+            return horseName;
         }
 
         //private void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
