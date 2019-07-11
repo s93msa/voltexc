@@ -123,6 +123,12 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow, string startNumber)
         {
+            var backgroundColors = new XLColor[]
+            {
+                XLColor.White , XLColor.White , XLColor.Blue, XLColor.Green, XLColor.Red, XLColor.Yellow, XLColor.White, XLColor.White, XLColor.White, XLColor.White, XLColor.White, XLColor.Red, XLColor.Yellow
+
+            };
+
             string tableName = GetJudgeTableName(judgeTable);
 
             var secondcell = GetNamedCell(worksheet, "bord");
@@ -131,7 +137,14 @@ namespace WebApplication1.Business.Logic.Excel
             secondcell.Value = tableName;
             secondcell.CellBelow(1).SetValue( _competitionData.VaultingClass.ClassNr);
             secondcell.CellBelow(2).Value = _competitionData.MomentName;
-            SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
+            var armnrCell = SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
+            int classNr;
+            
+            if (armnrCell != null && int.TryParse(_competitionData.VaultingClass.ClassNr, out classNr) && classNr <= backgroundColors.Length)
+            {
+                armnrCell.CellBelow(1).Style.Fill.BackgroundColor = backgroundColors[classNr-1];
+            }
+
             //secondcell.CellBelow(3).Value = _competitionData.ArmNumber;
             //SetValueInWorksheet(worksheet, startRow, "l", startNumber);
 

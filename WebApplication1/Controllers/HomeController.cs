@@ -249,6 +249,7 @@ namespace WebApplication1.Controllers
                 //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
                 //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
                 //if (startListClassStep.StartListClassStepId == 46) 
+                if(startListClassStep.Date.Day== new DateTime(2019,07, 12).Day)
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
