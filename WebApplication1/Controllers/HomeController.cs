@@ -248,8 +248,8 @@ namespace WebApplication1.Controllers
                 //if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
                 //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
                 //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
-                //if (startListClassStep.StartListClassStepId == 46) 
-                if(startListClassStep.Date.Day== new DateTime(2019,07, 12).Day)
+                //                if (startListClassStep.Date.Day== new DateTime(2019,07, 14).Day)
+                if (startListClassStep.StartListClassStepId == 6 || startListClassStep.StartListClassStepId == 1063)
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
