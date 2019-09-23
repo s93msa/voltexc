@@ -222,6 +222,7 @@
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
+    <Compile Include="Controllers\DTO\StartListTDBClasses.cs" />
     <Compile Include="Controllers\EditVaulterHorseController.cs" />
     <Compile Include="Controllers\HorseOrdersController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
