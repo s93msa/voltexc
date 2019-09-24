@@ -129,7 +129,7 @@ namespace WebApplication1.Controllers
             //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
             var startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404696 },             //senior lag
+                CompetitionClassesTdbIds = new[] { 441642 },             //senior lag
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 18, TestNumber = 1 },
@@ -140,7 +140,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404697 },            //Junior lag
+                CompetitionClassesTdbIds = new[] { 441643 },            //Junior lag
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 16, TestNumber = 1 },
@@ -151,7 +151,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404706 },           //Mixklass lag
+                CompetitionClassesTdbIds = new[] { 441651 },           //Mixklass lag
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 52, TestNumber = 1 },
@@ -162,7 +162,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404707, 404708 },          //Lätt klass Lag galopp och skritt  
+                CompetitionClassesTdbIds = new[] { 441653},          //Lätt klass Lag galopp och skritt  
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 43, TestNumber = 1 },
@@ -367,17 +367,14 @@ namespace WebApplication1.Controllers
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividualOnedayCompetition(ExcelImportService excelImportService,
             Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged)
         {
-            int[] competionClassesTdbIds;
-            int StartListClassStepId;
-            int testNumber;
-            UpdateService.NewHordeorders newHordeorders;
+            
 
             var startListTdbClasses = new List<StartListTdbClasses>();
 
             //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
             var startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] {404699, 404700, 404701, 404702},
+                CompetitionClassesTdbIds = new[] { 441644, 441645, 441646, 441647 },
                 StepMoment = new StepMoment[] {new StepMoment {StartListClassStepId = 1, TestNumber = 1}}
             };
 
@@ -385,7 +382,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404699 }, //Svår klass senio individuella senior med  tekn
+                CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
                 StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 1, TestNumber = 2 } }
             };
 
@@ -393,14 +390,14 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404699 }, //Svår klass senio individuella senior med  tekn
+                CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
                 StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 2, TestNumber = 3 } }
             };
             startListTdbClasses.Add(startListTdbClass);
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404700, 404701, 404702 }, //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+                CompetitionClassesTdbIds = new[] { 441645, 441646, 441647 }, //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
                 StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 2, TestNumber = 2} }
             };
 
@@ -408,7 +405,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 404710, 404711 }, // Lätt klass individuell galopp coh skritt  klass 7,8
+                CompetitionClassesTdbIds = new[] { 441655, 441656 }, // Lätt klass individuell galopp coh skritt  klass 7,8
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 46, TestNumber = 1 },

@@ -137,14 +137,14 @@ namespace WebApplication1.Business.Logic.Import
                 }
             }
 
-            if (UpdateExisting)
-            {
-                ContestService.UpdateClasses(updatedClasses.ToArray());
-            }
-            if (AddNew)
-            {
-                ContestService.AddClasses(newClasses.ToArray());
-            }
+            //if (UpdateExisting)
+            //{
+            //    ContestService.UpdateClasses(updatedClasses.ToArray());
+            //}
+            //if (AddNew)
+            //{
+            //    ContestService.AddClasses(newClasses.ToArray());
+            //}
 
             var changed = new Changed
             {
