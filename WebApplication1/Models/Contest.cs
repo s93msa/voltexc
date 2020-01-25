@@ -14,7 +14,7 @@ namespace WebApplication1.Models
 
         public virtual ContestType TypeOfContest { get; set; }
         public string Location{ get; set; }
-        public string Country { get; set; } //TODO: Country of club not contest
+        public string Country { get; set; } 
         public virtual List<StartListClassStep> StartListClassStep { get; set; }
 
         public List<StartListClassStep> GetActiveStartListClassStep()

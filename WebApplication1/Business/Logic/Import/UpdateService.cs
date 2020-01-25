@@ -128,6 +128,10 @@ namespace WebApplication1.Business.Logic.Import
                         existingClass.ClassName = competitionClass.ClassName;
                         existingClass.ClassNr = competitionClass.ClassNr;
                         existingClass.ClassTdbId = competitionClass.ClassTdbId;
+                        if (competitionClass.ScoreSheetId > 0)
+                        {
+                            existingClass.ScoreSheetId = competitionClass.ScoreSheetId;
+                        }
                         updatedClasses.Add(existingClass);
                     }
                 }
@@ -615,7 +619,8 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(CompetitionClass competitionClass, CompetitionClass existingClass)
         {
             return existingClass.ClassName != competitionClass.ClassName ||
-                   existingClass.ClassTdbId != competitionClass.ClassTdbId;
+                   existingClass.ClassTdbId != competitionClass.ClassTdbId ||
+                 (competitionClass.ScoreSheetId > 0 && existingClass.ScoreSheetId != competitionClass.ScoreSheetId);
         }
 
         private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)

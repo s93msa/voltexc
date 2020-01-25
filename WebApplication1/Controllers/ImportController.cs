@@ -119,11 +119,6 @@ namespace WebApplication1.Controllers
 
         private Dictionary<int, Changed> TeamOneDayCompetion(ExcelImportService excelImportService, Dictionary<int, Changed> TeamsStartlistChanged)
         {
-            int[] competionClassesTdbIds;
-            int StartListClassStepId;
-            int testNumber;
-            Changed changed;
-
             var startListTdbClasses = new List<StartListTdbClasses>();
 
             //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
