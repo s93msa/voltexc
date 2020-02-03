@@ -147,13 +147,33 @@ namespace WebApplication1.Business.Logic.Import
                 {
                     ClassTdbId = GetInt(row, "a"),
                     ClassNr = GetString(row, "b"),
-                    ClassName = GetString(row, "c")
+                    ClassName = GetString(row, "c"),
+                    ScoreSheetId = GetInt(row,"d",0)
                 };
                 competitionClasses.Add(competitionClass);
             }
 
             return competitionClasses.ToArray();
         }
+
+        //public CompetitionClass[] GetStartListClass()
+        //{
+        //    var startListClassStepsList = new List<StartListClassStep>();
+        //    var worksheet = _workbook.Worksheets?.Worksheet("startlisteklass");
+        //    foreach (var row in worksheet.Rows())
+        //    {
+        //        var startListClassStep = new StartListClassStep
+        //        {
+        //            //ClassTdbId = GetInt(row, "a"),
+        //            Name = = GetString(row, "b"),
+        //            ClassName = Get(row, "c"),
+        //            ScoreSheetId = GetInt(row, "d", 0)
+        //        };
+        //        startListClassStepsList.Add(startListClassStep);
+        //    }
+
+        //    return startListClassStepsList.ToArray();
+        //}
 
         public Lunger[] GetLungers()
         {
@@ -236,6 +256,19 @@ namespace WebApplication1.Business.Logic.Import
             }
 
             return defaultValue;
+        }
+
+        private static DateTime GetDate(IXLRow row, string cell)
+        {
+            DateTime returnValue;
+            var cellValue = row?.Cell(cell)?.Value?.ToString();
+
+            if (DateTime.TryParse(cellValue, out returnValue))
+            {
+                return returnValue;
+            }
+
+            return DateTime.Now;
         }
     }
 }
