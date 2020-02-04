@@ -1,3 +1,6 @@
+Infoga en ny kolumn mellan kommentarerna och första voltigören. Nya kolumnen ska ha bokstaven "k". 
+På de rader som är lag: Skriv in lagnamn i kolumn k på.
+
 I DB: Gå in i CompetitionClasses och lägg in rätt TDB-ID för varje klass
 I DB: Gå in i StartListClassSteps och lägg upp rätt startlisteklasser
 

@@ -197,7 +197,7 @@ namespace WebApplication1.Business.Logic.Import
 
         private static ExcelImportMergedModel GetAllRowInformation(IXLRow row)
         {
-            var vaulterId2 = GetInt(row, "m");
+            var vaulterId2 = GetInt(row, "n");
             var clubName = GetString(row, "i");
             var className = GetString(row, "c");
             var excelImportMergedModel = new ExcelImportMergedModel
@@ -211,19 +211,23 @@ namespace WebApplication1.Business.Logic.Import
                 HorseName = GetString(row, "g"),
                 ClubTdbId = GetInt(row, "h"),
                 ClubName = clubName,
-                VaulterId1 = GetInt(row, "k"),
-                VaulterName1 = GetString(row, "l"),
+                TeamName = GetString(row, "k", clubName + className),
+                VaulterId1 = GetInt(row, "l"),
+                VaulterName1 = GetString(row, "m"),
                 VaulterId2 = vaulterId2,
-                VaulterName2 = GetString(row, "n"),
-                VaulterId3 = GetInt(row, "o"),
-                VaulterName3 = GetString(row, "p"),
-                VaulterId4 = GetInt(row, "q"),
-                VaulterName4 = GetString(row, "r"),
-                VaulterId5 = GetInt(row, "s"),
-                VaulterName5 = GetString(row, "t"),
-                VaulterId6 = GetInt(row, "u"),
-                VaulterName6 = GetString(row, "v"),
-                TeamName = GetString(row, "w", clubName + className),
+                VaulterName2 = GetString(row, "o"),
+                VaulterId3 = GetInt(row, "p"),
+                VaulterName3 = GetString(row, "q"),
+                VaulterId4 = GetInt(row, "r"),
+                VaulterName4 = GetString(row, "s"),
+                VaulterId5 = GetInt(row, "t"),
+                VaulterName5 = GetString(row, "u"),
+                VaulterId6 = GetInt(row, "v"),
+                VaulterName6 = GetString(row, "w"),
+                VaulterId7 = GetInt(row, "x"),
+                VaulterName7 = GetString(row, "y"),
+                VaulterId8 = GetInt(row, "z"),
+                VaulterName8 = GetString(row, "aa"),
                 IsTeam = !IsEmpty(vaulterId2)
             };
             return excelImportMergedModel;

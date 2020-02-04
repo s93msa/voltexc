@@ -29,6 +29,10 @@ namespace WebApplication1.Business.Logic.Import
         public string VaulterName5 { get; set; }
         public int VaulterId6 { get; set; }
         public string VaulterName6 { get; set; }
+        public int VaulterId7 { get; set; }
+        public string VaulterName7 { get; set; }
+        public int VaulterId8 { get; set; }
+        public string VaulterName8 { get; set; }
 
         public bool IsTeam { get; set; }
 

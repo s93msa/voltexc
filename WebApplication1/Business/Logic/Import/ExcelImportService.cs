@@ -174,8 +174,10 @@ namespace WebApplication1.Business.Logic.Import
                 var member4 = GetTeamMember(teamRow.VaulterName4, teamRow.VaulterId4, 4, teamRow.TeamName);
                 var member5 = GetTeamMember(teamRow.VaulterName5, teamRow.VaulterId5, 5, teamRow.TeamName);
                 var member6 = GetTeamMember(teamRow.VaulterName6, teamRow.VaulterId6, 6, teamRow.TeamName);
+                var member7 = GetTeamMember(teamRow.VaulterName7, teamRow.VaulterId7, 7, teamRow.TeamName);
+                var member8 = GetTeamMember(teamRow.VaulterName8, teamRow.VaulterId8, 8, teamRow.TeamName);
 
-                var teamMembers = new List<TeamMember> { member1, member2, member3, member4, member5, member6 };
+                var teamMembers = new List<TeamMember> { member1, member2, member3, member4, member5, member6, member7, member8 };
                 teamMembersList.AddRange(teamMembers);
             }
             return teamMembersList.ToArray();
