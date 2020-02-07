@@ -68,8 +68,12 @@ namespace WebApplication1.Classes
             VaulterName = Vaulter1?.Name?.Trim();
             ArmNumber = Vaulter1?.Armband;
             VaultingClass = Vaulter1?.VaultingClass;
+            if (VaultingClass.ClassNr.Contains(':'))
+            {
+                var tdbId = int.Parse(VaultingClass.ClassNr.Split(':')[1]);
+                VaultingClass = Business.Logic.Contest.ContestService.GetClass(tdbId);
+            }
             Country = Vaulter1?.VaultingClub?.Country;
-
             TestNumber = vaulterOrder.Testnumber;
             Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;

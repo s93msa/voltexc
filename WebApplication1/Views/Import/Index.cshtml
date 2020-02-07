@@ -9,7 +9,7 @@
 
 @using (Html.BeginForm("Upload", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <input type="file" name="File" value="C:\Temp\Tävling exempel Listor.xlsx" />
+    <input type="file" name="File"  />
     <label for="AddNewCheckbox">Lägg till nya</label><input type="checkbox" name="addNewCheckbox" id="AddNewCheckbox" />
     <label for="UpdateCheckbox">Uppdatera redan existerande</label><input type="checkbox" name="updateCheckbox" id="UpdateCheckbox" />
     <label for="UpdateCheckbox">Gör ingen koll av startlistan </label><input type="checkbox" name="excludeStartlist" id="excludeStartlist" checked="checked" />

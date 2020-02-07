@@ -614,10 +614,7 @@ namespace WebApplication1.Business.Logic.Contest
                     //var dummy = GetAllDataFromDataBase<List<Vaulter>>(_vaulters); // bara för att hämta alla värden när vi är i context dvs inom using
                 }
             }
-
-
             return _vaulters;
-
         }
 
         public static List<Team> GetTeams()

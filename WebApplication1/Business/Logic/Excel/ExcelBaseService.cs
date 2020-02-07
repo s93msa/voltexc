@@ -32,16 +32,16 @@ namespace WebApplication1.Business.Logic.Excel
             }
             else
             {
-                var lattClassWorksheetNames = new string[]
-                    {"Lätt grund", "Lätt lagkür 1", "Lätt lagkür 2", "Lätt ind grund", "Lätt ind kür"};
-                var mellanClassWorksheetNames = new string[]
-                    {"Skritt mellan grund", "Skritt jrlag grund", "Skritt srlag grund", "Skritt lagkür"};
+                //var lattClassWorksheetNames = new string[]
+                //    {"Lätt grund", "Lätt lagkür 1", "Lätt lagkür 2", "Lätt ind grund", "Lätt ind kür"};
+                //var mellanClassWorksheetNames = new string[]
+                //    {"Skritt mellan grund", "Skritt jrlag grund", "Skritt srlag grund", "Skritt lagkür"};
 
-                var horseIsPartOfSheet = ConcatArrays(lattClassWorksheetNames, mellanClassWorksheetNames);
-                if (IsSheetNameInArray(worksheet, horseIsPartOfSheet))
-                {
+                //var horseIsPartOfSheet = ConcatArrays(lattClassWorksheetNames, mellanClassWorksheetNames);
+                //if (IsSheetNameInArray(worksheet, horseIsPartOfSheet))
+                //{
                     SetLattClassHorseResult(worksheet);
-                }
+                //}
             }
         }
 
@@ -72,7 +72,10 @@ namespace WebApplication1.Business.Logic.Excel
         protected void SetLattClassHorseResult(IXLWorksheet worksheet)
         {
             var result = GetNamedCell(worksheet, "Hästpoäng");
-            result.Value = ContestService.HorsePointTraHastTavling();
+            if(result != null)
+            {
+                result.Value = ContestService.HorsePointTraHastTavling();
+            }
         }
 
         protected static bool IsSheetNameInArray(IXLWorksheet worksheet, string[] lattClassWorksheetName)
@@ -184,7 +187,7 @@ namespace WebApplication1.Business.Logic.Excel
                 return;
             outputFileName = outputFileName.Replace("&", "och");
 
-            string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + outputFileName;
+            string fileoutputname = @"C:\episerver\voltige\VoltigeClosedXML\output\" + outputFileName;
             _competitionData.Workbook.SaveAs(fileoutputname);
         }
 
