@@ -359,8 +359,8 @@ namespace WebApplication1.Controllers
         {
             var individualStartlistChanged = new Dictionary<int, UpdateService.NewHordeorders>();
 
-            individualStartlistChanged = ImportIndividualTraHastCompetition(excelImportService, individualStartlistChanged);
-//            individualStartlistChanged = ImportIndividualOnedayCompetition(excelImportService, individualStartlistChanged);
+//            individualStartlistChanged = ImportIndividualTraHastCompetition(excelImportService, individualStartlistChanged);
+            individualStartlistChanged = ImportIndividualOnedayCompetition(excelImportService, individualStartlistChanged);
 //            individualStartlistChanged = ImportIndividualSmCompetition(excelImportService, individualStartlistChanged);
 
             return individualStartlistChanged;
@@ -369,33 +369,31 @@ namespace WebApplication1.Controllers
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividualOnedayCompetition(ExcelImportService excelImportService,
             Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged)
         {
-            
-
             var startListTdbClasses = new List<StartListTdbClasses>();
 
             //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
             var startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 441644, 441645, 441646, 441647 },
+                CompetitionClassesTdbIds = new[] { 441645, 441646, 441647 },
                 StepMoment = new StepMoment[] {new StepMoment {StartListClassStepId = 1, TestNumber = 1}}
             };
 
             startListTdbClasses.Add(startListTdbClass);
 
-            startListTdbClass = new StartListTdbClasses
-            {
-                CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
-                StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 1, TestNumber = 2 } }
-            };
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
+            //    StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 1, TestNumber = 2 } }
+            //};
 
-            startListTdbClasses.Add(startListTdbClass);
+            //startListTdbClasses.Add(startListTdbClass);
 
-            startListTdbClass = new StartListTdbClasses
-            {
-                CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
-                StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 2, TestNumber = 3 } }
-            };
-            startListTdbClasses.Add(startListTdbClass);
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 441644 }, //Svår klass senio individuella senior med  tekn
+            //    StepMoment = new StepMoment[] { new StepMoment { StartListClassStepId = 2, TestNumber = 3 } }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
 
             startListTdbClass = new StartListTdbClasses
             {
@@ -407,11 +405,22 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 441655, 441656 }, // Lätt klass individuell galopp coh skritt  klass 7,8
+                CompetitionClassesTdbIds = new[] { 441656 }, // skritt klass individue
                 StepMoment = new StepMoment[]
                 {
-                    new StepMoment { StartListClassStepId = 46, TestNumber = 1 },
-                    new StepMoment { StartListClassStepId = 46, TestNumber = 2 }
+                    new StepMoment { StartListClassStepId = 39, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 39, TestNumber = 2 }
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 9999 }, // skritt klass individue
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 2083, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 2083, TestNumber = 2 }
                 }
             };
 

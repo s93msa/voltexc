@@ -563,6 +563,7 @@ namespace WebApplication1.Business.Logic.Contest
                     foreach (var horseOrder in _horseOrders)
                     {
                         var dummy1 = horseOrder.HorseInformation.Lunger;
+                        var dummy2 = horseOrder.Vaulters;
                     }
                 }
             }
