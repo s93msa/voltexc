@@ -9,7 +9,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public class ExcelIndividualService : ExcelBaseService
+    public class ExcelIndividualService : ExcelScorecardBaseService
     {
         private readonly ExcelPreCompetitionData _competitionData;
        

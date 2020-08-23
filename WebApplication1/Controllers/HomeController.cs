@@ -112,7 +112,30 @@ namespace WebApplication1.Controllers
                 }
 
             }
+            //InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.Excelfile;
+            var workingdirectory = HttpContext.Server.MapPath("~");
+            var workbook = new XLWorkbook(workingdirectory + @"..\output\MagnusL.xlsx");
+            workbook.Worksheets.Worksheet(1).Cell(1, 1).Value = "test";
+            workbook.Save();
+            foreach (var CompetitionClassesInfo in competitionClassesViewModel.CompetitionClassesInformation)
+            {
+var s= CompetitionClassesInfo.ClassNumber;
+//CompetitionClassesInfo.ClassName;
+//CompetitionClassesInfo.NumberOfJudges;
+//CompetitionClassesInfo.Moment1;
+//CompetitionClassesInfo.Moment2;
+//CompetitionClassesInfo.Moment3;
+//CompetitionClassesInfo.Moment4;
+//CompetitionClassesInfo.Moment1Header;
+//CompetitionClassesInfo.Moment2Header;
+//CompetitionClassesInfo.Moment3Header;
+//CompetitionClassesInfo.Moment4Header;
+//CompetitionClassesInfo.JudgesMoment1;
+//CompetitionClassesInfo.JudgesMoment2;
+//CompetitionClassesInfo.JudgesMoment3;
+//CompetitionClassesInfo.JudgesMoment4;
 
+            } 
             return View(competitionClassesViewModel);
         }
 

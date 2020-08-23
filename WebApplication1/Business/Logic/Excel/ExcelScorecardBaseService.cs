@@ -11,13 +11,13 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public abstract class ExcelBaseService
+    public abstract class ExcelScorecardBaseService
     {
         public bool StartOrderInfileName { get; set; } = false;
 
         private readonly ExcelPreCompetitionData _competitionData;
 
-        protected ExcelBaseService(ExcelPreCompetitionData competitionInformation)
+        protected ExcelScorecardBaseService(ExcelPreCompetitionData competitionInformation)
         {
             _competitionData = competitionInformation;
         }

@@ -10,7 +10,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public class ExcelTeamService : ExcelBaseService
+    public class ExcelTeamService : ExcelScorecardBaseService
     {
         private readonly ExcelPreCompetitionData _competitionData;
 
