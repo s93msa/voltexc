@@ -11,15 +11,17 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public abstract class ExcelScorecardBaseService
+    public abstract class ExcelScorecardBaseService 
     {
         public bool StartOrderInfileName { get; set; } = false;
 
         private readonly ExcelPreCompetitionData _competitionData;
+        protected ExcelBaseService _excelBaseService;
 
         protected ExcelScorecardBaseService(ExcelPreCompetitionData competitionInformation)
         {
             _competitionData = competitionInformation;
+            _excelBaseService = new ExcelBaseService(_competitionData.Workbook);
         }
 
         protected void SetHorsePoints(IXLWorksheet worksheet)
@@ -45,33 +47,14 @@ namespace WebApplication1.Business.Logic.Excel
             }
         }
 
-
-        protected void ShowOnlyWorksheet(IXLWorksheet worksheet)
-        {
-            IXLWorksheets workbookWorksheets = _competitionData.Workbook?.Worksheets;
-            if (workbookWorksheets == null)
-                return;
-
-            foreach (var currrentWorksheet in workbookWorksheets)
-            {
-                if (currrentWorksheet == worksheet)
-                {
-                    currrentWorksheet.Visibility = XLWorksheetVisibility.Visible;
-                    currrentWorksheet.TabActive = true;
-                }
-                else
-                    currrentWorksheet.Hide(); //.Visibility = XLWorksheetVisibility.Hidden;
-            }
-        }
-
         protected void SetAJudgeResult(IXLWorksheet worksheet)
         {
-            var result = GetNamedCell(worksheet, "result");
+            var result = _excelBaseService.GetNamedCell(worksheet, "result");
             result.Value = ContestService.HorsePointTraHastTavling();
         }
         protected void SetLattClassHorseResult(IXLWorksheet worksheet)
         {
-            var result = GetNamedCell(worksheet, "Hästpoäng");
+            var result = _excelBaseService.GetNamedCell(worksheet, "Hästpoäng");
             if(result != null)
             {
                 result.Value = ContestService.HorsePointTraHastTavling();
@@ -94,7 +77,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
         {
-            var firstcell = GetNamedCell(worksheet, "datum");
+            var firstcell = _excelBaseService.GetNamedCell(worksheet, "datum");
             
             //var range = worksheet.Range("datum") ;
             //var firstcell = range.FirstCell();
@@ -114,26 +97,7 @@ namespace WebApplication1.Business.Logic.Excel
             //SetValueInWorksheet(worksheet, startRow + 6, "c", _competitionData.LungerName);
         }
 
-        private string RemoveNumberFromEnd(string horseName)
-        {
-            if (horseName == null)
-            {
-                return null;
-            }
-
-            var length = horseName.Length;
-            if (length > 1)
-            {
-                var lastChar = horseName.Substring(horseName.Length - 1, 1);
-                int lastCharInt;
-                if (int.TryParse(lastChar, out  lastCharInt))
-                {
-                    horseName = horseName.Substring(0, length - 1);
-                }
-            }
-
-            return horseName;
-        }
+       
 
         //private void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
         //{
@@ -142,7 +106,7 @@ namespace WebApplication1.Business.Logic.Excel
         //}
         protected void SetJudgeName(IXLWorksheet worksheet, int row, JudgeTable judgeTable)
         {
-            SetValueInWorksheet(worksheet,"domare", GetJudgeName(judgeTable));
+            _excelBaseService.SetValueInWorksheet(worksheet,"domare", GetJudgeName(judgeTable));
             //SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
         }
 
@@ -156,13 +120,13 @@ namespace WebApplication1.Business.Logic.Excel
 
             string tableName = GetJudgeTableName(judgeTable);
 
-            var secondcell = GetNamedCell(worksheet, "bord");
+            var secondcell = _excelBaseService.GetNamedCell(worksheet, "bord");
 
             secondcell.CellAbove(1).Value = startNumber;
             secondcell.Value = tableName;
             secondcell.CellBelow(1).SetValue( _competitionData.VaultingClass.ClassNr);
             secondcell.CellBelow(2).Value = _competitionData.MomentName;
-            var armnrCell = SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
+            var armnrCell = _excelBaseService.SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
             int classNr;
             
             if (armnrCell != null && int.TryParse(_competitionData.VaultingClass.ClassNr, out classNr) && classNr <= backgroundColors.Length)
@@ -179,16 +143,12 @@ namespace WebApplication1.Business.Logic.Excel
             //SetValueInWorksheet(worksheet, startRow + 4, "l", _competitionData.ArmNumber);
         }
 
-        
+
 
         protected void SaveExcelFile(string outputFileName)
         {
-            if (outputFileName == null)
-                return;
-            outputFileName = outputFileName.Replace("&", "och");
-
             string fileoutputname = @"C:\episerver\voltige\VoltigeClosedXML\output\" + outputFileName;
-            _competitionData.Workbook.SaveAs(fileoutputname);
+            _excelBaseService.SaveExcelFile(fileoutputname);
         }
 
         protected string GetOutputFilename(JudgeTable judgeTabel, string fileNamePrefix = "")
@@ -214,46 +174,7 @@ namespace WebApplication1.Business.Logic.Excel
             return path + fileNamePrefix+ fileName + ".xlsx";
         }
 
-        protected IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
-        {
-            var linkTocell = worksheet.NamedRange(cellName);
-            if (linkTocell == null)
-                return null;
-
-            //var g = GetNamedCell(worksheet, cellName);
-            var currentCell = worksheet.Cell(linkTocell.RefersTo.Split('!')[1]);
-
-            return currentCell;
-            //IXLNamedRange xlNamedRange = worksheet.NamedRange(namedCell);
-            //if (xlNamedRange == null)
-            //    return (IXLCell)null;
-            //IXLRange xlRange = xlNamedRange.Ranges.FirstOrDefault<IXLRange>();
-            //if (xlRange == null)
-            //    return (IXLCell)null;
-            //return xlRange.FirstCell();
-        }
-
-        protected void SetValueInWorksheet(IXLWorksheet worksheet, int row, string column, string value)
-        {
-            worksheet.Cell(row, column).Value = value;
-        }
-
-        protected IXLCell SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
-        {
-            //var linkTocell = worksheet.NamedRange(cellName);
-            
-            //var g = GetNamedCell(worksheet, cellName);
-            var currentCell = GetNamedCell(worksheet, cellName);
-            if (currentCell == null)
-                return null;
-
-            currentCell.Value = value;
-
-            return currentCell;
-            //          worksheet.Workbook.Range(cellName).Cells();
-            //= value;
-
-        }
+       
         private string GetJudgeName(JudgeTable judgeTable)
         {
             return judgeTable?.JudgeName;
@@ -262,6 +183,27 @@ namespace WebApplication1.Business.Logic.Excel
         private string GetJudgeTableName(JudgeTable judgeTable)
         {
             return judgeTable?.JudgeTableName.ToString();
+        }
+
+        private string RemoveNumberFromEnd(string horseName)
+        {
+            if (horseName == null)
+            {
+                return null;
+            }
+
+            var length = horseName.Length;
+            if (length > 1)
+            {
+                var lastChar = horseName.Substring(horseName.Length - 1, 1);
+                int lastCharInt;
+                if (int.TryParse(lastChar, out lastCharInt))
+                {
+                    horseName = horseName.Substring(0, length - 1);
+                }
+            }
+
+            return horseName;
         }
     }
 }

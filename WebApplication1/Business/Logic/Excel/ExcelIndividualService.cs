@@ -30,7 +30,7 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
             string idString = ContestService.GetVaulterExcelId(_competitionData.Vaulter1, _competitionData.Horse1.HorseId, _competitionData.TestNumber, judgeTable);
-            var cell = SetValueInWorksheet(worksheet, "id", idString);
+            var cell = _excelBaseService.SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }
 
@@ -70,7 +70,7 @@ namespace WebApplication1.Business.Logic.Excel
 
             SetWorksheetIndividuell(worksheet, judgeTable);
 
-            ShowOnlyWorksheet(worksheet);
+            _excelBaseService.ShowOnlyWorksheet(worksheet);
             string fileOutputname;
             if (StartOrderInfileName)
             {
