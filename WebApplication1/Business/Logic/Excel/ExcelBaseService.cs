@@ -12,7 +12,6 @@ namespace WebApplication1.Business.Logic.Excel
 
         public ExcelBaseService(XLWorkbook Workbook)
         {
-            _workbook = Workbook;
         }
 
         public void ShowOnlyWorksheet(IXLWorksheet worksheet)
@@ -34,7 +33,11 @@ namespace WebApplication1.Business.Logic.Excel
             }
         }
 
-        public void SaveExcelFile(string outputPathAndName)
+        public void SaveExcelFile()
+        {
+            _workbook.Save();
+        }
+            public void SaveExcelFile(string outputPathAndName)
         {
             if (outputPathAndName == null)
                 return;
@@ -42,12 +45,35 @@ namespace WebApplication1.Business.Logic.Excel
             _workbook.SaveAs(outputPathAndName);
         }
 
-        public void SetValues(IXLWorksheet worksheet, int startRow, int[,] values)
+        public void SetValuesInWorkSheet<T>(string worksheetName, int startRow, Row<T>[] rows)
         {
-            throw new NotImplementedException();
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+
+            int rowIndex = startRow;
+            foreach (var row in rows)
+            {
+                SetRowValuesInWorksheet(worksheet, rowIndex, 1, row.RowValues);
+                rowIndex++;
+            }
         }
 
+        public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, T[] rowValues)
+        {
+            int columnIndex = startColumn;
+            foreach (var cellValue in rowValues)
+            {
+                SetValueInWorksheet(worksheet, row, columnIndex, cellValue);
+                columnIndex++;
+            }
+        }
+
+
+
         public void SetValueInWorksheet(IXLWorksheet worksheet, int row, string column, string value)
+        {
+            worksheet.Cell(row, column).Value = value;
+        }
+        public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, T value)
         {
             worksheet.Cell(row, column).Value = value;
         }

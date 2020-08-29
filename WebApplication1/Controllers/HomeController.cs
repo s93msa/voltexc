@@ -16,6 +16,7 @@ using WebApplication1.Business.Logic.Excel;
 using WebApplication1.Classes;
 using WebApplication1.Models;
 using WebApplication1.ViewModels;
+using WebApplication1.Business.Logic.Excel.Results;
 
 namespace WebApplication1.Controllers
 {
@@ -44,18 +45,20 @@ namespace WebApplication1.Controllers
 
         public ActionResult CompetitionClasses()
         {
-
+            var workingdirectory = HttpContext.Server.MapPath("~");
+            var workbook = new XLWorkbook(workingdirectory + @"..\output\MagnusL.xlsx");
+            var excelResultService = new ExcelResultService(workbook);
            // var contest = ContestService.GetContestInstance();
             var judges = ContestService.GetJudgesPerStep();
 
             var competitionClassesViewModel = new CompetitionClassesViewModel();
+            var excelCompetitionClasses = new List<Business.Logic.Excel.Results.CompetitionClass>();
             using (var db = new VaultingContext())
             {
                 var contest = ContestService.GetContestInstance();
                 var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
                 var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
                 var classesList = GetAllClassesWithAtleastOneParticipant(db);
-
 
                 foreach (var competitionClass in competitionClasses.ToList())
                 {
@@ -89,6 +92,26 @@ namespace WebApplication1.Controllers
 
                     }
 
+                    var excelCompetitionClass = new Business.Logic.Excel.Results.CompetitionClass()
+                    {
+                        ClassNumber = classNumber,
+                        ClassName = className,
+                        NumberOfJudges = numberOfJudges,
+                        Moment1 = steps[0],
+                        Moment2 = steps[1],
+                        Moment3 = steps[2],
+                        Moment4 = steps[3],
+                        Moment1Header = momentText[0],
+                        Moment2Header = momentText[1],
+                        Moment3Header = momentText[2],
+                        Moment4Header = momentText[3],
+                        JudgesMoment1 = judgesString1,
+                        JudgesMoment2 = judgesString2,
+                        JudgesMoment3 = judgesString3,
+                        JudgesMoment4 = judgesString4
+                    };
+                    excelCompetitionClasses.Add(excelCompetitionClass);
+
                     var competitionClassInfo = new CompetitionClassViewModel
                     {
                         ClassNumber = classNumber,
@@ -112,11 +135,12 @@ namespace WebApplication1.Controllers
                 }
 
             }
+
+            excelResultService.SetCompetitionClasses(excelCompetitionClasses.ToArray());
+            excelResultService.Save();
             //InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.Excelfile;
-            var workingdirectory = HttpContext.Server.MapPath("~");
-            var workbook = new XLWorkbook(workingdirectory + @"..\output\MagnusL.xlsx");
-            workbook.Worksheets.Worksheet(1).Cell(1, 1).Value = "test";
-            workbook.Save();
+
+            //workbook.Worksheets.Worksheet(1).Cell(1, 1).Value = "test";
             foreach (var CompetitionClassesInfo in competitionClassesViewModel.CompetitionClassesInformation)
             {
 var s= CompetitionClassesInfo.ClassNumber;
@@ -156,7 +180,7 @@ var s= CompetitionClassesInfo.ClassNumber;
             return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
         }
 
-        private static List<Step> GetStepsForThisTypeOfCompetition(CompetitionClass competitionClass)
+        private static List<Step> GetStepsForThisTypeOfCompetition(Models.CompetitionClass competitionClass)
         {
             var contest = ContestService.GetContestInstance();
             return competitionClass.GetCompetitionSteps(contest.TypeOfContest);
