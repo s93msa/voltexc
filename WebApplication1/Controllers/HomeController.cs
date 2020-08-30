@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using System.Xml.Serialization;
-using AutoMapper;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Business.Logic.Excel;
 using WebApplication1.Classes;
 using WebApplication1.Models;
 using WebApplication1.ViewModels;
 using WebApplication1.Business.Logic.Excel.Results;
+using WebApplication1.Business.Logic.Result;
 
 namespace WebApplication1.Controllers
 {
@@ -24,10 +15,12 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
         public ExcelResultService _excelResultService;
+        public ResultService _resultService;
 
         public HomeController()
         {
             _excelResultService = new ExcelResultService();
+            _resultService = new ResultService();
         }
 
         public ActionResult Index()
@@ -50,108 +43,123 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        public ActionResult CreatePreResultInformationExcel()
+        {
+            var participants = _resultService.GetParticipants();
+            var classes = _resultService.GetClasses();
+
+            _excelResultService.SetVaulterList(participants.ToArray());
+            _excelResultService.SetCompetitionClasses(classes.ToArray());
+
+            _excelResultService.SaveWithTimeStamp();
+
+            ViewBag.Message = "Excel skapad";
+
+            return View();
+        }
+
         public ActionResult CompetitionClasses()
         {
            
-           // var contest = ContestService.GetContestInstance();
-            var judges = ContestService.GetJudgesPerStep();
+           //// var contest = ContestService.GetContestInstance();
+           // var judges = ContestService.GetJudgesPerStep();
 
-            var competitionClassesViewModel = new CompetitionClassesViewModel();
-            var excelCompetitionClasses = new List<Business.Logic.Excel.Results.CompetitionClass>();
-            using (var db = new VaultingContext())
-            {
-                var contest = ContestService.GetContestInstance();
-                var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
-                var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
-                var classesList = GetAllClassesWithAtleastOneParticipant(db);
+           // var competitionClassesViewModel = new CompetitionClassesViewModel();
+           // var excelCompetitionClasses = new List<Business.Logic.Excel.Results.CompetitionClass>();
+           // using (var db = new VaultingContext())
+           // {
+           //     var contest = ContestService.GetContestInstance();
+           //     var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
+           //     var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
+           //     var classesList = GetAllClassesWithAtleastOneParticipant(db);
 
-                foreach (var competitionClass in competitionClasses.ToList())
-                {
+           //     foreach (var competitionClass in competitionClasses.ToList())
+           //     {
               
-                    if(competitionClass.ClassNr == "0")
-                        continue;
-                    if(competitionClass.GetCompetitionSteps(contest.TypeOfContest).Count == 0)
-                        continue;
-                    if(!classesList.Contains(competitionClass.CompetitionClassId))
-                    { continue;}
+           //         if(competitionClass.ClassNr == "0")
+           //             continue;
+           //         if(competitionClass.GetCompetitionSteps(contest.TypeOfContest).Count == 0)
+           //             continue;
+           //         if(!classesList.Contains(competitionClass.CompetitionClassId))
+           //         { continue;}
 
-                    var classNumber = competitionClass.ClassNr;
-                    var className = competitionClass.ClassName;
-                    var numberOfJudges = "0";
-                    var steps = new string[4];
-                    var momentText = new string[4];
-                    var judgesString1 = GetJudgesString(judges, startListClassSteps, classNumber, 1);
-                    var judgesString2 = GetJudgesString(judges, startListClassSteps, classNumber, 2);
-                    var judgesString3 = GetJudgesString(judges, startListClassSteps, classNumber, 3);
-                    var judgesString4 = GetJudgesString(judges, startListClassSteps, classNumber, 4);
+           //         var classNumber = competitionClass.ClassNr;
+           //         var className = competitionClass.ClassName;
+           //         var numberOfJudges = "0";
+           //         var steps = new string[4];
+           //         var momentText = new string[4];
+           //         var judgesString1 = GetJudgesString(judges, startListClassSteps, classNumber, 1);
+           //         var judgesString2 = GetJudgesString(judges, startListClassSteps, classNumber, 2);
+           //         var judgesString3 = GetJudgesString(judges, startListClassSteps, classNumber, 3);
+           //         var judgesString4 = GetJudgesString(judges, startListClassSteps, classNumber, 4);
 
-                    var stepsList = GetStepsForThisTypeOfCompetition(competitionClass);
+           //         var stepsList = GetStepsForThisTypeOfCompetition(competitionClass);
 
-                    foreach (var step in stepsList)
-                    {
+           //         foreach (var step in stepsList)
+           //         {
 
-                        if (step.TestNumber < 1) continue;
+           //             if (step.TestNumber < 1) continue;
 
-                        steps[step.TestNumber - 1] = step.Name;
-                        momentText[step.TestNumber - 1] = step.ResultMomentText;
+           //             steps[step.TestNumber - 1] = step.Name;
+           //             momentText[step.TestNumber - 1] = step.ResultMomentText;
 
-                    }
+           //         }
 
-                    var excelCompetitionClass = new Business.Logic.Excel.Results.CompetitionClass()
-                    {
-                        ClassNumber = classNumber,
-                        ClassName = className,
-                        NumberOfJudges = numberOfJudges,
-                        Moment1 = steps[0],
-                        Moment2 = steps[1],
-                        Moment3 = steps[2],
-                        Moment4 = steps[3],
-                        Moment1Header = momentText[0],
-                        Moment2Header = momentText[1],
-                        Moment3Header = momentText[2],
-                        Moment4Header = momentText[3],
-                        JudgesMoment1 = judgesString1,
-                        JudgesMoment2 = judgesString2,
-                        JudgesMoment3 = judgesString3,
-                        JudgesMoment4 = judgesString4
-                    };
-                    excelCompetitionClasses.Add(excelCompetitionClass);
+           //         var excelCompetitionClass = new Business.Logic.Excel.Results.CompetitionClass()
+           //         {
+           //             ClassNumber = classNumber,
+           //             ClassName = className,
+           //             NumberOfJudges = numberOfJudges,
+           //             Moment1 = steps[0],
+           //             Moment2 = steps[1],
+           //             Moment3 = steps[2],
+           //             Moment4 = steps[3],
+           //             Moment1Header = momentText[0],
+           //             Moment2Header = momentText[1],
+           //             Moment3Header = momentText[2],
+           //             Moment4Header = momentText[3],
+           //             JudgesMoment1 = judgesString1,
+           //             JudgesMoment2 = judgesString2,
+           //             JudgesMoment3 = judgesString3,
+           //             JudgesMoment4 = judgesString4
+           //         };
+           //         excelCompetitionClasses.Add(excelCompetitionClass);
 
-                    var competitionClassInfo = new CompetitionClassViewModel
-                    {
-                        ClassNumber = classNumber,
-                        ClassName = className,
-                        NumberOfJudges = numberOfJudges,
-                        Moment1 = steps[0],
-                        Moment2 = steps[1],
-                        Moment3 = steps[2],
-                        Moment4 = steps[3],
-                        Moment1Header = momentText[0],
-                        Moment2Header = momentText[1],
-                        Moment3Header = momentText[2],
-                        Moment4Header = momentText[3],
-                        JudgesMoment1 = judgesString1,
-                        JudgesMoment2 = judgesString2,
-                        JudgesMoment3 = judgesString3,
-                        JudgesMoment4 = judgesString4
-                    };
+           //         var competitionClassInfo = new CompetitionClassViewModel
+           //         {
+           //             ClassNumber = classNumber,
+           //             ClassName = className,
+           //             NumberOfJudges = numberOfJudges,
+           //             Moment1 = steps[0],
+           //             Moment2 = steps[1],
+           //             Moment3 = steps[2],
+           //             Moment4 = steps[3],
+           //             Moment1Header = momentText[0],
+           //             Moment2Header = momentText[1],
+           //             Moment3Header = momentText[2],
+           //             Moment4Header = momentText[3],
+           //             JudgesMoment1 = judgesString1,
+           //             JudgesMoment2 = judgesString2,
+           //             JudgesMoment3 = judgesString3,
+           //             JudgesMoment4 = judgesString4
+           //         };
 
-                    competitionClassesViewModel.CompetitionClassesInformation.Add(competitionClassInfo);
-                }
+           //         competitionClassesViewModel.CompetitionClassesInformation.Add(competitionClassInfo);
+           //     }
 
-            }
+           // }
 
-            _excelResultService.SetCompetitionClasses(excelCompetitionClasses.ToArray());
-            _excelResultService.Save();
+           // _excelResultService.SetCompetitionClasses(excelCompetitionClasses.ToArray());
+           // _excelResultService.Save();
             
-            return View(competitionClassesViewModel);
+            return View();
         }
 
        
 
         public ActionResult ResultVaulterList()
         {
-            var excelPartitionsList = new List<Participants>();
+            var excelPartitionsList = new List<Participant>();
             var rows = new List<string[]>();   
 
             var contest = ContestService.GetContestInstance();
@@ -176,7 +184,7 @@ namespace WebApplication1.Controllers
                         var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam, horseId);
                         var row = new string[] { vaultingClassNr, teamName, lungerName, clubName, horseName, teamId };
                         rows.Add(row);
-                        var excelParticipant = new Participants()
+                        var excelParticipant = new Participant()
                         {
                             classNo = vaultingClassNr,
                             participantsName = teamName,
@@ -205,7 +213,7 @@ namespace WebApplication1.Controllers
                             var row = new string[] { vaultingClassNr, vaulterName, lungerName, clubName, horseName, vaulterId };
 
                             rows.Add(row);
-                            var excelParticipant = new Participants()
+                            var excelParticipant = new Participant()
                             {
                                 classNo = vaultingClassNr,
                                 participantsName = vaulterName,
@@ -314,53 +322,53 @@ namespace WebApplication1.Controllers
                 }
         }
 
-        private static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
-        {
-            var classesList = GetAllClassesWithAtLeastOneVaulter(db);
-            classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
-            return classesList;
-        }
+        //private static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
+        //{
+        //    var classesList = GetAllClassesWithAtLeastOneVaulter(db);
+        //    classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
+        //    return classesList;
+        //}
 
-        private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
-        {
-            return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
-        }
+        //private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
+        //{
+        //    return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        //}
 
-        private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
-        {
-            return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
-        }
+        //private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
+        //{
+        //    return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        //}
 
-        private static List<Step> GetStepsForThisTypeOfCompetition(Models.CompetitionClass competitionClass)
-        {
-            var contest = ContestService.GetContestInstance();
-            return competitionClass.GetCompetitionSteps(contest.TypeOfContest);
-        }
+        //private static List<Step> GetStepsForThisTypeOfCompetition(Models.CompetitionClass competitionClass)
+        //{
+        //    var contest = ContestService.GetContestInstance();
+        //    return competitionClass.GetCompetitionSteps(contest.TypeOfContest);
+        //}
 
 
-        private static string GetJudgesString(Dictionary<string, int> judges, Dictionary<int, StartListClassStep> startListClassSteps, string classNumber, int testNumber)
-        {
-            string judgesString = GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.A, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.B, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.C, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.D, testNumber);
-            return judgesString.TrimStart(',').TrimStart();
-        }
+        //private static string GetJudgesString(Dictionary<string, int> judges, Dictionary<int, StartListClassStep> startListClassSteps, string classNumber, int testNumber)
+        //{
+        //    string judgesString = GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.A, testNumber);
+        //    judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.B, testNumber);
+        //    judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.C, testNumber);
+        //    judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.D, testNumber);
+        //    return judgesString.TrimStart(',').TrimStart();
+        //}
 
-        private static string GetJudgeName(Dictionary<string, int> stepsrelation, string classNumber, Dictionary<int, StartListClassStep> startListClassSteps,
-            JudgeTableNames judgeTableName, int testNumber)
-        {
+        //private static string GetJudgeName(Dictionary<string, int> stepsrelation, string classNumber, Dictionary<int, StartListClassStep> startListClassSteps,
+        //    JudgeTableNames judgeTableName, int testNumber)
+        //{
 
-            int startliststep;
-            StartListClassStep startListClassStep = null;
-            if (stepsrelation.TryGetValue(classNumber + "_" + testNumber, out startliststep))
-                startListClassSteps.TryGetValue(startliststep, out startListClassStep);
-            var judgeName = startListClassStep?.GetJudgeName(judgeTableName);
-            if (string.IsNullOrWhiteSpace(judgeName))
-                return "";
+        //    int startliststep;
+        //    StartListClassStep startListClassStep = null;
+        //    if (stepsrelation.TryGetValue(classNumber + "_" + testNumber, out startliststep))
+        //        startListClassSteps.TryGetValue(startliststep, out startListClassStep);
+        //    var judgeName = startListClassStep?.GetJudgeName(judgeTableName);
+        //    if (string.IsNullOrWhiteSpace(judgeName))
+        //        return "";
 
-            return ", " + judgeName;
-        }
+        //    return ", " + judgeName;
+        //}
 
         //private static void CreateExcelforIndividual(Contest contest, StartListClassStep startListClassStep,int startNumber, HorseOrder horseOrder, int startVaulterNumber, VaulterOrder vaulterOrder)
         //{

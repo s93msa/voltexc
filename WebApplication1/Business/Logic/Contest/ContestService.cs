@@ -759,6 +759,23 @@ namespace WebApplication1.Business.Logic.Contest
             //      team.TeamId + testNumber;
         }
 
+        public static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
+        {
+            var classesList = GetAllClassesWithAtLeastOneVaulter(db);
+            classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
+            return classesList;
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
+        {
+            return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
+        {
+            return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        }
+
         private static string GetStepTypeString(StepType stepType)
         {
             var stepTypeString = "";

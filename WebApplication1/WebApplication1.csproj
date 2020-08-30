@@ -231,6 +231,7 @@
     <Compile Include="Business\Logic\Import\TeamMember.cs" />
     <Compile Include="Business\Logic\Import\UpdateService.cs" />
     <Compile Include="Business\Logic\Import\RequestService.cs" />
+    <Compile Include="Business\Logic\Result\ResultService.cs" />
     <Compile Include="Business\Logic\StartListClasses\StartListClassService.cs" />
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
