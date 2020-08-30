@@ -10,8 +10,9 @@ namespace WebApplication1.Business.Logic.Excel
     {
         private XLWorkbook _workbook;
 
-        public ExcelBaseService(XLWorkbook Workbook)
+        public ExcelBaseService(XLWorkbook workbook)
         {
+            _workbook = workbook;
         }
 
         public void ShowOnlyWorksheet(IXLWorksheet worksheet)
