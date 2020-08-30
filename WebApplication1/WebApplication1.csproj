@@ -223,6 +223,7 @@
     <Compile Include="Business\Logic\Excel\ExcelScorecardBaseService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelIndividualService.cs" />
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
+    <Compile Include="Business\Logic\Excel\Results\Participants.cs" />
     <Compile Include="Business\Logic\Excel\Row.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportMergedModel.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportRepository.cs" />
