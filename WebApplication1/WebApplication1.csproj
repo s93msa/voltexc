@@ -502,8 +502,6 @@
     <Content Include="Views\Home\CopyExcel.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\StartList.cshtml" />
-    <Content Include="Views\Home\ResultVaulterList.cshtml" />
-    <Content Include="Views\Home\CompetitionClasses.cshtml" />
     <Content Include="Views\HorseOrders\Create.cshtml" />
     <Content Include="Views\HorseOrders\Delete.cshtml" />
     <Content Include="Views\HorseOrders\Details.cshtml" />
@@ -512,6 +510,7 @@
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\HorseOrders\EditVaulterOrder.cshtml" />
     <Content Include="Views\EditVaulterHorse\Index.cshtml" />
+    <Content Include="Views\Home\CreatePreResultInformationExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
