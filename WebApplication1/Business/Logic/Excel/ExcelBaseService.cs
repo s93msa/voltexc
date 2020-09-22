@@ -42,7 +42,7 @@ namespace WebApplication1.Business.Logic.Excel
         {
             if (outputPathAndName == null)
                 return;
-            outputPathAndName = outputPathAndName.Replace("&", "och");
+            outputPathAndName = outputPathAndName.Replace("&", "och").Replace("\r", string.Empty).Replace("\n", string.Empty);
             _workbook.SaveAs(outputPathAndName);
         }
 

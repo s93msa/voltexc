@@ -148,7 +148,7 @@ namespace WebApplication1.Business.Logic.Import
                     ClassTdbId = GetInt(row, "a"),
                     ClassNr = GetString(row, "b"),
                     ClassName = GetString(row, "c"),
-                    ScoreSheetId = GetInt(row,"d",0)
+                    ScoreSheetId = GetInt(row,"d", defaultValue: 1)
                 };
                 competitionClasses.Add(competitionClass);
             }
