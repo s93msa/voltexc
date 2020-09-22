@@ -425,14 +425,24 @@ namespace WebApplication1.Controllers
             {
                 CompetitionClassesTdbIds = new[] { 490704 },
                 StepMoment = new StepMoment[] {
+                    new StepMoment {StartListClassStepId = 1, TestNumber = 2},
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+            startListTdbClass = new StartListTdbClasses // tekn
+            {
+                CompetitionClassesTdbIds = new[] { 490704 },
+                StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 2, TestNumber = 3},
                 }
             };
             startListTdbClasses.Add(startListTdbClass);
 
+
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490704, 490705, 490707, 490708 },
+                CompetitionClassesTdbIds = new[] { 490705, 490707, 490708 },
                 StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 2, TestNumber = 2},
                 }
