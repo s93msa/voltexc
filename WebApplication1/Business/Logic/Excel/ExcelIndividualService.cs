@@ -69,7 +69,9 @@ namespace WebApplication1.Business.Logic.Excel
             var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
 
             SetWorksheetIndividuell(worksheet, judgeTable);
-
+            //var workbook = new XLWorkbook(@"C:\episerver\voltige\VoltigeClosedXML\output\all.xlsx");
+            //worksheet.CopyTo(workbook, _competitionData.ListClassStep.StartListClassStepId + " " + judgeTable.JudgeTableName + " " +  _competitionData.StartVaulterNumber.ToString());
+            //workbook.Save();
             _excelBaseService.ShowOnlyWorksheet(worksheet);
             string fileOutputname;
             if (StartOrderInfileName)

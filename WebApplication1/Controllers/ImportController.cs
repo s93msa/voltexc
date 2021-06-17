@@ -123,7 +123,7 @@ namespace WebApplication1.Controllers
 
             var startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490702 },             //senior lag
+                CompetitionClassesTdbIds = new[] { 515963},             //senior lag
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 18, TestNumber = 1 },
@@ -134,7 +134,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490703 },            //Junior lag
+                CompetitionClassesTdbIds = new[] { 515964 },            //Junior lag
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 16, TestNumber = 1 },
@@ -145,7 +145,8 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490714 },         
+                CompetitionClassesTdbIds = new[] { 515975 },  //Skrittklass, lag typ 1
+       
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 40, TestNumber = 1 },
@@ -154,20 +155,20 @@ namespace WebApplication1.Controllers
             };
             startListTdbClasses.Add(startListTdbClass);
 
-            startListTdbClass = new StartListTdbClasses
-            {
-                CompetitionClassesTdbIds = new[] { 490716, 490717},
-                StepMoment = new StepMoment[]
-                {
-                    new StepMoment { StartListClassStepId = 46, TestNumber = 1 },
-                    new StepMoment { StartListClassStepId = 46, TestNumber = 2 },
-                }
-            };
-            startListTdbClasses.Add(startListTdbClass);
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 490716, 490717},
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 46, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 46, TestNumber = 2 },
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490718 },
+                CompetitionClassesTdbIds = new[] { 515979 },
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 2087, TestNumber = 1 },
@@ -177,20 +178,20 @@ namespace WebApplication1.Controllers
 
 
 
-            startListTdbClass = new StartListTdbClasses
-            {
-                CompetitionClassesTdbIds = new[] { 490712 },           //Mixklass E lag
-                StepMoment = new StepMoment[]
-                {
-                    new StepMoment { StartListClassStepId = 52, TestNumber = 1 },
-                    new StepMoment { StartListClassStepId = 52, TestNumber = 2 }
-                }
-            };
-            startListTdbClasses.Add(startListTdbClass);
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 490712 },           //Mixklass E lag
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 52, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 52, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490711 },           //Mixklass D lag
+                CompetitionClassesTdbIds = new[] { 515972 },           //Mixklass D lag
                 StepMoment = new StepMoment[]
     {
                     new StepMoment { StartListClassStepId = 2088, TestNumber = 1 },
@@ -414,7 +415,7 @@ namespace WebApplication1.Controllers
             //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
             var startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490704, 490705, 490707,  490708},
+                CompetitionClassesTdbIds = new[] { 515965, 515966, 515968,  515969},
                 StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 1, TestNumber = 1},
                 }
@@ -423,7 +424,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses // tekn
             {
-                CompetitionClassesTdbIds = new[] { 490704 },
+                CompetitionClassesTdbIds = new[] { 515965 },
                 StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 1, TestNumber = 2},
                 }
@@ -432,7 +433,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses // tekn
             {
-                CompetitionClassesTdbIds = new[] { 490704 },
+                CompetitionClassesTdbIds = new[] { 515965 },
                 StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 2, TestNumber = 3},
                 }
@@ -442,7 +443,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490705, 490707, 490708 },
+                CompetitionClassesTdbIds = new[] { 515966, 515968, 515969 },
                 StepMoment = new StepMoment[] {
                     new StepMoment {StartListClassStepId = 2, TestNumber = 2},
                 }
@@ -453,7 +454,7 @@ namespace WebApplication1.Controllers
 
             startListTdbClass = new StartListTdbClasses
             {
-                CompetitionClassesTdbIds = new[] { 490716, 490717 }, // skritt klass individue och lätt
+                CompetitionClassesTdbIds = new[] { 515978 }, // skritt klass individue och lätt
                 StepMoment = new StepMoment[]
                 {
                     new StepMoment { StartListClassStepId = 46, TestNumber = 1 },
