@@ -16,3 +16,7 @@ Sätt IsActive till 0
 SELECT        TOP (200) StartListClassStepId, StartNumber, TeamTestnumber, VaultingTeamId, Name, HorseName, IsActive, Expr1, Contest_ContestId, startlistclassstartorder
 FROM            aHorseOrderTeamIsActive
 WHERE        (Name LIKE '%Di%')
+
+Skapa protkoll bara för en startklass
+Sök efter nedan i koden:
+foreach (var startListClassStep in startListClassStepOrdered)
