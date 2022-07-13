@@ -68,14 +68,16 @@ namespace WebApplication1.Controllers
             {
                 //if (startListClassStep.Date > new DateTime(2018, 9, 7, 22, 0, 0) &&
                 //    startListClassStep.Date < new DateTime(2018, 9, 8, 23, 0, 0))
-                //if (startListClassStep.StartListClassStepId == 8) // junior minior grund final sm 2018
-                //if (startListClassStep.StartListClassStepId == 1080) // junior minior kur final sm 2018
-                //if (startListClassStep.StartListClassStepId == 6) // Svår klass Lag seniorer – kür final
-                //if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
-                //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
-                //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
+                //if (startListClassStep.StartListClassStepId == 2095) // Lätt klass Indiviuell sm 2022
+                //if (startListClassStep.StartListClassStepId == 2093) // Lätt klass lag sm 2022
+                //if (startListClassStep.StartListClassStepId == 5) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 1059) // Svår klass 1, Seniorlag SM klass- Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 1066) // Svår klass 3, 4, 5, 6 Individuella – Grund - Grund sm 2022
+                if (startListClassStep.StartListClassStepId == 5 || startListClassStep.StartListClassStepId == 1059 || startListClassStep.StartListClassStepId == 1066) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
+
+               
                 //                if (startListClassStep.Date.Day== new DateTime(2019,07, 14).Day)
-               //if (startListClassStep.StartListClassStepId == 1 )
+                //if (startListClassStep.StartListClassStepId == 1 )
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
