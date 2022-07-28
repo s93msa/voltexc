@@ -68,16 +68,33 @@ namespace WebApplication1.Controllers
             {
                 //if (startListClassStep.Date > new DateTime(2018, 9, 7, 22, 0, 0) &&
                 //    startListClassStep.Date < new DateTime(2018, 9, 8, 23, 0, 0))
-                //if (startListClassStep.StartListClassStepId == 2095) // Lätt klass Indiviuell sm 2022
+                //if (startListClassStep.StartListClassStepId == 2095 || startListClassStep.StartListClassStepId == 3092 || startListClassStep.StartListClassStepId == 3093 || startListClassStep.StartListClassStepId == 2093) // Lätt klass Indiviuell sm 2022
                 //if (startListClassStep.StartListClassStepId == 2093) // Lätt klass lag sm 2022
                 //if (startListClassStep.StartListClassStepId == 5) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
                 //if (startListClassStep.StartListClassStepId == 1059) // Svår klass 1, Seniorlag SM klass- Grund sm 2022
                 //if (startListClassStep.StartListClassStepId == 1066) // Svår klass 3, 4, 5, 6 Individuella – Grund - Grund sm 2022
-                if (startListClassStep.StartListClassStepId == 5 || startListClassStep.StartListClassStepId == 1059 || startListClassStep.StartListClassStepId == 1066) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
-
-               
+                //if (startListClassStep.StartListClassStepId == 5 || startListClassStep.StartListClassStepId == 1059 || startListClassStep.StartListClassStepId == 1066) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 2093) // Lätt klass lag sm 2022
+                //if (startListClassStep.StartListClassStepId == 9) // Svår klass 3, 4, 5, 6 Individuella – Kür  sm 2022
+                //if (startListClassStep.StartListClassStepId == 20) // Pas de deux omg 1
+                //if (startListClassStep.StartListClassStepId == 1062) // Svår klass 2, Juniorlag SM klass SM 2022
+                //if (startListClassStep.StartListClassStepId == 1061) // Svår klass 1 Lag seniorer – Kür SM 2022
+                //if (startListClassStep.StartListClassStepId == 9 || 
+                //startListClassStep.StartListClassStepId == 20 ||
+                //    startListClassStep.StartListClassStepId == 1062 ||
+                //    startListClassStep.StartListClassStepId == 1061
+                //    ) //  sm 2022 på fredag förmiddag innan final
                 //                if (startListClassStep.Date.Day== new DateTime(2019,07, 14).Day)
                 //if (startListClassStep.StartListClassStepId == 1 )
+
+                //if (startListClassStep.StartListClassStepId == 1063) // Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
+                //if (startListClassStep.StartListClassStepId == 6) // Svår klass 1, Seniorlag SM klass – Kür final SM 2022
+                //if (startListClassStep.StartListClassStepId == 1065) // Svår klass 3, 4, 5, 6  SM klass Individuella -  kür final SM 2022
+                //if (startListClassStep.StartListClassStepId == 1064) // Svår klass 3, 4, 5, 6  SM klass Individuella -  Teknisk kür eller grund SM 2022
+                if (startListClassStep.StartListClassStepId == 22 || startListClassStep.StartListClassStepId == 1063 || startListClassStep.StartListClassStepId == 6) 
+                                                                                // 22 pas de deux final - 
+                                                                                // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
+                                                                                // 6 Svår klass 1, Seniorlag SM klass – Kür final
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
