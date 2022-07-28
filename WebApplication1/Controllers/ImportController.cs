@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Import;
+using WebApplication1.Controllers.DTO;
 using WebApplication1.Models;
 using WebApplication1.ViewModels;
 
@@ -107,66 +108,128 @@ namespace WebApplication1.Controllers
 
         private Dictionary<int, Changed> ImportTeams(ExcelImportService excelImportService)
         {
-            int StartListClassStepId;
-            int[] competionClassesTdbIds;
-            int testNumber;
             Dictionary<int, Changed> TeamsStartlistChanged = new Dictionary<int, Changed>();
-            Changed changed;
-
-            //TeamsStartlistChanged = TeamOneDayTraHast(excelImportService, TeamsStartlistChanged);
-    //        TeamsStartlistChanged = TeamOneDayCompetion(excelImportService, TeamsStartlistChanged);
-            TeamsStartlistChanged = TeamSMCompetion(excelImportService, TeamsStartlistChanged);
+  
+       //     TeamsStartlistChanged = TeamOneDayTraHast(excelImportService, TeamsStartlistChanged);
+       //     TeamsStartlistChanged = TeamOneDayCompetion(excelImportService, TeamsStartlistChanged);
+           TeamsStartlistChanged = TeamSMCompetion(excelImportService, TeamsStartlistChanged);
 
             return TeamsStartlistChanged;
         }
 
         private Dictionary<int, Changed> TeamOneDayCompetion(ExcelImportService excelImportService, Dictionary<int, Changed> TeamsStartlistChanged)
         {
-            int[] competionClassesTdbIds;
-            int StartListClassStepId;
-            int testNumber;
-            Changed changed;
-            //senior lag
-            competionClassesTdbIds = new[] {404696};
-            StartListClassStepId = 18; // Svår klass lag seniorer klass 1 -Grund 
-            testNumber = 1;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            var startListTdbClasses = new List<StartListTdbClasses>();
 
-            StartListClassStepId = 7; //Svår klass lag seniorer klass 1 – Kür
-            testNumber = 2;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            var startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564867},             //senior lag
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 18, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 7, TestNumber = 2 }
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
-      
-            //Junior lag
-            competionClassesTdbIds = new[] { 404697 };
-            StartListClassStepId = 16; // Svår klass juniorlag klass 2 -Grund  
-            testNumber = 1;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564875 },
+                StepMoment = new StepMoment[]
+    {
+                    new StepMoment { StartListClassStepId = 55, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 56, TestNumber = 2 },
+    }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
-            StartListClassStepId = 10; //Svår klass lag junior – Kür
-            testNumber = 2;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564868 },            //Junior lag
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 16, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 10, TestNumber = 2 }
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564879 },  //Skrittklass, lag typ 1
+       
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 43, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 43, TestNumber = 2 },
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564880 },           
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 2090, TestNumber = 1 },
+                    new StepMoment { StartListClassStepId = 2090, TestNumber = 2 }
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 515979 },
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 2087, TestNumber = 1 },
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
+
+
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 490712 },           //Mixklass E lag
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 52, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 52, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 535188 },           //Mixklass D lag
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 2088, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 2088, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
+
+            TeamsStartlistChanged = ImportTeam(excelImportService, TeamsStartlistChanged, startListTdbClasses);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 441653},          //Lätt klass Lag galopp och skritt  
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 43, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 43, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
 
             //StartListClassStepId = 1063; //Svår klass lag seniorer klass 1 – Kür
             //testNumber = 3;
             //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             //TeamsStartlistChanged.Add(StartListClassStepId, changed);
-
-            //Mixklass lag
-            competionClassesTdbIds = new[] { 404706 };
-            StartListClassStepId = 52; //Grund och kür 
-            testNumber = 1;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
-
-            StartListClassStepId = 52; //Grund och kür 
-            testNumber = 2;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
 
             //Mellanklass lag
@@ -181,19 +244,11 @@ namespace WebApplication1.Controllers
             //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             //TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
-            ////Lätt klass Lag galopp och skritt  
-            competionClassesTdbIds = new[] { 404707, 404708 };
-            StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 grund
-            testNumber = 1;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
             //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
             //_updateService.UpdateTeamHorseOrders(horseOrders);
 
-            StartListClassStepId = 43; // Lätt klass Lag galopp klass 12 kür
-            testNumber = 2;
-            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            //TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
             //horseOrders = excelImportService.GetHorseOrdersTeam(competionClassesTdbIds, StartListClassStepId, testNumber);
             //_updateService.UpdateTeamHorseOrders(horseOrders);
 
@@ -208,6 +263,8 @@ namespace WebApplication1.Controllers
             //ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             return TeamsStartlistChanged;
         }
+
+
         private Dictionary<int, Changed> TeamSMCompetion(ExcelImportService excelImportService, Dictionary<int, Changed> TeamsStartlistChanged)
         {
             int[] competionClassesTdbIds;
@@ -215,7 +272,7 @@ namespace WebApplication1.Controllers
             int testNumber;
             Changed changed;
             //senior lag
-            competionClassesTdbIds = new[] { 425383};
+            competionClassesTdbIds = new[] { 571814};
             StartListClassStepId = 1059; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -233,7 +290,7 @@ namespace WebApplication1.Controllers
 
 
             //Junior lag
-            competionClassesTdbIds = new[] { 425384};
+            competionClassesTdbIds = new[] { 571815};
             StartListClassStepId = 5; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -249,18 +306,65 @@ namespace WebApplication1.Controllers
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
-            //Mixklass lag
-            //competionClassesTdbIds = new[] { 404706 };
-            //StartListClassStepId = 52; //Grund och kür 
-            //testNumber = 1;
-            //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            //TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            //Pas de deux Pas de Deux SM
+            competionClassesTdbIds = new[] { 571820 };
+            StartListClassStepId = 20; //kür 
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
-            //StartListClassStepId = 52; //Grund och kür 
-            //testNumber = 2;
-            //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            //TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+            StartListClassStepId = 22; //kür 
+            testNumber = 2;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
+            //Mixklass D
+            competionClassesTdbIds = new[] { 571829 };
+            StartListClassStepId = 3091; //Grund och kür 
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            StartListClassStepId = 3091; //Grund och kür 
+            testNumber = 2;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            //Mixklass E
+            competionClassesTdbIds = new[] { 571830 };
+            StartListClassStepId = 3092; //Grund och kür 
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            StartListClassStepId = 3092; //Grund och kür 
+            testNumber = 2;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            //Lätt klass lag
+            competionClassesTdbIds = new[] { 571827 };
+            StartListClassStepId = 2093; //Grund och kür 
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            StartListClassStepId = 2093; //Grund och kür 
+            testNumber = 2;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            //Skrittklass lag typ 1
+            competionClassesTdbIds = new[] { 571831 };
+            StartListClassStepId = 3093; //Grund och kür 
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
+
+            StartListClassStepId = 3093; //Grund och kür 
+            testNumber = 2;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
             //Mellanklass lag
             //competionClassesTdbIds = new[] {388234};
@@ -274,7 +378,7 @@ namespace WebApplication1.Controllers
             //changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             //TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
-           
+
             return TeamsStartlistChanged;
         }
         private Dictionary<int, Changed> TeamOneDayTraHast(ExcelImportService excelImportService, Dictionary<int, Changed> TeamsStartlistChanged)
@@ -284,7 +388,7 @@ namespace WebApplication1.Controllers
             int testNumber;
             Changed changed;
             //Senior lag
-            competionClassesTdbIds = new[] { 1 };
+            competionClassesTdbIds = new[] { 4 };
             StartListClassStepId = 18; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -297,7 +401,7 @@ namespace WebApplication1.Controllers
 
 
             //Junior lag
-            competionClassesTdbIds = new[] { 2 };
+            competionClassesTdbIds = new[] { 3 };
             StartListClassStepId = 16; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -309,24 +413,30 @@ namespace WebApplication1.Controllers
             TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
             //Pas de deux
-            competionClassesTdbIds = new[] { 4 };
+            competionClassesTdbIds = new[] { 5 };
             StartListClassStepId = 1081; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
             //Lättklass lag
-            competionClassesTdbIds = new[] { 10 };
-            StartListClassStepId = 43; // SLättklass lag -Grund  
+            competionClassesTdbIds = new[] { 10007 };
+            StartListClassStepId = 40; // SLättklass lag -Grund  
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
-            StartListClassStepId = 43; //Lättklass lag – Kür
+            StartListClassStepId = 40; //Lättklass lag – Kür
             testNumber = 2;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
+            //Showklass par
+            competionClassesTdbIds = new[] { 6 };
+            StartListClassStepId = 1089; // SLättklass lag -Grund  
+            testNumber = 1;
+            changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            TeamsStartlistChanged = AddToChangedLogg(TeamsStartlistChanged, StartListClassStepId, changed);
 
             return TeamsStartlistChanged;
         }
@@ -348,12 +458,9 @@ namespace WebApplication1.Controllers
 
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividuals(ExcelImportService excelImportService)
         {
-            int StartListClassStepId;
-            int[] competionClassesTdbIds;
-            int testNumber;
             var individualStartlistChanged = new Dictionary<int, UpdateService.NewHordeorders>();
-            UpdateService.NewHordeorders newHordeorders;
 
+//            individualStartlistChanged = ImportIndividualTraHastCompetition(excelImportService, individualStartlistChanged);
 //            individualStartlistChanged = ImportIndividualOnedayCompetition(excelImportService, individualStartlistChanged);
             individualStartlistChanged = ImportIndividualSmCompetition(excelImportService, individualStartlistChanged);
 
@@ -363,42 +470,94 @@ namespace WebApplication1.Controllers
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividualOnedayCompetition(ExcelImportService excelImportService,
             Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged)
         {
-            int[] competionClassesTdbIds;
-            int StartListClassStepId;
-            int testNumber;
-            UpdateService.NewHordeorders newHordeorders;
-// individuella
-            //Svår klass alla klasser
-            competionClassesTdbIds =
-                new[] { 404699, 404700, 404701, 404702 }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+            var startListTdbClasses = new List<StartListTdbClasses>();
 
-            StartListClassStepId = 1;
-            testNumber = 1;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+            //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+            var startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564869, 564870, 564872, 564873},
+                StepMoment = new StepMoment[] {
+                    new StepMoment {StartListClassStepId = 1, TestNumber = 1},
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
-            competionClassesTdbIds = new[] { 404699 }; //Svår klass senio individuella senior med  tekn
+            startListTdbClass = new StartListTdbClasses // tekn
+            {
+                CompetitionClassesTdbIds = new[] { 564869 },
+                StepMoment = new StepMoment[] {
+                    new StepMoment {StartListClassStepId = 1, TestNumber = 2},
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
-            StartListClassStepId = 1; // Svår klass individuella Juniorer-Miniorer – tekn Kür
-            testNumber = 2;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
-
-            competionClassesTdbIds = new[] { 404699 }; //Svår klass senio individuella senior med  tekn
-
-            StartListClassStepId = 2; // Svår klass individuella Juniorer-Miniorer – Kür
-            testNumber = 3;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+            startListTdbClass = new StartListTdbClasses // tekn
+            {
+                CompetitionClassesTdbIds = new[] { 564869 },
+                StepMoment = new StepMoment[] {
+                    new StepMoment {StartListClassStepId = 2, TestNumber = 3},
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
 
-            competionClassesTdbIds =
-                new[] { 404700, 404701, 404702 }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564870, 564872, 564873 },
+                StepMoment = new StepMoment[] {
+                    new StepMoment {StartListClassStepId = 2, TestNumber = 2},
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
 
-            StartListClassStepId = 2; // Svår klass individuella Sen utan tekn Juniorer-Miniorer – Kür
-            testNumber = 2;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+            startListTdbClass = new StartListTdbClasses
+            {
+                CompetitionClassesTdbIds = new[] { 564882 }, 
+                StepMoment = new StepMoment[]
+                {
+                    new StepMoment { StartListClassStepId = 2090, TestNumber = 1 }, //Pay and vault
+                    new StepMoment { StartListClassStepId = 2090, TestNumber = 2 }
+                }
+            };
+            startListTdbClasses.Add(startListTdbClass);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 535193}, // skritt klass individue och lätt
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 39, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 39, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 535194 }, // skritt klass individue och lätt
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 46, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 46, TestNumber = 2 }
+            //    }
+            //};
+            //startListTdbClasses.Add(startListTdbClass);
+
+            //startListTdbClass = new StartListTdbClasses
+            //{
+            //    CompetitionClassesTdbIds = new[] { 9999 }, // skritt klass individue
+            //    StepMoment = new StepMoment[]
+            //    {
+            //        new StepMoment { StartListClassStepId = 2083, TestNumber = 1 },
+            //        new StepMoment { StartListClassStepId = 2083, TestNumber = 2 }
+            //    }
+            //};
+
+            //startListTdbClasses.Add(startListTdbClass);
+
+            individualStartlistChanged = ImportIndividual(excelImportService, individualStartlistChanged, startListTdbClasses);
+
+
 
             //StartListClassStepId = 1065; // Svår klass individuella Juniorer-Miniorer – Kür
             //testNumber = 4;
@@ -424,17 +583,8 @@ namespace WebApplication1.Controllers
             //individualStartlistChanged.Add(StartListClassStepId, newHordeorders);
 
 
-            competionClassesTdbIds = new[] { 404710, 404711 };
-            StartListClassStepId = 46; // Lätt klass individuell galopp coh skritt  klass 7,8
-            testNumber = 1;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
-            StartListClassStepId = 46; // Lätt klass individuell galopp och skritt klass 7,8
-            testNumber = 2;
-            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
-            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
-
+ 
             //competionClassesTdbIds = new [] { 350455 };
             //StartListClassStepId = 39; // Lätt klass individuell galopp klass 8
             //testNumber = 1;
@@ -446,6 +596,40 @@ namespace WebApplication1.Controllers
             return individualStartlistChanged;
         }
 
+        private Dictionary<int, UpdateService.NewHordeorders> ImportIndividual(ExcelImportService excelImportService, Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged,
+            List<StartListTdbClasses> startListTdbClasses)
+        {
+            foreach (var startListTdbClassItem in startListTdbClasses)
+            {
+                foreach (var stepMoment in startListTdbClassItem.StepMoment)
+                {
+                    var newHordeorders = ImportIndividual(excelImportService, startListTdbClassItem.CompetitionClassesTdbIds,
+                        stepMoment.StartListClassStepId, stepMoment.TestNumber);
+                    individualStartlistChanged = UpdateChangeList(individualStartlistChanged, stepMoment.StartListClassStepId,
+                        newHordeorders);
+                }
+            }
+
+            return individualStartlistChanged;
+        }
+
+        private Dictionary<int, Changed> ImportTeam(ExcelImportService excelImportService, Dictionary<int, Changed> teamsStartlistChanged,
+            List<StartListTdbClasses> startListTdbClasses)
+        {
+            foreach (var startListTdbClassItem in startListTdbClasses)
+            {
+                foreach (var stepMoment in startListTdbClassItem.StepMoment)
+                {
+                    var changed = ImportTeam(excelImportService, startListTdbClassItem.CompetitionClassesTdbIds,
+                        stepMoment.StartListClassStepId, stepMoment.TestNumber);
+                    teamsStartlistChanged = AddToChangedLogg(teamsStartlistChanged, stepMoment.StartListClassStepId, changed);
+                }
+            }
+
+            return teamsStartlistChanged;
+        }
+
+
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividualSmCompetition(ExcelImportService excelImportService,
         Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged)
         {
@@ -456,9 +640,8 @@ namespace WebApplication1.Controllers
 
 
             competionClassesTdbIds =
-                new[] { 425385, 425386,
-                    425387, 425388,
-                    425393, 425394}; //individuella 
+                new[] { 571816, 571817, 571818, 571819, // SM
+                    571821, 571822, 571823, 571824, 571825}; //individuella 
 
             StartListClassStepId = 1066;
             testNumber = 1;
@@ -471,8 +654,7 @@ namespace WebApplication1.Controllers
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
             competionClassesTdbIds =
-                new[] { 425385, 425386,
-                    425387, 425388}; //individuella exlusive nationella
+                new[] { 571816, 571817, 571818, 571819 }; //individuella exlusive nationella
 
 
             StartListClassStepId = 1064; // Svår klass individuella senior – tekn Kür och grund för ej tekn
@@ -486,7 +668,17 @@ namespace WebApplication1.Controllers
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
+            competionClassesTdbIds =
+                new[] { 571828 }; // 15	Lättklass, Individuell grund och kür 
 
+            StartListClassStepId = 2095; 
+            testNumber = 1;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            testNumber = 2;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
 
 
@@ -571,15 +763,29 @@ namespace WebApplication1.Controllers
             // individuella
             //Svår klass alla klasser
             competionClassesTdbIds =
-                new[] { 5, 6, 7, 8 ,9  }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+                new[] { 100, 1, 2  }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
 
             StartListClassStepId = 1;
             testNumber = 1;
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
 
+            competionClassesTdbIds =
+                new[] { 2 }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
 
-            StartListClassStepId = 1; 
+            testNumber = 2;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            competionClassesTdbIds =
+    new[] { 2 }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+            testNumber = 3;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            competionClassesTdbIds =
+    new[] { 100, 1 }; //Svår klass individuella senior med och utan tekn, Juniorer-Miniorer
+
             testNumber = 2;
             newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
@@ -598,6 +804,21 @@ namespace WebApplication1.Controllers
             //testNumber = 2;
             //newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
             //individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+
+            //Clear Round
+            competionClassesTdbIds =
+               new[] { 10004 }; 
+
+            StartListClassStepId = 1086;
+            testNumber = 1;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
+            testNumber = 2;
+            newHordeorders = ImportIndividual(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
+            individualStartlistChanged = UpdateChangeList(individualStartlistChanged, StartListClassStepId, newHordeorders);
+
 
             return individualStartlistChanged;
         }

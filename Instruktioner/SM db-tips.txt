@@ -1,0 +1,22 @@
+Ändra startNumber i
+SELECT        TOP (200) StartListClassId, StartListClassStepId, StartOrder, Contest_ContestId, HorseId, HorseName, StartNumber, HorseOrderId, Name
+FROM            aStartListHorses
+WHERE        (StartListClassStepId = 1063)
+ORDER BY StartOrder, StartNumber
+
+Inaktivera voltigör
+Sätt IsActive till 0
+SELECT        TOP (200) IsActive, Name, VaultingClassId, Expr1, Contest_ContestId, HorseOrderId, VaulterOrderID, VaulterId, StartListClassStepId, horsestartnumber, vaulterStartorder
+FROM            aHorseOrderVaulterActive
+WHERE        (Name LIKE '%Amalia%')
+ORDER BY StartListClassStepId, horsestartnumber, vaulterStartorder
+
+Inaktivera lag
+Sätt IsActive till 0
+SELECT        TOP (200) StartListClassStepId, StartNumber, TeamTestnumber, VaultingTeamId, Name, HorseName, IsActive, Expr1, Contest_ContestId, startlistclassstartorder
+FROM            aHorseOrderTeamIsActive
+WHERE        (Name LIKE '%Di%')
+
+Skapa protkoll bara för en startklass
+Sök efter nedan i koden:
+foreach (var startListClassStep in startListClassStepOrdered)

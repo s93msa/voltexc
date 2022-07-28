@@ -128,6 +128,10 @@ namespace WebApplication1.Business.Logic.Import
                         existingClass.ClassName = competitionClass.ClassName;
                         existingClass.ClassNr = competitionClass.ClassNr;
                         existingClass.ClassTdbId = competitionClass.ClassTdbId;
+                        if (competitionClass.ScoreSheetId > 0)
+                        {
+                            existingClass.ScoreSheetId = competitionClass.ScoreSheetId;
+                        }
                         updatedClasses.Add(existingClass);
                     }
                 }
@@ -489,7 +493,8 @@ namespace WebApplication1.Business.Logic.Import
             var newVaulterOrders = new List<VaulterOrder>();
             var existingHorseOrders = GetExistingHorseOrderIndividual(horseOrder);
             var horseOrderIds = existingHorseOrders.Select(x => x.HorseOrderId).ToArray();
-            var startOrder = 1;
+            var vaulterWithMaxStartOrder = existingHorseOrders.FirstOrDefault()?.Vaulters.OrderByDescending(x => x.StartOrder).FirstOrDefault();
+            var startOrder = vaulterWithMaxStartOrder == null ? 1 : (vaulterWithMaxStartOrder.StartOrder + 1);
             foreach (var importedVaulterOrder in horseOrder.Vaulters)
             {
                 var vaulterId = GetExistingVaulter(importedVaulterOrder.Participant).VaulterId;
@@ -615,7 +620,8 @@ namespace WebApplication1.Business.Logic.Import
         private static bool NotEqual(CompetitionClass competitionClass, CompetitionClass existingClass)
         {
             return existingClass.ClassName != competitionClass.ClassName ||
-                   existingClass.ClassTdbId != competitionClass.ClassTdbId;
+                   existingClass.ClassTdbId != competitionClass.ClassTdbId ||
+                 (competitionClass.ScoreSheetId > 0 && existingClass.ScoreSheetId != competitionClass.ScoreSheetId);
         }
 
         private static bool NotEqual(Vaulter vaulter, Vaulter existingVaulter)

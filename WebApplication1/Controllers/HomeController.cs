@@ -1,221 +1,47 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using System.Xml.Serialization;
-using AutoMapper;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Business.Logic.Excel;
 using WebApplication1.Classes;
 using WebApplication1.Models;
-using WebApplication1.ViewModels;
+using WebApplication1.Business.Logic.Excel.Results;
+using WebApplication1.Business.Logic.Result;
+using System;
 
 namespace WebApplication1.Controllers
 {
 
     public class HomeController : Controller
     {
+        public ExcelResultService _excelResultService;
+        public ResultService _resultService;
+
+        public HomeController()
+        {
+            _excelResultService = new ExcelResultService();
+            _resultService = new ResultService();
+        }
+
         public ActionResult Index()
         {
             var contest = ContestService.GetNewDataFromDatabase();
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult CreatePreResultInformationExcel()
         {
-            ViewBag.Message = "Your application description page.";
+            var participants = _resultService.GetParticipants();
+            var classes = _resultService.GetClasses();
+
+            _excelResultService.SetVaulterList(participants.ToArray());
+            _excelResultService.SetCompetitionClasses(classes.ToArray());
+
+            _excelResultService.SaveWithTimeStamp();
+
+            ViewBag.Message = "Excel skapad";
 
             return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        public ActionResult CompetitionClasses()
-        {
-
-           // var contest = ContestService.GetContestInstance();
-            var judges = ContestService.GetJudgesPerStep();
-
-            var competitionClassesViewModel = new CompetitionClassesViewModel();
-            using (var db = new VaultingContext())
-            {
-                var contest = ContestService.GetContestInstance();
-                var competitionClasses = db.CompetitionClasses.OrderBy(x => x.ClassNr);
-                var startListClassSteps = db.StartListClassSteps.ToDictionary(x => x.StartListClassStepId, x => x);
-                var classesList = GetAllClassesWithAtleastOneParticipant(db);
-
-
-                foreach (var competitionClass in competitionClasses.ToList())
-                {
-              
-                    if(competitionClass.ClassNr == "0")
-                        continue;
-                    if(competitionClass.GetCompetitionSteps(contest.TypeOfContest).Count == 0)
-                        continue;
-                    if(!classesList.Contains(competitionClass.CompetitionClassId))
-                    { continue;}
-
-                    var classNumber = competitionClass.ClassNr;
-                    var className = competitionClass.ClassName;
-                    var numberOfJudges = "0";
-                    var steps = new string[4];
-                    var momentText = new string[4];
-                    var judgesString1 = GetJudgesString(judges, startListClassSteps, classNumber, 1);
-                    var judgesString2 = GetJudgesString(judges, startListClassSteps, classNumber, 2);
-                    var judgesString3 = GetJudgesString(judges, startListClassSteps, classNumber, 3);
-                    var judgesString4 = GetJudgesString(judges, startListClassSteps, classNumber, 4);
-
-                    var stepsList = GetStepsForThisTypeOfCompetition(competitionClass);
-
-                    foreach (var step in stepsList)
-                    {
-
-                        if (step.TestNumber < 1) continue;
-
-                        steps[step.TestNumber - 1] = step.Name;
-                        momentText[step.TestNumber - 1] = step.ResultMomentText;
-
-                    }
-
-                    var competitionClassInfo = new CompetitionClassViewModel
-                    {
-                        ClassNumber = classNumber,
-                        ClassName = className,
-                        NumberOfJudges = numberOfJudges,
-                        Moment1 = steps[0],
-                        Moment2 = steps[1],
-                        Moment3 = steps[2],
-                        Moment4 = steps[3],
-                        Moment1Header = momentText[0],
-                        Moment2Header = momentText[1],
-                        Moment3Header = momentText[2],
-                        Moment4Header = momentText[3],
-                        JudgesMoment1 = judgesString1,
-                        JudgesMoment2 = judgesString2,
-                        JudgesMoment3 = judgesString3,
-                        JudgesMoment4 = judgesString4
-                    };
-
-                    competitionClassesViewModel.CompetitionClassesInformation.Add(competitionClassInfo);
-                }
-
-            }
-
-            return View(competitionClassesViewModel);
-        }
-
-        private static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
-        {
-            var classesList = GetAllClassesWithAtLeastOneVaulter(db);
-            classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
-            return classesList;
-        }
-
-        private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
-        {
-            return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
-        }
-
-        private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
-        {
-            return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
-        }
-
-        private static List<Step> GetStepsForThisTypeOfCompetition(CompetitionClass competitionClass)
-        {
-            var contest = ContestService.GetContestInstance();
-            return competitionClass.GetCompetitionSteps(contest.TypeOfContest);
-        }
-
-
-        private static string GetJudgesString(Dictionary<string, int> judges, Dictionary<int, StartListClassStep> startListClassSteps, string classNumber, int testNumber)
-        {
-            string judgesString = GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.A, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.B, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.C, testNumber);
-            judgesString += GetJudgeName(judges, classNumber, startListClassSteps, JudgeTableNames.D, testNumber);
-            return judgesString.TrimStart(',').TrimStart();
-        }
-
-        private static string GetJudgeName(Dictionary<string, int> stepsrelation, string classNumber, Dictionary<int, StartListClassStep> startListClassSteps,
-            JudgeTableNames judgeTableName, int testNumber)
-        {
-
-            int startliststep;
-            StartListClassStep startListClassStep = null;
-            if(stepsrelation.TryGetValue(classNumber + "_" + testNumber, out startliststep))
-                startListClassSteps.TryGetValue(startliststep, out startListClassStep);
-            var judgeName = startListClassStep?.GetJudgeName(judgeTableName);
-            if (string.IsNullOrWhiteSpace(judgeName))
-                return "";
-
-            return ", " + judgeName;
-        }
-
-        public ActionResult ResultVaulterList()
-        {
-            var rows = new List<string[]>();   
-
-            var contest = ContestService.GetContestInstance();
-            foreach (var startListClassStep in contest.StartListClassStep.OrderBy(x => x.StartOrder))
-            {
-                foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
-                {
-                    var horseName = startListItem.HorseInformation?.HorseName;
-                    var horseId = startListItem.HorseInformation?.HorseId ?? 0;
-                    var lungerName = startListItem.HorseInformation?.Lunger?.LungerName;
-
-                    if (startListItem.IsTeam)
-                    {
-                        var testnumber = startListItem.TeamTestnumber;
-                        if (testnumber > 1) continue;
-                        var vaultingClass = startListItem.VaultingTeam.VaultingClass;
-                        var vaultingClassNr = vaultingClass?.ClassNr.ToString();
-                        var teamName = startListItem.VaultingTeam.Name;
-                        var clubName = startListItem.VaultingTeam.VaultingClub.ClubName;
-                        clubName += " (" + startListItem.VaultingTeam.VaultingClub.Country + ")";
-                       // var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
-                        var teamId = ContestService.GetTeamExcelId(startListItem.VaultingTeam, horseId);
-                        var row = new string[] { vaultingClassNr, teamName, lungerName, clubName, horseName, teamId };
-                        rows.Add(row);
-                    }
-                    else
-                    {
-                        foreach (var participant in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
-                        {
-                            var testnumber = participant.Testnumber;
-                            if (testnumber > 1) continue;
-
-                            var vaultingClass = participant.Participant.VaultingClass;
-                            var vaultingClassNr = vaultingClass?.ClassNr;
-                            var vaulterName = participant.Participant.Name;
-                            var clubName = participant.Participant.VaultingClub?.ClubName;
-                            clubName += " (" + participant.Participant.VaultingClub?.Country + ")";
-
-                            //var step = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaultingClass, testnumber);
-                            string vaulterId = ContestService.GetVaulterExcelId(participant.Participant, horseId);
-                            var row = new string[] { vaultingClassNr, vaulterName, lungerName, clubName, horseName, vaulterId };
-
-                            rows.Add(row);
-                        }
-                    }
-                }
-                
-            }
-           
-            return View(rows);
         }
 
         
@@ -242,20 +68,39 @@ namespace WebApplication1.Controllers
             {
                 //if (startListClassStep.Date > new DateTime(2018, 9, 7, 22, 0, 0) &&
                 //    startListClassStep.Date < new DateTime(2018, 9, 8, 23, 0, 0))
-                //if (startListClassStep.StartListClassStepId == 8) // junior minior grund final sm 2018
-                //if (startListClassStep.StartListClassStepId == 1080) // junior minior kur final sm 2018
-                //if (startListClassStep.StartListClassStepId == 6) // Svår klass Lag seniorer – kür final
-                //if (startListClassStep.StartListClassStepId == 1063) // Svår klass Lag juniorer – kür final                    
-                //if (startListClassStep.StartListClassStepId == 1065) // junior minior kur final sm 2018
-                //if (startListClassStep.StartListClassStepId == 1064) // teknisk kür  final sm 2018
+                //if (startListClassStep.StartListClassStepId == 2095 || startListClassStep.StartListClassStepId == 3092 || startListClassStep.StartListClassStepId == 3093 || startListClassStep.StartListClassStepId == 2093) // Lätt klass Indiviuell sm 2022
+                //if (startListClassStep.StartListClassStepId == 2093) // Lätt klass lag sm 2022
+                //if (startListClassStep.StartListClassStepId == 5) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 1059) // Svår klass 1, Seniorlag SM klass- Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 1066) // Svår klass 3, 4, 5, 6 Individuella – Grund - Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 5 || startListClassStep.StartListClassStepId == 1059 || startListClassStep.StartListClassStepId == 1066) // Svår klass 2, Juniorlag SM klass-  Grund sm 2022
+                //if (startListClassStep.StartListClassStepId == 2093) // Lätt klass lag sm 2022
+                //if (startListClassStep.StartListClassStepId == 9) // Svår klass 3, 4, 5, 6 Individuella – Kür  sm 2022
+                //if (startListClassStep.StartListClassStepId == 20) // Pas de deux omg 1
+                //if (startListClassStep.StartListClassStepId == 1062) // Svår klass 2, Juniorlag SM klass SM 2022
+                //if (startListClassStep.StartListClassStepId == 1061) // Svår klass 1 Lag seniorer – Kür SM 2022
+                //if (startListClassStep.StartListClassStepId == 9 || 
+                //startListClassStep.StartListClassStepId == 20 ||
+                //    startListClassStep.StartListClassStepId == 1062 ||
+                //    startListClassStep.StartListClassStepId == 1061
+                //    ) //  sm 2022 på fredag förmiddag innan final
                 //                if (startListClassStep.Date.Day== new DateTime(2019,07, 14).Day)
-                if (startListClassStep.StartListClassStepId == 6 || startListClassStep.StartListClassStepId == 1063)
+                //if (startListClassStep.StartListClassStepId == 1 )
+
+                //if (startListClassStep.StartListClassStepId == 1063) // Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
+                //if (startListClassStep.StartListClassStepId == 6) // Svår klass 1, Seniorlag SM klass – Kür final SM 2022
+                //if (startListClassStep.StartListClassStepId == 1065) // Svår klass 3, 4, 5, 6  SM klass Individuella -  kür final SM 2022
+                //if (startListClassStep.StartListClassStepId == 1064) // Svår klass 3, 4, 5, 6  SM klass Individuella -  Teknisk kür eller grund SM 2022
+                if (startListClassStep.StartListClassStepId == 22 || startListClassStep.StartListClassStepId == 1063 || startListClassStep.StartListClassStepId == 6) 
+                                                                                // 22 pas de deux final - 
+                                                                                // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
+                                                                                // 6 Svår klass 1, Seniorlag SM klass – Kür final
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
             }
                 
-            return View();
+            return View("CopyExcel");
         }
 
         private static void SaveInExcel(Contest contest, StartListClassStep startListClassStep, bool startNumberInFileName = false)
@@ -307,338 +152,6 @@ namespace WebApplication1.Controllers
                 }
         }
 
-        //private static void CreateExcelforIndividual(Contest contest, StartListClassStep startListClassStep,int startNumber, HorseOrder horseOrder, int startVaulterNumber, VaulterOrder vaulterOrder)
-        //{
-        //    var vaulter = vaulterOrder.Participant;
-        //    var vaulterClass = vaulter.VaultingClass;
-
-        //    var testNumber = vaulterOrder.Testnumber;
-        //    var step = GetCompetitionStep(vaulterClass, testNumber);
-        //    var vaultingClubName = vaulter.VaultingClub?.ClubName.Trim();
-        //    var horse = horseOrder.HorseInformation;
-        //    var lungerName = horse.Lunger.LungerName?.Trim();
-        //    var judgeTableA = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.A);
-        //    var judgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
-        //    var judgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
-        //    var judgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
-        //    //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-        //    //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-        //    //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-        //    //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-        //    var fileName = vaulterClass.Excelfile;
-        //    var workbook = new XLWorkbook(fileName);
-        //    //var vaulter = horseOrder.Participant;
-
-        //    if (vaulterClass.ClassNr == 4)
-        //    {
-        //        CreateExcelForClass4(contest, startListClassStep, startNumber,  vaulter, vaultingClubName,
-        //            horse, lungerName, judgeTableA, judgeTableB, judgeTableC, judgeTableD,
-        //            step, workbook);
-
-        //    }
-        //    else if (vaulterClass.ClassNr == 5)
-        //    {
-        //        CreateExcelForClass5(contest, startListClassStep, startNumber,  vaulter, vaultingClubName,
-        //            horse, lungerName, judgeTableA, judgeTableB, judgeTableC, judgeTableD,
-        //            step, workbook);
-        //        //workbook.Worksheets.Worksheet(3).Visibility = XLWorksheetVisibility.Hidden;
-
-        //        //var worksheetHorse = workbook.Worksheet(2);
-        //        //worksheetHorse.Cell(7, "c").Value = country;
-        //    }
-
-
-        //    // worksheetHorse.Cell(7, "d").Value = d?.Count;
-
-        //    //}
-        //}
-
-
-        //Individuella juniorer
-        //private static void CreateExcelForClass4(Contest contest, StartListClassStep startListClassStep, int  startNumber,  Vaulter vaulter, string vaultingClubName, Horse horse, string lungerName, JudgeTable JudgeTableA, JudgeTable JudgeTableB, JudgeTable JudgeTableC, JudgeTable JudgeTableD, Step step, XLWorkbook workbook)
-        //{
-
-        //    var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-        //    var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-        //    var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-        //    var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-        //    string testNumber = Convert.ToString(step?.TestNumber) + step?.Name;
-
-        //    var worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableA?.Trim());
-
-        //    SetWorksheetHorse(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableA?.JudgeName);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    var fileOutputname = GetOutputFilename(JudgeTableA, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableB?.Trim());
-
-        //    SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableB);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableB, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableC?.Trim());
-        //    SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableC);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableC, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableD?.Trim());
-        //    SetWorksheetIndividuellJuniorGrund2(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableD);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableD, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-        //}
-
-        ////Individuella miniorer
-        //private static void CreateExcelForClass5(Contest contest, StartListClassStep startListClassStep, int startNumber,  Vaulter vaulter, string vaultingClubName, Horse horse, string lungerName, JudgeTable JudgeTableA, JudgeTable JudgeTableB, JudgeTable JudgeTableC, JudgeTable JudgeTableD, Step step, XLWorkbook workbook)
-        //{
-
-        //    var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-        //    var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-        //    var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-        //    var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
-
-        //    string testNumber = Convert.ToString(step?.TestNumber) + step?.Name;
-
-        //    var worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableA?.Trim());
-
-        //    SetWorksheetHorse(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableA?.JudgeName);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    var fileOutputname = GetOutputFilename(JudgeTableA, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableB?.Trim());
-
-        //    SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableB);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableB, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableC?.Trim());
-        //    SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableC);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableC, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-
-
-
-        //    worksheet = workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTableD?.Trim());
-        //    SetWorksheetIndividuellMiniorGrund1(worksheet, contest, startListClassStep.Date, testNumber, startNumber, vaulter,
-        //            vaultingClubName, horse.HorseName, lungerName, JudgeTableD);
-
-        //    ShowOnlyWorksheet(workbook.Worksheets, worksheet);
-        //    fileOutputname = GetOutputFilename(JudgeTableD, startListClassStep, vaulter);
-        //    SaveExcelFile(workbook, fileOutputname);
-        //}
-
-        //private static void SaveExcelFile(XLWorkbook workbook, string fileName)
-        //{
-        //    string fileoutputname = @"C:\Temp\Test_Voligemallar\output\" + fileName + ".xlsx";
-        //    workbook.SaveAs(fileoutputname);
-        //}
-
-        //private static string GetOutputFilename(JudgeTable judgeTabel, StartListClassStep startListClassStep, Vaulter vaulter)
-        //{
-        //    return startListClassStep.Date.ToShortDateString() +  @"\" + judgeTabel.JudgeTableName + @"\" + startListClassStep.Name + @"\" + vaulter.Name + ".xlsx";
-        //}
-
-        //private static void ShowOnlyWorksheet(IXLWorksheets workbookWorksheets, IXLWorksheet worksheet)
-        //{
-        //    foreach (var currrentWorksheet in workbookWorksheets)
-        //    {
-        //        if (currrentWorksheet == worksheet)
-        //        {
-        //            currrentWorksheet.Visibility = XLWorksheetVisibility.Visible;
-        //            currrentWorksheet.TabActive = true;
-        //        }
-        //        else
-        //            currrentWorksheet.Hide(); //.Visibility = XLWorksheetVisibility.Hidden;
-        //    }
-        //}
-
-        //private static JudgeTable GetJudge(List<JudgeTable> judgeTables, JudgeTableNames tableName)
-        //{
-        //    foreach (var table in judgeTables)
-        //    {
-        //        if (table.JudgeTableName == tableName)
-        //            return table;
-        //    }
-        //    return null;
-        //}
-
-        //private static void SetWorksheetHorse(IXLWorksheet worksheet, Contest contest, DateTime stepDate, string moment , int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, string judgeName)
-        //{
-        //    const string tableName = "A";
-        //    var country = contest?.Country;
-        //    var eventLocation = contest?.Location;
-        //    var vaulterName = participant.Name;
-        //    var vaulterClass = participant.VaultingClass;
-        //    var armNumber = participant.Armband;
-
-        //    SetValueInWorksheet(worksheet, 3, "c", stepDate.ToShortDateString());
-        //    SetValueInWorksheet(worksheet, 4, "c", eventLocation);
-        //    SetValueInWorksheet(worksheet, 5, "c", vaulterName);
-        //    SetValueInWorksheet(worksheet, 6, "c", vaultingClubName);
-        //    SetValueInWorksheet(worksheet, 7, "c", country);
-        //    SetValueInWorksheet(worksheet, 8, "c", horseName);
-        //    SetValueInWorksheet(worksheet, 9, "c", lungerName);
-
-        //    SetValueInWorksheet(worksheet, 1, "l", startnumber.ToString());
-        //    SetValueInWorksheet(worksheet, 2, "l", tableName);
-        //    SetValueInWorksheet(worksheet, 3, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
-        //    SetValueInWorksheet(worksheet, 4, "l", moment);
-        //    SetValueInWorksheet(worksheet, 6, "l", armNumber);
-
-        //    SetValueInWorksheet(worksheet, 29, "c", judgeName);
-
-
-        //}
-        
-        //private static void SetWorksheetIndividuellMiniorGrund1(IXLWorksheet worksheet, Contest contest, DateTime stepDate, string moment, int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, JudgeTable judgeTable)
-        //{
-
-        //    var country = contest?.Country;
-        //    var eventLocation = contest?.Location;
-        //    var vaulterName = participant.Name;
-        //    var vaulterClass = participant.VaultingClass;
-        //    var armNumber = participant.Armband;
-
-        //    SetValueInWorksheet(worksheet, 4, "c", stepDate.ToShortDateString());
-        //    SetValueInWorksheet(worksheet, 5, "c", eventLocation);
-        //    SetValueInWorksheet(worksheet, 6, "c", vaulterName);
-        //    SetValueInWorksheet(worksheet, 7, "c", vaultingClubName);
-        //    SetValueInWorksheet(worksheet, 8, "c", country);
-        //    SetValueInWorksheet(worksheet, 9, "c", horseName);
-        //    SetValueInWorksheet(worksheet, 10, "c", lungerName);
-
-        //    SetValueInWorksheet(worksheet, 2, "l", startnumber.ToString());
-        //    SetValueInWorksheet(worksheet, 3, "l", judgeTable?.JudgeTableName.ToString());
-        //    SetValueInWorksheet(worksheet, 4, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
-        //    SetValueInWorksheet(worksheet, 5, "l", moment);
-        //    SetValueInWorksheet(worksheet, 7, "l", armNumber);
-
-        //    SetValueInWorksheet(worksheet, 32, "c", judgeTable?.JudgeName);
-
-
-        //}
-
-        //private static void SetWorksheetIndividuellJuniorGrund2(IXLWorksheet worksheet, Contest contest,  DateTime stepDate, string moment, int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, JudgeTable judgeTable)
-        //{
-            
-        //    var country = contest?.Country;
-        //    var eventLocation = contest?.Location;
-        //    var vaulterName = participant.Name;
-        //    var vaulterClass = participant.VaultingClass;
-        //    var armNumber = participant.Armband;
-
-        //    SetValueInWorksheet(worksheet, 4, "c", stepDate.ToShortDateString());
-        //    SetValueInWorksheet(worksheet, 5, "c", eventLocation);
-        //    SetValueInWorksheet(worksheet, 6, "c", vaulterName);
-        //    SetValueInWorksheet(worksheet, 7, "c", vaultingClubName);
-        //    SetValueInWorksheet(worksheet, 8, "c", country);
-        //    SetValueInWorksheet(worksheet, 9, "c", horseName);
-        //    SetValueInWorksheet(worksheet, 10, "c", lungerName);
-
-        //    SetValueInWorksheet(worksheet, 2, "l", startnumber.ToString());
-        //    SetValueInWorksheet(worksheet, 3, "l", judgeTable?.JudgeTableName.ToString());
-        //    SetValueInWorksheet(worksheet, 4, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
-        //    SetValueInWorksheet(worksheet, 5, "l", moment);
-        //    SetValueInWorksheet(worksheet, 7, "l", armNumber);
-
-        //    SetValueInWorksheet(worksheet, 32, "c", judgeTable?.JudgeName);
-
-
-        //}
-
-        //private static void SetWorksheetIndkürtekn2_3(IXLWorksheet worksheet, Contest contest, DateTime stepDate, string moment, int startnumber, Vaulter participant, string vaultingClubName, string horseName, string lungerName, JudgeTable judgeTable)
-        //{
-
-        //    var country = contest?.Country;
-        //    var eventLocation = contest?.Location;
-        //    var vaulterName = participant.Name;
-        //    var vaulterClass = participant.VaultingClass;
-        //    var armNumber = participant.Armband;
-
-        //    SetValueInWorksheet(worksheet, 4, "c", stepDate.ToShortDateString());
-        //    SetValueInWorksheet(worksheet, 5, "c", eventLocation);
-        //    SetValueInWorksheet(worksheet, 6, "c", vaulterName);
-        //    SetValueInWorksheet(worksheet, 7, "c", vaultingClubName);
-        //    SetValueInWorksheet(worksheet, 8, "c", country);
-        //    SetValueInWorksheet(worksheet, 9, "c", horseName);
-        //    SetValueInWorksheet(worksheet, 10, "c", lungerName);
-
-        //    SetValueInWorksheet(worksheet, 2, "l", startnumber.ToString());
-        //    SetValueInWorksheet(worksheet, 3, "l", judgeTable?.JudgeTableName.ToString());
-        //    SetValueInWorksheet(worksheet, 4, "l", vaulterClass.ClassNr + " (" + vaulterClass.ClassName + ")");
-        //    SetValueInWorksheet(worksheet, 5, "l", moment);
-        //    SetValueInWorksheet(worksheet, 7, "l", armNumber);
-
-        //    SetValueInWorksheet(worksheet, 37, "c", judgeTable?.JudgeName);
-
-
-        //}
-
-
-        //private static void SetValueInWorksheet(IXLWorksheet worksheet, int row, string column , string value)
-        //{
-        //    worksheet.Cell(row, column).Value = value;
-        //}
-
-        //private static void SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
-        //{
-        //    var linkTocell = worksheet.Workbook.NamedRange(cellName);
-        //    var g = GetNamedCell(worksheet, cellName);
-        //    worksheet.Cell(linkTocell.RefersTo.Split('!')[1]).Value = value;
-        //    //          worksheet.Workbook.Range(cellName).Cells();
-        //        //= value;
-        //}
-
-        //public static IXLCell GetNamedCell(IXLWorksheet worksheet, string namedCell)
-        //{
-        //    IXLNamedRange xlNamedRange = worksheet.NamedRange(namedCell);
-        //    if (xlNamedRange == null)
-        //        return (IXLCell)null;
-        //    IXLRange xlRange = xlNamedRange.Ranges.FirstOrDefault<IXLRange>();
-        //    if (xlRange == null)
-        //        return (IXLCell)null;
-        //    return xlRange.FirstCell();
-        //}
-
-
-       
-
-        //private static Step GetCompetitionStep(CompetitionClass vaulterClass, int testNumber)
-        //{
-        //    foreach (var step in vaulterClass.Steps)
-        //    {
-        //        if (testNumber == step.TestNumber)
-        //            return step;
-        //    }
-
-        //    return null;
-        //}
 
     }
 }

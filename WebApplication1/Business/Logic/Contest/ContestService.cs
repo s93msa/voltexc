@@ -563,6 +563,7 @@ namespace WebApplication1.Business.Logic.Contest
                     foreach (var horseOrder in _horseOrders)
                     {
                         var dummy1 = horseOrder.HorseInformation.Lunger;
+                        var dummy2 = horseOrder.Vaulters;
                     }
                 }
             }
@@ -614,10 +615,7 @@ namespace WebApplication1.Business.Logic.Contest
                     //var dummy = GetAllDataFromDataBase<List<Vaulter>>(_vaulters); // bara för att hämta alla värden när vi är i context dvs inom using
                 }
             }
-
-
             return _vaulters;
-
         }
 
         public static List<Team> GetTeams()
@@ -759,6 +757,23 @@ namespace WebApplication1.Business.Logic.Contest
             return returnString;
             //return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
             //      team.TeamId + testNumber;
+        }
+
+        public static List<int?> GetAllClassesWithAtleastOneParticipant(VaultingContext db)
+        {
+            var classesList = GetAllClassesWithAtLeastOneVaulter(db);
+            classesList.AddRange(GetAllClassesWithAtLeastOneTeam(db));
+            return classesList;
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneVaulter(VaultingContext db)
+        {
+            return db.Vaulters.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
+        }
+
+        private static List<int?> GetAllClassesWithAtLeastOneTeam(VaultingContext db)
+        {
+            return db.Teams.GroupBy(x => x.VaultingClassId).Select(grp => grp.FirstOrDefault().VaultingClassId).ToList();
         }
 
         private static string GetStepTypeString(StepType stepType)

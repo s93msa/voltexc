@@ -10,7 +10,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public class ExcelTeamService : ExcelBaseService
+    public class ExcelTeamService : ExcelScorecardBaseService
     {
         private readonly ExcelPreCompetitionData _competitionData;
 
@@ -67,7 +67,7 @@ namespace WebApplication1.Business.Logic.Excel
 
             SetWorksheetTeam(worksheet, judgeTable);
 
-            ShowOnlyWorksheet(worksheet);
+            _excelBaseService.ShowOnlyWorksheet(worksheet);
             string fileOutputname;
             if (StartOrderInfileName)
             {
@@ -133,7 +133,7 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
             string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.Horse1.HorseId, _competitionData.TestNumber, judgeTable);
-            var cell = SetValueInWorksheet(worksheet, "id", idString);
+            var cell = _excelBaseService.SetValueInWorksheet(worksheet, "id", idString);
             cell?.WorksheetColumn().Hide();
         }
 
@@ -162,7 +162,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SetMemberNames(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
         {
-            var firstcell = GetNamedCell(worksheet, "firstvaulter");
+            var firstcell = _excelBaseService.GetNamedCell(worksheet, "firstvaulter");
             //string tableName = GetJudgeTableName(judgeTable);
             int offset = 0;
             foreach (var vaulter in _competitionData.GetTeamVaultersSorted())

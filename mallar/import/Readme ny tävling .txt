@@ -1,4 +1,11 @@
-I DB: Gå in i CompetitionClasses och lägg in rätt TDB-ID för varje klass
+Infoga en ny kolumn mellan kommentarerna och första voltigören. Nya kolumnen ska ha bokstaven "k". 
+På de rader som är lag: Skriv in lagnamn i kolumn k på.
+
+Ändra ordning i excelarket på ekipagefliken så att tävlande på samma häst ligger i rätt ordning. Dvs den först voltigören på hästen måste ligga före den andra startande inom samma startlisteklass.
+Lägg till rätt 
+
+Lägg till ScoreSheetId i kolumn D i kolumnnen klasser
+
 I DB: Gå in i StartListClassSteps och lägg upp rätt startlisteklasser
 
 Ändra till rätt typ av tävling TeamSMCompetion, TeamOnedayCompetition, Trähast osv i metoden ImportTeams
