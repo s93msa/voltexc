@@ -6,6 +6,11 @@ Lägg till rätt
 
 Lägg till ScoreSheetId i kolumn D i kolumnnen klasser
 
+Kontrollera/ändra i web.config:
+ContestId (1 = SM 2 = normal)
+Trahasttavling (true/false) -> om true kolla HorsePointTraHastTavling
+
+
 I DB: Gå in i StartListClassSteps och lägg upp rätt startlisteklasser
 
 Ändra till rätt typ av tävling TeamSMCompetion, TeamOnedayCompetition, Trähast osv i metoden ImportTeams
