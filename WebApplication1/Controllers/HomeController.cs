@@ -92,9 +92,10 @@ namespace WebApplication1.Controllers
                 //if (startListClassStep.StartListClassStepId == 1065) // Svår klass 3, 4, 5, 6  SM klass Individuella -  kür final SM 2022
                 //if (startListClassStep.StartListClassStepId == 1064) // Svår klass 3, 4, 5, 6  SM klass Individuella -  Teknisk kür eller grund SM 2022
                 //if (startListClassStep.StartListClassStepId == 22 || startListClassStep.StartListClassStepId == 1063 || startListClassStep.StartListClassStepId == 6) 
-                                                                                // 22 pas de deux final - 
-                                                                                // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
-                                                                                // 6 Svår klass 1, Seniorlag SM klass – Kür final
+                // 22 pas de deux final - 
+                // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
+                // 6 Svår klass 1, Seniorlag SM klass – Kür final
+                if(startListClassStep.StartListClassStepId == 1086)
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
