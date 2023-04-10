@@ -55,7 +55,7 @@ namespace WebApplication1.Controllers
 
         public ActionResult CopyExcelWithStartnumber()
         {
-            return CopyExcel(true);
+            return CopyExcel(startNumberInFileName: true);
         }
         public ActionResult CopyExcel(bool startNumberInFileName = false)
         {
@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
                 // 22 pas de deux final - 
                 // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
                 // 6 Svår klass 1, Seniorlag SM klass – Kür final
-                if(startListClassStep.StartListClassStepId == 1086)
+                //if(startListClassStep.StartListClassStepId == 1086)
                 {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 }
@@ -119,11 +119,15 @@ namespace WebApplication1.Controllers
 
 
 
-            var startlistOrderByHorseOrder = startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber);
+            var startlistOrderByHorseOrder = startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber).ToArray();
 
             int startListNumber = 0;
                 foreach (var horseOrder in startlistOrderByHorseOrder)
                 {
+                    //if(horseOrder.HorseId != 22659)
+                    //{
+                    //    continue;
+                    //}
                     if (horseOrder.IsTeam)
                     {
                         startListNumber++;

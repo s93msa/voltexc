@@ -74,7 +74,17 @@ namespace WebApplication1.Business.Logic.Excel
             return horseIsPartOfSheet;
         }
 
+        protected void SetHeaderPostfix(IXLWorksheet worksheet)
+        {
+            var header = _excelBaseService.GetNamedCell(worksheet, "header");
+            if(header != null)
+            {
+                //var headerPostfix = _competitionData.VaultingClass.HeaderPostfix;
+                //header.Value = header.Value + " " + headerPostfix;
+            }
 
+
+        }
         protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
         {
             var firstcell = _excelBaseService.GetNamedCell(worksheet, "datum");

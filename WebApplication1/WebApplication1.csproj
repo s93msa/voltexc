@@ -428,6 +428,10 @@
     <Compile Include="Migrations\201902122202434_AddScoreSheetId.Designer.cs">
       <DependentUpon>201902122202434_AddScoreSheetId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304101753101_addHeaderPostfix.cs" />
+    <Compile Include="Migrations\202304101753101_addHeaderPostfix.Designer.cs">
+      <DependentUpon>202304101753101_addHeaderPostfix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\CompetitionClass.cs" />
@@ -667,6 +671,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902122202434_AddScoreSheetId.resx">
       <DependentUpon>201902122202434_AddScoreSheetId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304101753101_addHeaderPostfix.resx">
+      <DependentUpon>202304101753101_addHeaderPostfix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

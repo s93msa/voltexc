@@ -121,7 +121,7 @@ namespace WebApplication1.Business.Logic.Excel
                 //    SetWorksheetIndTekniskArtistisk(worksheet, judgeTable);
                 //    break;
                 default:
-                    SetWorksheetIndividuellDefault(worksheet, judgeTable);
+                    SetWorksheetDefault(worksheet, judgeTable);
                     break;
             }
 
@@ -137,7 +137,7 @@ namespace WebApplication1.Business.Logic.Excel
             cell?.WorksheetColumn().Hide();
         }
 
-        private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
+        private void SetWorksheetDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
             SetFirstInformationGroup(worksheet, 4);

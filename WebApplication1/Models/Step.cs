@@ -24,6 +24,8 @@ namespace WebApplication1.Models
 
         public string OverrideExcelfileName { get; set; }
 
+        //public string HeaderPostfix { get; set; }
+
 
 
     }

@@ -16,6 +16,7 @@ namespace WebApplication1.Models
         public int ScoreSheetId { get; set; }
         [ForeignKey("ScoreSheetId")]
         public virtual ScoreSheets ScoreSheet  { get; set; }
+        //public string HeaderPostfix { get; set; }
 
         //  public string Excelfile { get; set; }
 
@@ -24,7 +25,7 @@ namespace WebApplication1.Models
         //TODO: remove currentContestType from method
         public List<Step> GetCompetitionSteps(ContestType currentContestType)
         {
-            return ScoreSheet.TestMomentList;
+            return ScoreSheet.GetMoments();
 //            return Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestType.ContestTypeId);
         }
        

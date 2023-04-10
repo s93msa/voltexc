@@ -140,7 +140,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetIndividuellDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
-
+            SetHeaderPostfix(worksheet);
             SetFirstInformationGroup(worksheet, 4);
             SetVaulterInformation(worksheet, judgeTable, 2);
 
