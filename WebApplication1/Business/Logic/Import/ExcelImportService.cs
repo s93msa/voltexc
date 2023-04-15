@@ -218,8 +218,11 @@ namespace WebApplication1.Business.Logic.Import
                     ClassNr = teamRow.ClassNr,
                     ClassName = teamRow.ClassName
                 };
-
-             
+                var existingTeamsWithSameName = teamList.Count(team => team.Name == teamRow.TeamName);
+                if (existingTeamsWithSameName > 0)
+                {
+                    teamRow.TeamName = teamRow.TeamName + (existingTeamsWithSameName + 1);
+                }
 
                 var newTeam = new Team
                 {
@@ -227,7 +230,6 @@ namespace WebApplication1.Business.Logic.Import
                     VaultingClub = club,
                     VaultingClass = competitionClass,
                 };
-
                 teamList.Add(newTeam);
 
             }
