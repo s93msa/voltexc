@@ -144,6 +144,10 @@ namespace WebApplication1.Controllers
                         
                         foreach (var vaulter in vaultersSorted)
                         {
+                            //if(vaulter.Participant.VaultingClass.ClassTdbId != 619324)
+                            //{
+                            //    continue;
+                            //}
                             startListNumber++;
                             var vaulterInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
                                 startListNumber, vaulter);

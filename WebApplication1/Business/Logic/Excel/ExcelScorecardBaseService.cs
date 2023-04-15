@@ -77,10 +77,10 @@ namespace WebApplication1.Business.Logic.Excel
         protected void SetHeaderPostfix(IXLWorksheet worksheet)
         {
             var header = _excelBaseService.GetNamedCell(worksheet, "header");
-            if(header != null)
+            if (header != null)
             {
-                //var headerPostfix = _competitionData.VaultingClass.HeaderPostfix;
-                //header.Value = header.Value + " " + headerPostfix;
+                var headerPostfix = _competitionData.VaultingClass.ScoreSheet.HeaderPostfix;
+                header.Value = header.Value + " " + headerPostfix;
             }
 
 
