@@ -76,6 +76,7 @@ namespace WebApplication1.Business.Logic.Excel
         }
         public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, T value)
         {
+            worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
             worksheet.Cell(row, column).Value = value;
         }
 

@@ -725,36 +725,44 @@ namespace WebApplication1.Business.Logic.Contest
         
         public static string GetVaulterExcelId(Vaulter participant, int horseId, int testNumber = 0, JudgeTable judgeTable = null)
         {
+            List<string> returnStrings = new List<string>();
             //var classId = participant.VaultingClass?.CompetitionClassId;
             var vaulterId = participant.VaulterId;
-            var classnr = participant.VaultingClass?.ClassNr;
-            var returnString = "id_" + vaulterId + "_" + classnr + "_" + horseId;
-
-            //var stepTypeString = GetStepTypeString(stepType);
-            if (testNumber > 0 && judgeTable != null)
+            var classnrArray = participant.VaultingClass?.ClassNr.Split('.');
+            foreach(var classNr in classnrArray)
             {
-                returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+                var returnString = "id_" + vaulterId + "_" + classNr + "_" + horseId;
+
+                if (testNumber > 0 && judgeTable != null)
+                {
+                    returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+                }
+                returnStrings.Add(returnString);
             }
-            return returnString;
+            return string.Join(",", returnStrings);
             //return "id_" + participant.VaultingClass?.CompetitionClassId + "_" + participant.VaulterId + testNumber;
         }
 
 
         public static string GetTeamExcelId(Team team, int horseId, int testNumber = 0, JudgeTable judgeTable = null)
         {
+            List<string> returnStrings = new List<string>();
             // var stepTypeString = GetStepTypeString(stepType);
             //var classId = team.VaultingClass?.CompetitionClassId;
-            var vaulterId = team.TeamId;
-            var classnr = team.VaultingClass?.ClassNr;
-            var returnString = "id_" + vaulterId + "_" + classnr + "_" + horseId;
-
-            //var stepTypeString = GetStepTypeString(stepType);
-            if (testNumber > 0 && judgeTable != null)
+            var teamId = team.TeamId;
+            var classnrArray = team.VaultingClass?.ClassNr.Split('.');
+            foreach (var classNr in classnrArray)
             {
-                returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
-            }
+                var returnString = "id_" + teamId + "_" + classNr + "_" + horseId;
 
-            return returnString;
+                //var stepTypeString = GetStepTypeString(stepType);
+                if (testNumber > 0 && judgeTable != null)
+                {
+                    returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+                }
+                returnStrings.Add(returnString);
+            }
+            return string.Join(",", returnStrings);
             //return "id_" + team.VaultingClass?.CompetitionClassId + "_" +
             //      team.TeamId + testNumber;
         }

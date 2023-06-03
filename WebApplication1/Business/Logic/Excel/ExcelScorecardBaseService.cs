@@ -157,6 +157,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         protected void SaveExcelFile(string outputFileName)
         {
+            outputFileName = outputFileName.Replace("/", "");
             string fileoutputname = @"C:\episerver\voltige\VoltigeClosedXML\output\" + outputFileName;
             _excelBaseService.SaveExcelFile(fileoutputname);
         }
