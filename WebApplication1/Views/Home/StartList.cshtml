@@ -61,7 +61,7 @@ d }) |
 
                 <tr>
                     <td>
-                        @Html.ActionLink("Ändra", "Edit", "HorseOrders", new { id = startListItem.HorseOrderId }, null) |
+                        @*@Html.ActionLink("Ändra", "Edit", "HorseOrders", new { id = startListItem.HorseOrderId }, null) |*@
                     </td>
                     <td>
                         @startnumber.ToString()
@@ -80,18 +80,19 @@ d }) |
                         @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) klass: @startListItem.VaultingTeam.VaultingClass.ClassNr-
                         @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
-                        @*(@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.Country))*@
-                        <br />Voltigörer: <br />
-                        @foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
-                        {
-                            @(@*vaulter.StartNumber.ToString() + " " +*@ vaulter.Participant.Name) 
-                            <br />
+					<td>
+						@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
+						(@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.Country))
+						<br />Voltigörer: <br />
+						@foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
+						{
+							@(@*vaulter.StartNumber.ToString() + " " +*@ /**/
+																										 vaulter.Participant.Name)
+							<br />
 
-                        }
+						}
 
-                    </td>
+					</td>
                 </tr>
 
             }
@@ -103,7 +104,7 @@ d }) |
 
                     <tr>
                         <td>
-                            @Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)
+                            @*@Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)*@
                             @startnumber.ToString()
                         </td>
                         <td>
@@ -123,7 +124,7 @@ d }) |
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
-                            @*(@Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.Country))*@
+                            (@Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.Country))
                         </td>
                     </tr>
                 }
