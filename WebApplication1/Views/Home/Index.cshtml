@@ -1,26 +1,30 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+	ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
-    <h1>Skapa protokoll</h1>
-    <p>@Html.ActionLink("Skapa nu", "CopyExcel", "Home")</p>
+	<h1>Skapa protokoll</h1>
+	<p>@Html.ActionLink("Skapa nu", "CopyExcel", "Home")</p>
 </div>
 <div class="jumbotron">
-    <h1>Skapa protokoll för utskrift</h1>
-    <h2>Med startnummer först i filnamnet</h2>
-<p>@Html.ActionLink("Skapa nu", "CopyExcelWithStartnumber", "Home")</p>
+	<h1>Skapa protokoll för utskrift</h1>
+	<h2>Med startnummer först i filnamnet</h2>
+	<p>@Html.ActionLink("Skapa nu", "CopyExcelWithStartnumber", "Home")</p>
 </div>
 
 <div class="jumbotron">
-    <h1>Visa startlista</h1>
-    <p>@Html.ActionLink("Visa nu", "StartList", "Home")</p>
+	<h1>Visa startlista</h1>
+	<p>@Html.ActionLink("Visa nu", "StartList", "Home")</p>
 </div>
 <div class="jumbotron">
-    <h1>Skapa excel för resultatprogram</h1>
-    <p>@Html.ActionLink("Skapa nu", "CreatePreResultInformationExcel", "Home")</p>
+	<h1>Skapa excel för resultatprogram</h1>
+	<p>@Html.ActionLink("Skapa nu", "CreatePreResultInformationExcel", "Home")</p>
 </div>
 <div class="jumbotron">
-    <h1>Importera från TDB</h1>
-    <p>@Html.ActionLink("Hämta från excelfil", "Index", "Import")</p>
+	<h1>Skapa pdf:er för utskrift</h1>
+	<p>@Html.ActionLink("Skapa nu", "CreatePdfPrintFile", "Home")</p>
+</div>
+<div class="jumbotron">
+	<h1>Importera från TDB</h1>
+	<p>@Html.ActionLink("Hämta från excelfil", "Index", "Import")</p>
 </div>

@@ -8,6 +8,7 @@ using WebApplication1.Models;
 using WebApplication1.Business.Logic.Excel.Results;
 using WebApplication1.Business.Logic.Result;
 using System;
+using WebApplication1.Business.Logic.Pdf;
 
 namespace WebApplication1.Controllers
 {
@@ -43,8 +44,19 @@ namespace WebApplication1.Controllers
 
             return View();
         }
+        public ActionResult CreatePdfPrintFile()
+        {
+            var startListNames = pdfbatfileService.GetStartListNames();
+            foreach (var startDate in startListNames.Keys)
+            {
+                pdfbatfileService.WriteBatfile(startDate.ToShortDateString(), startListNames[startDate]);
+            }
 
-        
+            ViewBag.Message = "pdfbat skapad";
+
+            return View();
+        }
+
 
 
         public ActionResult StartList()
@@ -95,7 +107,7 @@ namespace WebApplication1.Controllers
                 // 22 pas de deux final - 
                 // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
                 // 6 Svår klass 1, Seniorlag SM klass – Kür final
-                //if(startListClassStep.StartListClassStepId == 2)
+                //if(startListClassStepStartListClassStepId == 2)
                 //{
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 //}
