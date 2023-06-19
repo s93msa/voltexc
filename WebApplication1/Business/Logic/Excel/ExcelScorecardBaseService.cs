@@ -80,7 +80,10 @@ namespace WebApplication1.Business.Logic.Excel
             if (header != null)
             {
                 var headerPostfix = _competitionData.VaultingClass.ScoreSheet.HeaderPostfix;
-                header.Value = header.Value + " " + headerPostfix;
+                if(header.Value == null || !header.Value.ToString().EndsWith(headerPostfix))
+                {
+                    header.Value = header.Value + " " + headerPostfix;
+                }
             }
 
 
