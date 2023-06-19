@@ -58,6 +58,11 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void CreateExcelFromValues(string excelWorksheetNameJudgesTable, JudgeTable judgeTable)
         {
+            //if(!_competitionData.VaultingClass.ClassNr.StartsWith("24") && !_competitionData.VaultingClass.ClassNr.StartsWith("4"))
+            //{
+            //    return;
+            //}
+
             if (judgeTable == null)
             {
                 judgeTable = new JudgeTable();
