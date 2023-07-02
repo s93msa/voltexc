@@ -80,7 +80,7 @@ namespace WebApplication1.Business.Logic.Excel
             if (header != null)
             {
                 var headerPostfix = _competitionData.VaultingClass.ScoreSheet.HeaderPostfix;
-                if(header.Value == null || !header.Value.ToString().EndsWith(headerPostfix))
+                if(header.Value == null || (!string.IsNullOrEmpty(headerPostfix) && !header.Value.ToString().EndsWith(headerPostfix)))
                 {
                     header.Value = header.Value + " " + headerPostfix;
                 }
@@ -162,6 +162,7 @@ namespace WebApplication1.Business.Logic.Excel
         {
             outputFileName = outputFileName.Replace("/", "");
             string fileoutputname = @"C:\episerver\voltige\VoltigeClosedXML\output\" + outputFileName;
+            //string fileoutputname = @"C:\episerver\voltige\VoltigeClosedXML\output\" + outputFileName;
             _excelBaseService.SaveExcelFile(fileoutputname);
         }
 
