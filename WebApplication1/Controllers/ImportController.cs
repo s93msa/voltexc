@@ -672,7 +672,7 @@ namespace WebApplication1.Controllers
 
             competionClassesTdbIds =
                 new[] { 629737, 629738, 629739, 629740, 629741, 629742, 629743, 629744, 629745, 629746, 629747, 629748, 629749, 629750, // SM
-                     629754, 629756, 629757, 629758}; //individuella 
+                     629754, 629756, 629757, 629758, 629759}; //individuella 
 
             StartListClassStepId = 1066;
             testNumber = 1;
