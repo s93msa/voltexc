@@ -13,12 +13,12 @@ namespace WebApplication1.Business.Logic.Pdf
     {
         public static Dictionary<DateTime, Dictionary<JudgeTableNames, List<string>>> GetStartListNames()
         {
-            var startListNamesPerJudgetable = new Dictionary<DateTime,Dictionary<JudgeTableNames, List<string>>>();
+            var startListNamesPerJudgetable = new Dictionary<DateTime, Dictionary<JudgeTableNames, List<string>>>();
 
             var contest = ContestService.GetContestInstance();
             foreach (var startListClassStep in contest.GetActiveStartListClassStep().OrderBy(x => x.StartOrder))
             {
-                var startListClassDate = startListClassStep.Date;
+                var startListClassDate = startListClassStep.Date.Date;
                 if (!startListNamesPerJudgetable.ContainsKey(startListClassDate))
                 {
                     startListNamesPerJudgetable.Add(startListClassDate, new Dictionary<JudgeTableNames, List<string>>());
