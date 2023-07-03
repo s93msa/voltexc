@@ -56,6 +56,10 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void CreateExcelFromValues(string excelWorksheetNameJudgesTable, JudgeTable judgeTable)
         {
+            //if (!_competitionData.VaultingClass.ClassNr.StartsWith("28") && !_competitionData.VaultingClass.ClassNr.StartsWith("7"))
+            //{
+            //    return;
+            //}
             if (judgeTable == null)
             {
                 judgeTable = new JudgeTable();
@@ -139,6 +143,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         private void SetWorksheetDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
+            SetHeaderPostfix(worksheet);
 
             SetFirstInformationGroup(worksheet, 4);
             SetTeamInformation(worksheet, judgeTable, 2);
