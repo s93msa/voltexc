@@ -304,7 +304,7 @@ namespace WebApplication1.Controllers
             int testNumber;
             Changed changed;
             //senior lag
-            competionClassesTdbIds = new[] { 629732, 629733};
+            competionClassesTdbIds = new[] { 629732, 629733};  ///{ 629732, 629733, 629734, 629735, 629736};
             StartListClassStepId = 1059; // Svår klass lag seniorer klass 1 -Grund 
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);
@@ -322,7 +322,7 @@ namespace WebApplication1.Controllers
 
 
             //Junior lag
-            competionClassesTdbIds = new[] { 629734, 629735, 629736};
+            competionClassesTdbIds = new[] { 629734, 629735, 629736}; // kommentera bort ifall senior och junior i samma
             StartListClassStepId = 5; // Svår klass juniorlag klass 2 -Grund  
             testNumber = 1;
             changed = ImportTeam(excelImportService, competionClassesTdbIds, StartListClassStepId, testNumber);

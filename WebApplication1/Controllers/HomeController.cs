@@ -109,8 +109,10 @@ namespace WebApplication1.Controllers
                 // 6 Svår klass 1, Seniorlag SM klass – Kür final
                 //if(startListClassStepStartListClassStepId == 2)
                 //{
+                if (startListClassStep.Date.Day == new DateTime(2023, 07, 07).Day)
+                {
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
-                //}
+                }
             }
                 
             return View("CopyExcel");
@@ -156,11 +158,11 @@ namespace WebApplication1.Controllers
                         
                         foreach (var vaulter in vaultersSorted)
                         {
-                            //if(vaulter.Participant.VaultingClass.ClassTdbId != 619324)
+                            //if (vaulter.Participant.VaultingClass.ClassTdbId != 629759)
                             //{
                             //    continue;
                             //}
-                            startListNumber++;
+                        startListNumber++;
                             var vaulterInformation = new ExcelPreCompetitionData(contest, startListClassStep, horseOrder,
                                 startListNumber, vaulter);
                             var excelIndividualService = new ExcelIndividualService(vaulterInformation);
