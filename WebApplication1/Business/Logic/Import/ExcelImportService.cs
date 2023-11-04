@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Web;
 using AutoMapper;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
-using WebApplication1.Migrations;
+using WebApplication1.Business.Logic.Contest;
+using WebApplication1.Controllers.DTO;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -30,6 +25,19 @@ namespace WebApplication1.Business.Logic.Import
             {
                 horseOrder.StartListClassStepId = startListClassStepId;
                 horseOrder.Vaulters.ForEach(x => x.Testnumber = vaulterTestnumber);
+            }
+
+            return horseOrderList;
+        }
+
+        public HorseOrder[] GetHorseOrderIndividual(int startListClassStepId,
+            ClassesTdbIdDictionary classesTdbIdTestnumber)
+        {
+            var horseOrderList = GetIndividualHorseOrders(classesTdbIdTestnumber.Keys.ToArray());
+            foreach (var horseOrder in horseOrderList)
+            {
+                horseOrder.StartListClassStepId = startListClassStepId;
+                horseOrder.Vaulters.ForEach(x => x.Testnumber = classesTdbIdTestnumber[ContestService.GetVaulter(x.Participant.VaulterTdbId).VaultingClass.ClassTdbId]);               
             }
 
             return horseOrderList;
