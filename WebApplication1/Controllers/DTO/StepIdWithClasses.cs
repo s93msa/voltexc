@@ -10,35 +10,26 @@ namespace WebApplication1.Controllers.DTO
     {
         public int StartListClassStepId;
 
-        public ClassesTdbIdDictionary CompetitionClassesTdbIds;
+        public List<ClassesTdb> CompetitionClassesTdbIds;
 
-        public StepIdWithClasses(int startListClassStepId, ClassesTdbIdDictionary competitionClassesTdbIds)
+        public StepIdWithClasses(int startListClassStepId, List<ClassesTdb> competitionClassesTdbIds)
         {
             StartListClassStepId = startListClassStepId;
             CompetitionClassesTdbIds = competitionClassesTdbIds;
         }
     }
 
-    public class ClassesTdbIdDictionary : Dictionary<int, int>
+    public class ClassesTdb
     {
-        public new void Add(int tdbId, int testNumber)
-        {
-            //if (base.TryGetValue(tdbId, out var existingTestNumbers))
-            //{
-            //    existingTestNumbers.Add(testNumber);
-            //    base[tdbId] = existingTestNumbers;
-            //}
-            //else
-            //{
-                base.Add(tdbId, testNumber);
-            //}
-        }
+        public int ClassTdbId;
+        public int testnumber;
 
-        public new int this[int tdbId]
+        public ClassesTdb(int classTdbId, int testnumber)
         {
-            get { return base[tdbId]; }
-            set { base[tdbId] = value; }
+            ClassTdbId = classTdbId;
+            this.testnumber = testnumber;
         }
+        
     }
 
 

@@ -119,6 +119,10 @@ namespace WebApplication1.Controllers
 
         private Dictionary<int, Changed> TeamOneDayCompetion(ExcelImportService excelImportService, Dictionary<int, Changed> TeamsStartlistChanged)
         {
+
+            var stepIdsWithClasses = excelImportService.GetStartlistStepCompetionClasses();
+            return ImportTeam(excelImportService, TeamsStartlistChanged, stepIdsWithClasses);
+
             var startListTdbClasses = new List<StartListTdbClasses>();
 
             //var startListTdbClass = new StartListTdbClasses
@@ -526,80 +530,82 @@ namespace WebApplication1.Controllers
         private Dictionary<int, UpdateService.NewHordeorders> ImportIndividualOnedayCompetition(ExcelImportService excelImportService,
                     Dictionary<int, UpdateService.NewHordeorders> individualStartlistChanged)
         {
-            int startListClassStepId;
-            List<StepIdWithClasses> stepIdsWithClasses;
-            ClassesTdbIdDictionary competitionClassesTdbIds;
+            //int startListClassStepId;
+            var stepIdsWithClasses = excelImportService.GetStartlistStepCompetionClasses(); 
+            //ClassesTdbIdDictionary competitionClassesTdbIds;
 
-            startListClassStepId = 1;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630072, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630073, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630075, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630076, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630077, testNumber: 1);
-
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
             individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 1081;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 2);
+            //startListClassStepId = 1;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630072, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630073, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630075, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630076, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630077, testNumber: 1);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 2;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 3);
-            competitionClassesTdbIds.Add(tdbId: 630072, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630073, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 3);
-            competitionClassesTdbIds.Add(tdbId: 630075, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630076, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630077, testNumber: 2);
+            //startListClassStepId = 1081;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 2);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 3103;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 500, testNumber: 1);
+            //startListClassStepId = 2;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 630071, testNumber: 3);
+            //competitionClassesTdbIds.Add(tdbId: 630072, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630073, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630074, testNumber: 3);
+            //competitionClassesTdbIds.Add(tdbId: 630075, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630076, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630077, testNumber: 2);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 3103;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 500, testNumber: 2);
+            //startListClassStepId = 3103;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 500, testNumber: 1);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 46;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 630085, testNumber: 1);
-            competitionClassesTdbIds.Add(tdbId: 630086, testNumber: 1);
+            //startListClassStepId = 3103;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 500, testNumber: 2);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
-            startListClassStepId = 46;
-            stepIdsWithClasses = new List<StepIdWithClasses>();
-            competitionClassesTdbIds = new ClassesTdbIdDictionary();
-            competitionClassesTdbIds.Add(tdbId: 630085, testNumber: 2);
-            competitionClassesTdbIds.Add(tdbId: 630086, testNumber: 2);
+            //startListClassStepId = 46;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 630085, testNumber: 1);
+            //competitionClassesTdbIds.Add(tdbId: 630086, testNumber: 1);
 
-            stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
-            individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
+
+            //startListClassStepId = 46;
+            //stepIdsWithClasses = new List<StepIdWithClasses>();
+            //competitionClassesTdbIds = new ClassesTdbIdDictionary();
+            //competitionClassesTdbIds.Add(tdbId: 630085, testNumber: 2);
+            //competitionClassesTdbIds.Add(tdbId: 630086, testNumber: 2);
+
+            //stepIdsWithClasses.Add(new StepIdWithClasses(startListClassStepId, competitionClassesTdbIds));
+            //individualStartlistChanged = ImportIndividuals(excelImportService, individualStartlistChanged, stepIdsWithClasses);
 
             return individualStartlistChanged;
         }
@@ -760,6 +766,37 @@ namespace WebApplication1.Controllers
             }
 
             return individualStartlistChanged;
+        }
+
+        private Dictionary<int, Changed> ImportTeam(ExcelImportService excelImportService, Dictionary<int, Changed> teamsStartlistChanged,
+            List<StepIdWithClasses> stepIdsWithClasses)
+        {
+            foreach (var stepIdWithClasses in stepIdsWithClasses)
+            {
+                var changed = ImportTeam(excelImportService, stepIdWithClasses);
+                teamsStartlistChanged = AddToChangedLogg(teamsStartlistChanged, stepIdWithClasses.StartListClassStepId, changed);
+            }
+    //            foreach (var stepIdWithClass in stepIdWithClasses.CompetitionClassesTdbIds)
+    //            {
+    //                var changed = ImportTeam(excelImportService, stepIdWithClass.Key,
+    //                    startListClassStepId, testnumber: stepIdWithClass.Value);
+    //            }
+    //            var changed = ImportTeam(excelImportService, startListTdbClassItem.CompetitionClassesTdbIds,
+    //stepMoment.StartListClassStepId, stepMoment.TestNumber);
+    //            var changed = ImportTeam(excelImportService, startListTdbClassItem.CompetitionClassesTdbIds,
+ 
+    //        }
+    //        foreach (var startListTdbClassItem in startListTdbClasses)
+    //        {
+    //            foreach (var stepMoment in startListTdbClassItem.StepMoment)
+    //            {
+    //                var changed = ImportTeam(excelImportService, startListTdbClassItem.CompetitionClassesTdbIds,
+    //                    stepMoment.StartListClassStepId, stepMoment.TestNumber);
+    //                teamsStartlistChanged = AddToChangedLogg(teamsStartlistChanged, stepMoment.StartListClassStepId, changed);
+    //            }
+    //        }
+
+            return teamsStartlistChanged;
         }
 
         private Dictionary<int, Changed> ImportTeam(ExcelImportService excelImportService, Dictionary<int, Changed> teamsStartlistChanged,
@@ -1004,6 +1041,12 @@ namespace WebApplication1.Controllers
             var newHordeorders = _updateService.UpdateIndividualHorseOrders(horseOrders);
 
             return newHordeorders;
+        }
+        private Changed ImportTeam(ExcelImportService excelImportService, StepIdWithClasses startListTdbClasses)
+        {
+            var horseOrders = excelImportService.GetHorseOrdersTeam(startListTdbClasses.StartListClassStepId, startListTdbClasses.CompetitionClassesTdbIds);
+            var changed = _updateService.UpdateTeamHorseOrders(horseOrders);
+            return changed;
         }
 
         private Changed ImportTeam(ExcelImportService excelImportService, int[] competionClassesTdbIds, int startListClassStepId,

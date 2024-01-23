@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ClosedXML.Excel;
+using WebApplication1.Controllers.DTO;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -83,6 +84,107 @@ namespace WebApplication1.Business.Logic.Import
             }
 
             return vaulters.ToArray();
+        }
+
+        public List<StartListClassStep> GetStartList()
+        {
+            //string startlistClassName = "";
+            //var startlistClassDate = DateTime.MinValue;
+            var startListClasses = new List<StartListClassStep>();
+            var startList = _workbook.Worksheets?.Worksheet("startordning");
+            foreach (var row in startList.Rows())
+            {
+                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                {
+                    continue;
+                }
+
+                var startOrder = GetStartOrder(row);
+                var startlistClassName = row.Cell("b").Value as string;
+                var startlistClassDate = Convert.ToDateTime(row.Cell("c").Value);
+                if (startListClasses.Exists(x => x.StartOrder == startOrder))
+                {
+                    continue;
+                }
+
+                //if (newStartlistClassName == startlistClassName && newDate == startlistClassDate)
+                //{
+                //    continue;
+                //}
+                var vaulter = new StartListClassStep
+                {
+                    StartOrder = startOrder,
+                    Name = startlistClassName,
+                    Date = startlistClassDate,
+                };
+                startListClasses.Add(vaulter);
+            }
+
+            return startListClasses;
+        }
+
+        public List<StepIdWithClasses> GetStartlistStepCompetionClasses()
+        {
+            var stepIdsWithClasses = new List<StepIdWithClasses>();
+
+            //string startlistClassName = "";
+            //var startlistClassDate = DateTime.MinValue;
+            //var startListClasses = new List<StartListClassStep>();
+            var startList = _workbook.Worksheets?.Worksheet("startlisteklasser");
+            foreach (var row in startList.Rows())
+            {
+                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                {
+                    continue;
+                }
+
+                //var startOrder = GetStartOrder(row);
+                var startlistClassStepId = Convert.ToInt32(row.Cell("a").Value);
+                var classTdbId = Convert.ToInt32(row.Cell("c").Value);
+                var testNumber = Convert.ToInt32(row.Cell("g").Value);
+
+                var stepIdWithClasses = stepIdsWithClasses.Find(x => x.StartListClassStepId == startlistClassStepId);
+
+                if (stepIdWithClasses == null)
+                {
+                    var classesTdbId = new List<ClassesTdb>();
+                    classesTdbId.Add(new ClassesTdb(classTdbId, testNumber));
+
+                    var stepId = new StepIdWithClasses(startlistClassStepId, classesTdbId);
+
+                    stepIdsWithClasses.Add(stepId);
+                }
+                else
+                {
+                    stepIdWithClasses.CompetitionClassesTdbIds.Add(new ClassesTdb(classTdbId, testNumber));
+                }
+
+                //var startlistClassName = row.Cell("b").Value as string;
+                //var startlistClassDate = Convert.ToDateTime(row.Cell("c").Value);
+                //if (startListClasses.Exists(x => x.StartOrder == startOrder))
+                //{
+                //    continue;
+                //}
+
+                //if (newStartlistClassName == startlistClassName && newDate == startlistClassDate)
+                //{
+                //    continue;
+                //}
+                //var vaulter = new StartListClassStep
+                //{
+                //    StartOrder = startOrder,
+                //    Name = startlistClassName,
+                //    Date = startlistClassDate,
+                //};
+                //startListClasses.Add(vaulter);
+            }
+
+            return stepIdsWithClasses;
+        }
+
+        private static int GetStartOrder(IXLRow row)
+        {
+            return Convert.ToInt32(row.Cell("a").Value) * 10;
         }
 
         public Vaulter[] GetTeamVaulters()
