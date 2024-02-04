@@ -237,6 +237,7 @@
     <Compile Include="Classes\ExcelPreCompetitionData.cs" />
     <Compile Include="Classes\ScoreSheetIndividual.cs" />
     <Compile Include="Classes\VaultingContext.cs" />
+    <Compile Include="Controllers\DTO\StepIdWithClasses.cs" />
     <Compile Include="Controllers\DTO\StartListTDBClasses.cs" />
     <Compile Include="Controllers\EditVaulterHorseController.cs" />
     <Compile Include="Controllers\HorseOrdersController.cs" />
@@ -491,7 +492,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Web;
 using AutoMapper;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
-using WebApplication1.Migrations;
+using WebApplication1.Business.Logic.Contest;
+using WebApplication1.Controllers.DTO;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -35,6 +30,30 @@ namespace WebApplication1.Business.Logic.Import
             return horseOrderList;
         }
 
+        public HorseOrder[] GetHorseOrderIndividual(int startListClassStepId,
+            List<ClassesTdb> classesTdbIdTestnumber)
+        {
+            var horseOrderList = GetIndividualHorseOrders(classesTdbIdTestnumber);
+            foreach (var horseOrder in horseOrderList)
+            {
+                horseOrder.StartListClassStepId = startListClassStepId;
+               //? horseOrder.Vaulters.ForEach(x => x.Testnumber = classesTdbIdTestnumber[ContestService.GetVaulter(x.Participant.VaulterTdbId).VaultingClass.ClassTdbId]);               
+            }
+
+            return horseOrderList;
+        }
+        public HorseOrder[] GetHorseOrdersTeam(int startListClassStepId,
+            List<ClassesTdb> classesTdbIdTestnumber)
+        {
+            var horseOrderList = GetTeamHorseOrders(classesTdbIdTestnumber);
+            foreach (var horseOrder in horseOrderList)
+            {
+                horseOrder.StartListClassStepId = startListClassStepId;
+            }
+
+            return horseOrderList;
+        }
+
         public HorseOrder[] GetHorseOrdersTeam(int[] competionClassesTdbIds,
             int startListClassStepId, int teamTestnumber)
         {
@@ -47,6 +66,67 @@ namespace WebApplication1.Business.Logic.Import
 
             return horseOrderList;
         }
+        private HorseOrder[] GetIndividualHorseOrders(List<ClassesTdb> classesTdbIdsTestnumber)
+        {
+
+            var rows = GetRows(classesTdbIdsTestnumber.Select(x => x.ClassTdbId).ToArray<int>());
+            var individualRows = rows.Where(x => x.IsTeam == false).ToArray();
+            var listofDistinctHorseTdbIds = individualRows.GroupBy(x => new { x.HorseTdbId, x.LungerTdbId }).Select(sameHorse =>
+            {
+                //find first horsename starting with a number
+                foreach (var horse in sameHorse)
+                {
+                    int startNumberDummy;
+                    if (int.TryParse(horse.HorseName.Split(';').First(), out startNumberDummy))
+                    {
+                        return horse;
+                    }
+                }
+                return sameHorse.First();
+            });
+            var horseOrders = new List<HorseOrder>();
+            int serialNumber = 1;
+            int startNumber;
+            foreach (var row in listofDistinctHorseTdbIds)
+            {
+                if (!int.TryParse(row.HorseName.Split(';')[0], out startNumber))
+                {
+                    startNumber = serialNumber;
+                    serialNumber++;
+                }
+
+                var vaultersRows = individualRows.Where(x => x.HorseTdbId == row.HorseTdbId && x.LungerTdbId == row.LungerTdbId);
+                var lunger = new Lunger() { LungerTdbId = row.LungerTdbId };
+
+                var vaultersOrder = new List<VaulterOrder>();
+                int vaulterStartOrder = 1;
+                foreach (var vaultersRow in vaultersRows)
+                {
+                    var existingVaulter = ContestService.GetVaulter(vaultersRow.VaulterId1);
+                    var vaulter = new Vaulter() { VaulterTdbId = vaultersRow.VaulterId1, Name = vaultersRow.VaulterName1 };
+                    var testnumbers = classesTdbIdsTestnumber.Where(x => x.ClassTdbId == existingVaulter.VaultingClass.ClassTdbId).OrderBy(x => x.testnumber).Select(x => x.testnumber).ToArray();
+                    foreach (var testnumber in testnumbers)
+                    {
+                        var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = testnumber };
+                        vaultersOrder.Add(vaulterOrder);
+                    }
+                }
+
+                var horseOrder = new HorseOrder
+                {
+                    StartNumber = startNumber,
+                    HorseInformation = new Horse() { HorseTdbId = row.HorseTdbId, Lunger = lunger },
+                    IsActive = true,
+                    IsTeam = false,
+                    Vaulters = vaultersOrder
+                };
+                horseOrders.Add(horseOrder);
+
+            }
+
+            return horseOrders.ToArray();
+        }
+
         private HorseOrder[] GetIndividualHorseOrders(int[] competionClassesTdbIds)
         {
             var rows = GetRows(competionClassesTdbIds);
@@ -103,8 +183,29 @@ namespace WebApplication1.Business.Logic.Import
 
 
         }
+        
+        private HorseOrder[] GetTeamHorseOrders(List<ClassesTdb> classesTdbIdsTestnumber)
+        {
+            var rows = GetRows(classesTdbIdsTestnumber.Select(x => x.ClassTdbId).ToArray<int>());
 
-    private HorseOrder[] GetTeamHorseOrders(int[] competionClassesTdbIds)
+            var teamRows = rows.Where(x => x.IsTeam).ToArray();
+            List<HorseOrder> horseOrders = new List<HorseOrder>();
+            int startNumber = 1;
+            foreach (var classesTdbIdTestnumber in classesTdbIdsTestnumber)
+            {
+                var teams = teamRows.Where(team => team.ClassTdbId == classesTdbIdTestnumber.ClassTdbId);
+                foreach (var team in teams)
+                {
+                    HorseOrder horseOrder = CreateHorseOrder(team);
+                    horseOrder.TeamTestnumber = classesTdbIdTestnumber.testnumber;
+                    horseOrder.StartNumber = startNumber++;
+                    horseOrders.Add(horseOrder);
+                }
+            }
+
+            return horseOrders.ToArray();
+        }
+        private HorseOrder[] GetTeamHorseOrders(int[] competionClassesTdbIds)
         {
             var rows = GetRows(competionClassesTdbIds);
 
@@ -113,24 +214,28 @@ namespace WebApplication1.Business.Logic.Import
             int startNumber = 1;
             foreach (var teamRow in teamRows)
             {
-                var lunger = new Lunger() {LungerTdbId = teamRow.LungerTdbId};
-
-                var horseOrder = new HorseOrder
-                {
-                    StartNumber = startNumber++,
-                    HorseInformation = new Horse() {HorseTdbId = teamRow.HorseTdbId, Lunger = lunger},
-                    IsActive = true,
-                    IsTeam = true,
-                    VaultingTeam = new Team() {Name = teamRow.TeamName}
-                };
-
+                HorseOrder horseOrder = CreateHorseOrder(teamRow);
+                horseOrder.StartNumber = startNumber++;
                 horseOrders.Add(horseOrder);
             }
 
             return horseOrders.ToArray();
         }
 
-       
+        private static HorseOrder CreateHorseOrder(ExcelImportMergedModel teamRow)
+        {
+            var lunger = new Lunger() { LungerTdbId = teamRow.LungerTdbId };
+
+            var horseOrder = new HorseOrder
+            {
+                HorseInformation = new Horse() { HorseTdbId = teamRow.HorseTdbId, Lunger = lunger },
+                IsActive = true,
+                IsTeam = true,
+                VaultingTeam = new Team() { Name = teamRow.TeamName }
+            };
+            return horseOrder;
+        }
+
 
         public ExcelImportMergedModel[] GetRows(int[] classNumbers)
         {
@@ -176,6 +281,15 @@ namespace WebApplication1.Business.Logic.Import
 
             return vaulters.ToArray();
         }
+
+        //public Vaulter[] GetStartOrder()
+        //{
+        //    var startOrder = GetStartOrders();
+        //    var d = Get
+        //    var vaulters = AddTeamVaulters(individualVaulters);
+
+        //    return vaulters.ToArray();
+        //}
 
 
         public TeamMember[] GetTeamMembers()
@@ -276,7 +390,7 @@ namespace WebApplication1.Business.Logic.Import
             return vaulters;
         }
 
-        public Vaulter[] GetIndividualVaulters()
+        private Vaulter[] GetIndividualVaulters()
         {
             //TODO: cache
             var vaultersArray = _excelImportRepository.GetVaulters();
@@ -285,7 +399,20 @@ namespace WebApplication1.Business.Logic.Import
             vaulters = SetClass(vaulters);
             return vaulters.ToArray();
         }
-
+        public List<StepIdWithClasses> GetStartlistStepCompetionClasses()
+        {
+            //var startListClasses = _excelImportRepository.GetStartList();
+            //foreach (var startListClass in startListClasses)
+            //{
+            //    startListClass.
+            //}
+            //var vaulters = new List<Vaulter>(vaultersArray);
+            return _excelImportRepository.GetStartlistStepCompetionClasses();
+            //startListClasses.ForEach(startlistClass => startlistClass.StartList)
+            //vaulters = SetClub(vaulters);
+            //vaulters = SetClass(vaulters);
+            //return vaulters.ToArray();
+        }
         public Vaulter[] GetTeamVaulters()
         {
             //TODO: cache
