@@ -57,7 +57,8 @@ namespace WebApplication1.Business.Logic.Pdf
             {
                 foreach (var row in rows)
                 {
-                    sw.WriteLine("..\\..\\printSheets\\printSheets.exe \"" + row + "\"");
+                    var relPath = row.Replace("/", "");
+                    sw.WriteLine("..\\..\\printSheets\\printSheets.exe \"" + relPath + "\"");
                 }
             }
 
