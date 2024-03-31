@@ -83,7 +83,7 @@ namespace WebApplication1.Business.Logic.Import
                     }
                 }
                 return sameHorse.First();
-            });
+            }).ToList();
             var horseOrders = new List<HorseOrder>();
             int serialNumber = 1;
             int startNumber;
@@ -95,20 +95,32 @@ namespace WebApplication1.Business.Logic.Import
                     serialNumber++;
                 }
 
-                var vaultersRows = individualRows.Where(x => x.HorseTdbId == row.HorseTdbId && x.LungerTdbId == row.LungerTdbId);
+                var vaultersRows = individualRows.Where(x => x.HorseTdbId == row.HorseTdbId && x.LungerTdbId == row.LungerTdbId).ToList();
                 var lunger = new Lunger() { LungerTdbId = row.LungerTdbId };
 
                 var vaultersOrder = new List<VaulterOrder>();
                 int vaulterStartOrder = 1;
-                foreach (var vaultersRow in vaultersRows)
+                var distinctTestnumbers = classesTdbIdsTestnumber.Select(x => x.testnumber).Distinct().ToList(); //   .Where(x => x.ClassTdbId == existingVaulter.VaultingClass.ClassTdbId).OrderBy(x => x.testnumber).Select(x => x.testnumber).ToArray();
+                foreach (var testnumber in distinctTestnumbers)
                 {
-                    var existingVaulter = ContestService.GetVaulter(vaultersRow.VaulterId1);
-                    var vaulter = new Vaulter() { VaulterTdbId = vaultersRow.VaulterId1, Name = vaultersRow.VaulterName1 };
-                    var testnumbers = classesTdbIdsTestnumber.Where(x => x.ClassTdbId == existingVaulter.VaultingClass.ClassTdbId).OrderBy(x => x.testnumber).Select(x => x.testnumber).ToArray();
-                    foreach (var testnumber in testnumbers)
+                    foreach (var vaultersRow in vaultersRows)
                     {
+                        var existingVaulter = ContestService.GetVaulter(vaultersRow.VaulterId1);
+                        var vaultersClass = existingVaulter.VaultingClass.ClassTdbId;
+                        var classHaveThisTestNumber = null != classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass && x.testnumber == testnumber).FirstOrDefault();
+                        if (!classHaveThisTestNumber)
+                        {
+                            continue;
+                        }
+                        var vaulter = new Vaulter() { VaulterTdbId = vaultersRow.VaulterId1, Name = vaultersRow.VaulterName1 };
+
                         var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = testnumber };
                         vaultersOrder.Add(vaulterOrder);
+                        //foreach (var testnumber in testnumbers)
+                        //{
+                        //    var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = testnumber };
+                        //    vaultersOrder.Add(vaulterOrder);
+                        //}
                     }
                 }
 
