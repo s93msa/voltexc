@@ -141,7 +141,7 @@ namespace WebApplication1.Business.Logic.Import
                 //var startOrder = GetStartOrder(row);
                 var startlistClassStepId = Convert.ToInt32(row.Cell("a").Value);
                 var classTdbId = Convert.ToInt32(row.Cell("c").Value);
-                var testNumber = Convert.ToInt32(row.Cell("g").Value);
+                var testNumber = Convert.ToInt32(row.Cell("f").Value);
 
                 var stepIdWithClasses = stepIdsWithClasses.Find(x => x.StartListClassStepId == startlistClassStepId);
 
