@@ -195,25 +195,33 @@ namespace WebApplication1.Business.Logic.Import
 
 
         }
-        
+
         private HorseOrder[] GetTeamHorseOrders(List<ClassesTdb> classesTdbIdsTestnumber)
         {
             var rows = GetRows(classesTdbIdsTestnumber.Select(x => x.ClassTdbId).ToArray<int>());
 
             var teamRows = rows.Where(x => x.IsTeam).ToArray();
+            var ClassTdbIds = classesTdbIdsTestnumber.Select(x => x.ClassTdbId).Distinct().ToList();
             List<HorseOrder> horseOrders = new List<HorseOrder>();
             int startNumber = 1;
-            foreach (var classesTdbIdTestnumber in classesTdbIdsTestnumber)
-            {
-                var teams = teamRows.Where(team => team.ClassTdbId == classesTdbIdTestnumber.ClassTdbId);
+            //foreach (var classesTdbId in ClassTdbIds)
+            //{
+                var teams = teamRows.Where(team => ClassTdbIds.Contains(team.ClassTdbId));
                 foreach (var team in teams)
                 {
-                    HorseOrder horseOrder = CreateHorseOrder(team);
-                    horseOrder.TeamTestnumber = classesTdbIdTestnumber.testnumber;
-                    horseOrder.StartNumber = startNumber++;
-                    horseOrders.Add(horseOrder);
+                    var teamClass = team.ClassTdbId;
+                    var testnumbers = classesTdbIdsTestnumber.Where(x => x.ClassTdbId == teamClass).Select(x => x.testnumber).Distinct().OrderBy(x => x).ToList();
+
+
+                    foreach (var testnumber in testnumbers)
+                    {
+                        HorseOrder horseOrder = CreateHorseOrder(team);
+                        horseOrder.TeamTestnumber = testnumber;
+                        horseOrder.StartNumber = startNumber++;
+                        horseOrders.Add(horseOrder);
+                    }
                 }
-            }
+            //}
 
             return horseOrders.ToArray();
         }
