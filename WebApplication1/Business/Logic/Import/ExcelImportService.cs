@@ -100,21 +100,26 @@ namespace WebApplication1.Business.Logic.Import
 
                 var vaultersOrder = new List<VaulterOrder>();
                 int vaulterStartOrder = 1;
-                var distinctTestnumbers = classesTdbIdsTestnumber.Select(x => x.testnumber).Distinct().ToList(); //   .Where(x => x.ClassTdbId == existingVaulter.VaultingClass.ClassTdbId).OrderBy(x => x.testnumber).Select(x => x.testnumber).ToArray();
+                var distinctTestnumbers = classesTdbIdsTestnumber.Select(x => x.testnumber).Distinct().ToList();
+                                                                                                                 // här behöver vi ändra så att den loopar igenom alla rows. Den tar sedan lägsta testnummer för varje voltigör dvs för den klassen 
+                var loopIndex = 0;
                 foreach (var testnumber in distinctTestnumbers)
                 {
                     foreach (var vaultersRow in vaultersRows)
                     {
                         var existingVaulter = ContestService.GetVaulter(vaultersRow.VaulterId1);
                         var vaultersClass = existingVaulter.VaultingClass.ClassTdbId;
-                        var classHaveThisTestNumber = null != classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass && x.testnumber == testnumber).FirstOrDefault();
+                        // Kanske inte den snyggaste lösningen. Men behövde fixa snabbt. Den tar ut den lägsta testnumret i denna startlsteklass för klassen. För varje loop ökar den med ett så nästa gång tar den den näst lägsta osv
+                        // Det gör tex att om man kör grund och teknisk kür i samma startlisteklass kommer den först ta grunden för alla tävlande på den hästen sen tekniskt kür för alla tävlande  (för de som kör det)
+                        var minTestnumber = classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass).Select(y => y.testnumber).Min() + loopIndex; 
+                        var classHaveThisTestNumber = null != classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass && x.testnumber == minTestnumber).FirstOrDefault();
                         if (!classHaveThisTestNumber)
                         {
                             continue;
                         }
                         var vaulter = new Vaulter() { VaulterTdbId = vaultersRow.VaulterId1, Name = vaultersRow.VaulterName1 };
 
-                        var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = testnumber };
+                        var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = minTestnumber };
                         vaultersOrder.Add(vaulterOrder);
                         //foreach (var testnumber in testnumbers)
                         //{
@@ -122,6 +127,7 @@ namespace WebApplication1.Business.Logic.Import
                         //    vaultersOrder.Add(vaulterOrder);
                         //}
                     }
+                    loopIndex++;
                 }
 
                 var horseOrder = new HorseOrder
