@@ -225,6 +225,9 @@
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
     <Compile Include="Business\Logic\Excel\Results\Participants.cs" />
     <Compile Include="Business\Logic\Excel\Row.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportMergedModelTestNumber.cs" />
+    <Compile Include="Business\Logic\Import\HorseLounger.cs" />
+    <Compile Include="Business\Logic\Import\StartlistClass.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportMergedModel.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportRepository.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportService.cs" />

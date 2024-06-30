@@ -36,7 +36,121 @@ namespace WebApplication1.Business.Logic.Import
             return excelImportMergedList.ToArray();
         }
 
-       
+        public bool WorksheetStartListExist()
+        {
+            return !string.IsNullOrWhiteSpace(GetWorksheetStartList()?.Name);
+        }
+
+        public List<StartlistClass>GetStartlistMergedInfo()
+        {
+            var startList = new List<StartlistClass>();
+            //var horseLoungerVaultersList = new List<HorseLoungerVaulters>();
+            var worksheet = GetWorksheetStartList();
+
+            var testNumberPerEkipage = new Dictionary<string, int>();
+            int previousHorseTdbId = -1;
+            int previousLoungerTdbId = -1;
+            bool previousWasTeam = false; 
+            StartlistClass startListClass = new StartlistClass();
+            var horseLoungerVaulters = new HorseLoungerVaulters();
+            foreach (var row in worksheet.Rows())
+            {
+                if (IsNewStartClassRow(row))
+                {
+                    startListClass = new StartlistClass
+                    {
+                        startListClassId = GetInt(row, "a"),
+                        horseLoungerVaultersList = new List<HorseLoungerVaulters>()
+                    };
+                    startList.Add(startListClass);
+                    continue;
+                }
+                else
+                {
+                    int testNumber;
+                    var excelImportMergedModel = GetAllRowInformation(row);
+                    if(excelImportMergedModel.VaulterId1 < 1)
+                    {
+                        continue;
+                    }
+                    testNumber = SetNewTestnumber(testNumberPerEkipage, excelImportMergedModel);
+
+                    var excelImportMergedModelTestNumber = new ExcelImportMergedModelTestNumber(excelImportMergedModel, testNumber);
+                    if ((!excelImportMergedModel.IsTeam && !previousWasTeam) && excelImportMergedModel.HorseTdbId == previousHorseTdbId && excelImportMergedModel.LungerTdbId == previousLoungerTdbId)
+                    {
+                        horseLoungerVaulters.excelRowsList.Add(excelImportMergedModelTestNumber);
+                    }
+                    else
+                    {
+                        horseLoungerVaulters = new HorseLoungerVaulters();
+                        horseLoungerVaulters.horseTdbId = excelImportMergedModel.HorseTdbId;
+                        horseLoungerVaulters.LoungerTdbId = excelImportMergedModel.LungerTdbId;
+                        var excelImportMergedModelList = new List<ExcelImportMergedModelTestNumber>();
+                        excelImportMergedModelList.Add(excelImportMergedModelTestNumber);
+                        horseLoungerVaulters.excelRowsList = excelImportMergedModelList;
+                        //((horseLoungerVaultersList.Add(horseLoungerVaulters);
+                        startListClass.horseLoungerVaultersList.Add(horseLoungerVaulters);
+
+                        //Set previous
+                        previousHorseTdbId = excelImportMergedModel.HorseTdbId;
+                        previousLoungerTdbId = excelImportMergedModel.LungerTdbId;
+                        previousWasTeam = excelImportMergedModel.IsTeam;
+                    }
+
+                }
+            }
+            return startList;
+        }
+        private IXLWorksheet GetWorksheetStartList()
+        {
+            IXLWorksheet startlist;
+            if (_workbook.Worksheets.TryGetWorksheet("startlista", out startlist))
+            {
+                return startlist;
+            }
+
+            return null;
+        }
+
+        private static bool IsNewStartClassRow(IXLRow row)
+        {
+            return IsCellBold(row, "b");
+        }
+
+        private int SetNewTestnumber(Dictionary<string, int> teamsTestnumber, ExcelImportMergedModel excelImportMergedModel)
+        {
+            int testNumber;
+            if (excelImportMergedModel.IsTeam)
+            {
+                var teamName = excelImportMergedModel.TeamName;
+                testNumber = SetTestnumber(teamsTestnumber, teamName);
+
+            }
+            else
+            {
+                var vaulter = excelImportMergedModel.VaulterName1;
+                testNumber = SetTestnumber(teamsTestnumber, vaulter);
+            }
+
+            return testNumber;
+        }
+
+        private int SetTestnumber(Dictionary<string, int> teamsTestnumber, string teamName)
+        {
+            int testnumber;
+            if (teamsTestnumber.TryGetValue(teamName, out testnumber))
+            {
+                teamsTestnumber[teamName] = ++testnumber;
+            }
+            else
+            {
+                testnumber = 1;
+                teamsTestnumber[teamName] = 1;
+            }
+
+            return testnumber;
+        }
+
         public Horse[] GetHorses()
         {
             var horses = new List<Horse>();
@@ -375,6 +489,11 @@ namespace WebApplication1.Business.Logic.Import
             }
 
             return DateTime.Now;
+        }
+
+        private static bool IsCellBold(IXLRow row, string cell)
+        {
+            return row?.Cell(cell)?.Style.Font.Bold ?? false;
         }
     }
 }
