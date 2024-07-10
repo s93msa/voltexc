@@ -53,12 +53,33 @@ namespace WebApplication1.Business.Logic.Excel
             int rowIndex = startRow;
             foreach (var row in rows)
             {
-                SetRowValuesInWorksheet(worksheet, rowIndex, 1, row.RowValues);
+                SetRowValuesInWorksheet(worksheet, rowIndex, startColumn: 1, rowValues: row.RowValues);
+                rowIndex++;
+            }
+        }
+
+        public void SetValuesInWorkSheet<T>(string worksheetName, int startRow, ICollection<Row<Cell<T>>> rows)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+
+            int rowIndex = startRow;
+            foreach (var row in rows)
+            {
+                SetRowValuesInWorksheet(worksheet, rowIndex, startColumn: 1, rowValues: row.RowValues.ToList());
                 rowIndex++;
             }
         }
 
         public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, T[] rowValues)
+        {
+            int columnIndex = startColumn;
+            foreach (var cellValue in rowValues)
+            {
+                SetValueInWorksheet(worksheet, row, columnIndex, cellValue);
+                columnIndex++;
+            }
+        }
+        public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, ICollection<Cell<T>> rowValues)
         {
             int columnIndex = startColumn;
             foreach (var cellValue in rowValues)
@@ -78,6 +99,15 @@ namespace WebApplication1.Business.Logic.Excel
         {
             worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
             worksheet.Cell(row, column).Value = value;
+        }
+        public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, Cell<T> cell)
+        {
+            worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
+            if (cell.FontStyle == ExcelFontStyle.Bold)
+            {
+                worksheet.Cell(row, column).Style.Font.Bold = true;
+            }
+            worksheet.Cell(row, column).Value = cell.CellValue;
         }
 
         public IXLCell SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
