@@ -46,17 +46,17 @@ namespace WebApplication1.Business.Logic.Excel
             _workbook.SaveAs(outputPathAndName);
         }
 
-        public void SetValuesInWorkSheet<T>(string worksheetName, int startRow, Row<T>[] rows)
-        {
-            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+        //public void SetValuesInWorkSheet<T>(string worksheetName, int startRow, Row<T>[] rows)
+        //{
+        //    var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
 
-            int rowIndex = startRow;
-            foreach (var row in rows)
-            {
-                SetRowValuesInWorksheet(worksheet, rowIndex, startColumn: 1, rowValues: row.RowValues);
-                rowIndex++;
-            }
-        }
+        //    int rowIndex = startRow;
+        //    foreach (var row in rows)
+        //    {
+        //        SetRowValuesInWorksheet(worksheet, rowIndex, startColumn: 1, rowValues: row.RowValues);
+        //        rowIndex++;
+        //    }
+        //}
 
         public void SetValuesInWorkSheet<T>(string worksheetName, int startRow, ICollection<Row<Cell<T>>> rows)
         {
@@ -70,15 +70,15 @@ namespace WebApplication1.Business.Logic.Excel
             }
         }
 
-        public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, T[] rowValues)
-        {
-            int columnIndex = startColumn;
-            foreach (var cellValue in rowValues)
-            {
-                SetValueInWorksheet(worksheet, row, columnIndex, cellValue);
-                columnIndex++;
-            }
-        }
+        //public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, T[] rowValues)
+        //{
+        //    int columnIndex = startColumn;
+        //    foreach (var cellValue in rowValues)
+        //    {
+        //        SetValueInWorksheet(worksheet, row, columnIndex, cellValue);
+        //        columnIndex++;
+        //    }
+        //}
         public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, ICollection<Cell<T>> rowValues)
         {
             int columnIndex = startColumn;
@@ -95,13 +95,17 @@ namespace WebApplication1.Business.Logic.Excel
         {
             worksheet.Cell(row, column).Value = value;
         }
-        public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, T value)
-        {
-            worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
-            worksheet.Cell(row, column).Value = value;
-        }
+        //public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, T value)
+        //{
+        //    worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
+        //    worksheet.Cell(row, column).Value = value;
+        //}
         public void SetValueInWorksheet<T>(IXLWorksheet worksheet, int row, int column, Cell<T> cell)
         {
+            if(cell == null)
+            {
+                return;
+            }
             worksheet.Cell(row, column).Style.NumberFormat.Format = "@"; //format text för att klara när klassen har punkt och nollor tex 1.40 det får inte ändras till 1,4
             if (cell.FontStyle == ExcelFontStyle.Bold)
             {
