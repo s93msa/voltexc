@@ -69,6 +69,20 @@ namespace WebApplication1.Business.Logic.Excel
                 rowIndex++;
             }
         }
+        public void SetFormulaInWorkSheet(string worksheetName, int endRow)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+            worksheet.Column(1).InsertColumnsBefore(1);
+            worksheet.Cell("A1").Value = new DateTime(1, 1, 1, 10, 00, 0);
+            worksheet.Cell("A1").Style.DateFormat.Format = "HH:mm";
+
+            //= OM(D1 = 0; ""; B1 + KLOCKSLAG(0; 0; PRODUKTSUMMA(D1: D1) * 60))
+
+            for (var currentRow=2; currentRow <= endRow; currentRow++)
+            {
+                worksheet.Cell(currentRow, 1).FormulaA1 = "IF(B" + (currentRow - 1) + "=0,\"\", A1+TIME(0,0,SUMPRODUCT(VALUE(B1:B" + (currentRow-1) + "))*60))";
+            }
+        }
 
         //public void SetRowValuesInWorksheet<T>(IXLWorksheet worksheet, int row, int startColumn, T[] rowValues)
         //{

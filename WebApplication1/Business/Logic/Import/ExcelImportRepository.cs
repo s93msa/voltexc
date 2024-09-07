@@ -41,7 +41,7 @@ namespace WebApplication1.Business.Logic.Import
             return !string.IsNullOrWhiteSpace(GetWorksheetStartList()?.Name);
         }
 
-        public List<StartlistClass>GetStartlistMergedInfo()
+        public List<StartlistClass> GetStartlistMergedInfo()
         {
             var startList = new List<StartlistClass>();
             //var horseLoungerVaultersList = new List<HorseLoungerVaulters>();
@@ -50,7 +50,7 @@ namespace WebApplication1.Business.Logic.Import
             var testNumberPerEkipage = new Dictionary<string, int>();
             int previousHorseTdbId = -1;
             int previousLoungerTdbId = -1;
-            bool previousWasTeam = false; 
+            bool previousWasTeam = false;
             StartlistClass startListClass = new StartlistClass();
             var horseLoungerVaulters = new HorseLoungerVaulters();
             foreach (var row in worksheet.Rows())
@@ -69,7 +69,7 @@ namespace WebApplication1.Business.Logic.Import
                 {
                     int testNumber;
                     var excelImportMergedModel = GetAllRowInformation(row);
-                    if(excelImportMergedModel.VaulterId1 < 1)
+                    if (excelImportMergedModel.VaulterId1 < 1)
                     {
                         continue;
                     }
@@ -117,19 +117,24 @@ namespace WebApplication1.Business.Logic.Import
             return IsCellBold(row, "b");
         }
 
-        private int SetNewTestnumber(Dictionary<string, int> teamsTestnumber, ExcelImportMergedModel excelImportMergedModel)
+        private int SetNewTestnumber(Dictionary<string, int> testnumber, ExcelImportMergedModel excelImportMergedModel)
         {
             int testNumber;
             if (excelImportMergedModel.IsTeam)
             {
                 var teamName = excelImportMergedModel.TeamName;
-                testNumber = SetTestnumber(teamsTestnumber, teamName);
+                var horseName = excelImportMergedModel.HorseName;
+                var classNr = excelImportMergedModel.ClassNr;
+                testNumber = SetTestnumber(testnumber, $"{teamName}_{horseName}_{classNr}");
 
             }
             else
             {
                 var vaulter = excelImportMergedModel.VaulterName1;
-                testNumber = SetTestnumber(teamsTestnumber, vaulter);
+                var horseName = excelImportMergedModel.HorseName;
+                var classNr = excelImportMergedModel.ClassNr;
+
+                testNumber = SetTestnumber(testnumber, $"{ vaulter}_{horseName}_{classNr}");
             }
 
             return testNumber;
@@ -413,8 +418,8 @@ namespace WebApplication1.Business.Logic.Import
 
         private static ExcelImportMergedModel GetAllRowInformation(IXLRow row)
         {
-            var vaulterId2 = GetInt(row, "n");
-            var clubName = GetString(row, "i");
+            var vaulterId2 = GetInt(row, "p");
+            var clubName = GetString(row, "k");
             var className = GetString(row, "c");
             var excelImportMergedModel = new ExcelImportMergedModel
             {
@@ -425,25 +430,25 @@ namespace WebApplication1.Business.Logic.Import
                 LungerName = GetString(row, "e"),
                 HorseTdbId = GetInt(row, "f"),
                 HorseName = GetString(row, "g"),
-                ClubTdbId = GetInt(row, "h"),
+                ClubTdbId = GetInt(row, "j"),
                 ClubName = clubName,
-                TeamName = GetString(row, "k", clubName + className),
-                VaulterId1 = GetInt(row, "l"),
-                VaulterName1 = GetString(row, "m"),
+                TeamName = GetString(row, "m", clubName + className),
+                VaulterId1 = GetInt(row, "n"),
+                VaulterName1 = GetString(row, "o"),
                 VaulterId2 = vaulterId2,
-                VaulterName2 = GetString(row, "o"),
-                VaulterId3 = GetInt(row, "p"),
-                VaulterName3 = GetString(row, "q"),
-                VaulterId4 = GetInt(row, "r"),
-                VaulterName4 = GetString(row, "s"),
-                VaulterId5 = GetInt(row, "t"),
-                VaulterName5 = GetString(row, "u"),
-                VaulterId6 = GetInt(row, "v"),
-                VaulterName6 = GetString(row, "w"),
-                VaulterId7 = GetInt(row, "x"),
-                VaulterName7 = GetString(row, "y"),
-                VaulterId8 = GetInt(row, "z"),
-                VaulterName8 = GetString(row, "aa"),
+                VaulterName2 = GetString(row, "q"),
+                VaulterId3 = GetInt(row, "r"),
+                VaulterName3 = GetString(row, "s"),
+                VaulterId4 = GetInt(row, "t"),
+                VaulterName4 = GetString(row, "u"),
+                VaulterId5 = GetInt(row, "v"),
+                VaulterName5 = GetString(row, "w"),
+                VaulterId6 = GetInt(row, "x"),
+                VaulterName6 = GetString(row, "y"),
+                VaulterId7 = GetInt(row, "z"),
+                VaulterName7 = GetString(row, "aa"),
+                VaulterId8 = GetInt(row, "ab"),
+                VaulterName8 = GetString(row, "ac"),
                 IsTeam = !IsEmpty(vaulterId2)
             };
             return excelImportMergedModel;

@@ -8,12 +8,12 @@ using WebApplication1.Business.Logic.Import;
 
 namespace WebApplication1.Business.Logic.Excel
 {
-    public class StartlistExportService
+    public class ExportStartListService
     {
         private const string ExcelFileExtension = ".xlsx";
         private ExcelBaseService _excelBaseService;
         private string _ExcelPathAndName;
-        public StartlistExportService()
+        public ExportStartListService()
         {
             var workingdirectory = System.Web.Hosting.HostingEnvironment.MapPath("~");
             _ExcelPathAndName = workingdirectory + @"..\output\startlist";
@@ -40,70 +40,62 @@ namespace WebApplication1.Business.Logic.Excel
             foreach (var startlistClass in startlistclasses)
             {
                 var columns = new List<Cell<string>>();
-                var cell = new Cell<string>("");
+                var cell = BoldCell(startlistClass.StartListClassStepId.ToString());
                 columns.Add(cell);
                 cell = BoldCell(startlistClass.Name);
                 columns.Add(cell);
 
                 rows.Add(new Row<Cell<string>>(columns.ToArray()));
-                
+
+                ////Row<string>
+
                 //var outputStartlistClass = new StartlistClass();
                 //outputStartlistClass.startListClassId = startlistClass.StartListClassStepId;
                 foreach (var startListItem in startlistClass.GetActiveStartList().OrderBy(x => x.StartNumber))
                 {
                     if (startListItem.IsTeam)
                     {
-                        double durationMinutes; //Lag grund: 10 min/lag eller Lag kür: 8 min / lag PdD: 5 min/PdD
-                        if (startListItem.VaultingTeam.VaultingClass.ClassName.ToLower().Contains("pas de deux"))
-                        {
-                            durationMinutes = 5;
-                        }
-                        else if (startListItem.TeamTestnumber == 1)
-                        {
-                            durationMinutes = 10;
-                        }
-                        else
-                        {
-                            durationMinutes = 8;
-                        }
-
-
-                        columns = new List<Cell<string>>
-                        {
-                            new Cell<string>(durationMinutes.ToString()), 
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassNr),
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassName),
-                            new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
-                            new Cell<string>(startListItem.HorseInformation.HorseName),
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClub.ClubName),
-                            new Cell<string>(""),
-                            new Cell<string>(startListItem.VaultingTeam.Name)
-                        };
+                        columns = new List<Cell<string>>();
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassTdbId.ToString()));
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassNr));
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassName));
+                        columns.Add(new Cell<string>(startListItem.HorseInformation.Lunger.LungerTdbId.ToString()));
+                        columns.Add(new Cell<string>(startListItem.HorseInformation.Lunger.LungerName));
+                        columns.Add(new Cell<string>(startListItem.HorseInformation.HorseTdbId.ToString()));
+                        columns.Add(new Cell<string>(startListItem.HorseInformation.HorseName));
+                        columns.Add(new Cell<string>("")); //Reserverhäst
+                        columns.Add(new Cell<string>("")); //Reserverhäst
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.VaultingClub.ClubTdbId.ToString()));
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.VaultingClub.ClubName));
+                        columns.Add(new Cell<string>(""));
+                        columns.Add(new Cell<string>(startListItem.VaultingTeam.Name));
                         foreach (var teamItem in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
                         {
+                            columns.Add(new Cell<string>(teamItem.Participant.VaulterTdbId.ToString()));
                             columns.Add(new Cell<string>(teamItem.Participant.Name));
                         }
                         rows.Add(new Row<Cell<string>>(columns.ToArray()));
                     }
                     else
                     {
-                        var vaulters = startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder).ToList();
-                        double durationMinutes = 1.5 + (vaulters.Count() * 2); //Individuella: grund och kür 1,5 min/häst + 2 min/voltigör
-
-                        foreach (var vaulterItem in vaulters)
+                        foreach (var vaulterItem in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
                         {
-                            columns = new List<Cell<string>>
-                            {
-                                new Cell<string>(durationMinutes.ToString()), 
-                                new Cell<string>(vaulterItem.Participant.VaultingClass.ClassNr),
-                                new Cell<string>(vaulterItem.Participant.VaultingClass.ClassName),
-                                new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
-                                new Cell<string>(startListItem.HorseInformation.HorseName),
-                                new Cell<string>(vaulterItem.Participant.VaultingClub.ClubName),
-                                new Cell<string>(""),
-                                new Cell<string>(""),
-                                new Cell<string>(vaulterItem.Participant.Name)
-                            };
+                            columns = new List<Cell<string>>();
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaultingClass.ClassTdbId.ToString()));
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaultingClass.ClassNr));
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaultingClass.ClassName));
+                            columns.Add(new Cell<string>(startListItem.HorseInformation.Lunger.LungerTdbId.ToString()));
+                            columns.Add(new Cell<string>(startListItem.HorseInformation.Lunger.LungerName));
+                            columns.Add(new Cell<string>(startListItem.HorseInformation.HorseTdbId.ToString()));
+                            columns.Add(new Cell<string>(startListItem.HorseInformation.HorseName));
+                            columns.Add(new Cell<string>("")); //Reserverhäst
+                            columns.Add(new Cell<string>("")); //Reserverhäst
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaultingClub.ClubTdbId.ToString()));
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaultingClub.ClubName));
+                            columns.Add(new Cell<string>(""));
+                            columns.Add(new Cell<string>(""));
+                            columns.Add(new Cell<string>(vaulterItem.Participant.VaulterTdbId.ToString()));
+                            columns.Add(new Cell<string>(vaulterItem.Participant.Name));
                             rows.Add(new Row<Cell<string>>(columns.ToArray()));
                         }
                     }
@@ -128,8 +120,6 @@ namespace WebApplication1.Business.Logic.Excel
             var rows = CreateStartlist();
 
             _excelBaseService.SetValuesInWorkSheet(worksheetName, 1, rows);
-            _excelBaseService.SetFormulaInWorkSheet(worksheetName, rows.Count());
-
         }
 
         private static Cell<string> BoldCell(string cellValue)

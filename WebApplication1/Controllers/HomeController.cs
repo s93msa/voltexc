@@ -18,9 +18,11 @@ namespace WebApplication1.Controllers
         public ExcelResultService _excelResultService;
         public ResultService _resultService;
         private StartlistExportService _startlistExportService;
+        private ExportStartListService _exportStartListService;
 
         public HomeController()
         {
+            _exportStartListService = new ExportStartListService();
             _excelResultService = new ExcelResultService();
             _resultService = new ResultService();
             _startlistExportService = new StartlistExportService();
@@ -46,13 +48,22 @@ namespace WebApplication1.Controllers
 
             return View();
         }
-
-        public ActionResult CreateStartListExcel()
+        public ActionResult CreateExportStartListExcel()
         {
 
             _startlistExportService.SetStartList();
 
             _startlistExportService.SaveWithTimeStamp();
+
+            ViewBag.Message = "Excel skapad";
+
+            return View();
+        }
+        public ActionResult CreateStartListExcel()
+        {
+            _exportStartListService.SetStartList();
+
+            _exportStartListService.SaveWithTimeStamp();
 
             ViewBag.Message = "Excel skapad";
 

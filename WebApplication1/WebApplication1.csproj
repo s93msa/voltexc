@@ -226,6 +226,7 @@
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
     <Compile Include="Business\Logic\Excel\Results\Participants.cs" />
     <Compile Include="Business\Logic\Excel\Row.cs" />
+    <Compile Include="Business\Logic\Excel\ExportStartListService .cs" />
     <Compile Include="Business\Logic\Excel\StartlistExportService.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportMergedModelTestNumber.cs" />
     <Compile Include="Business\Logic\Import\HorseLounger.cs" />
@@ -472,6 +473,8 @@
     <Compile Include="ViewModels\HorseOrderViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\VaultersOrderViewModel.cs" />
+    <Content Include="Views\Home\CreateStartListExcel.cshtml" />
+    <None Include="Views\Home\CreateExportStartListExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
