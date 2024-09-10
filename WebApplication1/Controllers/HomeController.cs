@@ -50,10 +50,9 @@ namespace WebApplication1.Controllers
         }
         public ActionResult CreateExportStartListExcel()
         {
+            _exportStartListService.SetStartList();
 
-            _startlistExportService.SetStartList();
-
-            _startlistExportService.SaveWithTimeStamp();
+            _exportStartListService.SaveWithTimeStamp();
 
             ViewBag.Message = "Excel skapad";
 
@@ -61,9 +60,10 @@ namespace WebApplication1.Controllers
         }
         public ActionResult CreateStartListExcel()
         {
-            _exportStartListService.SetStartList();
 
-            _exportStartListService.SaveWithTimeStamp();
+            _startlistExportService.SetStartList();
+
+            _startlistExportService.SaveWithTimeStamp();
 
             ViewBag.Message = "Excel skapad";
 

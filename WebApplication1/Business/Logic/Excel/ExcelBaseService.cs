@@ -73,14 +73,14 @@ namespace WebApplication1.Business.Logic.Excel
         {
             var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
             worksheet.Column(1).InsertColumnsBefore(1);
-            worksheet.Cell("A1").Value = new DateTime(1, 1, 1, 10, 00, 0);
-            worksheet.Cell("A1").Style.DateFormat.Format = "HH:mm";
-
+            
+            worksheet.Cell("A1").Value = new DateTime(2023, 9, 10, 9, 0, 0); ;
+            worksheet.Column("A").Style.DateFormat.Format = "HH:mm";
             //= OM(D1 = 0; ""; B1 + KLOCKSLAG(0; 0; PRODUKTSUMMA(D1: D1) * 60))
 
             for (var currentRow=2; currentRow <= endRow; currentRow++)
             {
-                worksheet.Cell(currentRow, 1).FormulaA1 = "IF(B" + (currentRow - 1) + "=0,\"\", A1+TIME(0,0,SUMPRODUCT(VALUE(B1:B" + (currentRow-1) + "))*60))";
+                worksheet.Cell(currentRow, 1).FormulaA1 = "IF(B" + (currentRow) + "=0,\"\", A1+TIME(0,0,SUMPRODUCT(VALUE(B1:B" + (currentRow-1) + "))*60))";
             }
         }
 
@@ -162,6 +162,29 @@ namespace WebApplication1.Business.Logic.Excel
             //if (xlRange == null)
             //    return (IXLCell)null;
             //return xlRange.FirstCell();
+        }
+
+        public void SetAutoRowHeight(string worksheetName)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+            worksheet.Rows().AdjustToContents();
+        }
+
+        public void ConvertToNumber(string worksheetName, string columnName)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+            var column = worksheet.Column(columnName);
+            worksheet.Column(columnName).Style.NumberFormat.Format = "0.0";
+
+            foreach (var cell in column.CellsUsed(c => c.Address.RowNumber > 1)) // Skip the header in D1
+            {
+                double result;
+                if (double.TryParse(cell.GetValue<string>(), out result))
+                {
+                    cell.Value = result; // Assign the parsed number
+                    cell.SetDataType(XLDataType.Number); // Set the data type to number
+                }
+            }
         }
     }
 }

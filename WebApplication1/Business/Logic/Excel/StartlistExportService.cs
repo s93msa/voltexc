@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Business.Logic.Import;
+using WebApplication1.Classes;
+using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Excel
 {
@@ -39,14 +42,14 @@ namespace WebApplication1.Business.Logic.Excel
             var startlistclasses = contest.GetActiveStartListClassStep().OrderBy(x => x.StartOrder);
             foreach (var startlistClass in startlistclasses)
             {
-                var columns = new List<Cell<string>>();
-                var cell = new Cell<string>("");
-                columns.Add(cell);
-                cell = BoldCell(startlistClass.Name);
-                columns.Add(cell);
+                rows.Add(EmptyRow());
+                List<Cell<string>> columns = ClassInformation(startlistClass);
 
                 rows.Add(new Row<Cell<string>>(columns.ToArray()));
-                
+                columns = JudgesInformation(startlistClass);
+                rows.Add(new Row<Cell<string>>(columns.ToArray()));
+
+                int startnumer = 0;
                 //var outputStartlistClass = new StartlistClass();
                 //outputStartlistClass.startListClassId = startlistClass.StartListClassStepId;
                 foreach (var startListItem in startlistClass.GetActiveStartList().OrderBy(x => x.StartNumber))
@@ -67,44 +70,72 @@ namespace WebApplication1.Business.Logic.Excel
                             durationMinutes = 8;
                         }
 
-
+                        startnumer++;
+                        var testName = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name;
+                        var classTestInformation = startListItem.VaultingTeam.VaultingClass.ClassName + " klass: " + startListItem.VaultingTeam.VaultingClass.ClassNr + " - " + testName;
                         columns = new List<Cell<string>>
                         {
-                            new Cell<string>(durationMinutes.ToString()), 
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassNr),
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClass.ClassName),
-                            new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
-                            new Cell<string>(startListItem.HorseInformation.HorseName),
-                            new Cell<string>(startListItem.VaultingTeam.VaultingClub.ClubName),
+                            new Cell<string>(durationMinutes.ToString()),
                             new Cell<string>(""),
-                            new Cell<string>(startListItem.VaultingTeam.Name)
+                            new Cell<string>(startnumer.ToString()),
+                            new Cell<string>(startListItem.VaultingTeam.Name),
+                            new Cell<string>(startListItem.HorseInformation.HorseName),
+                            new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
+                            new Cell<string>(classTestInformation),
+                            new Cell<string>(startListItem.VaultingTeam.VaultingClub.ClubName),
                         };
+                        rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                        var teamParticipants = new List<string>();
                         foreach (var teamItem in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
                         {
-                            columns.Add(new Cell<string>(teamItem.Participant.Name));
+                            teamParticipants.Add(teamItem.Participant.Name.Replace(" ", "\u00A0")); // \u00A0 = non-breaking space
                         }
+                        columns = new List<Cell<string>>
+                        {
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(""),
+                            new Cell<string>(string.Join(", ", teamParticipants))
+                        };
+                        rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                        columns = new List<Cell<string>>
+                            {
+                                new Cell<string>(""),
+                            };
                         rows.Add(new Row<Cell<string>>(columns.ToArray()));
                     }
                     else
                     {
                         var vaulters = startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder).ToList();
                         double durationMinutes = 1.5 + (vaulters.Count() * 2); //Individuella: grund och kür 1,5 min/häst + 2 min/voltigör
-
+                        var durationMinutesString = durationMinutes.ToString();
                         foreach (var vaulterItem in vaulters)
                         {
+                            var testName = ExcelPreCompetitionData.GetCompetitionStep(contest.TypeOfContest, vaulterItem.Participant.VaultingClass, vaulterItem.Testnumber)?.Name;
+                            var classTestInformation = vaulterItem.Participant.VaultingClass.ClassName + " klass: " + vaulterItem.Participant.VaultingClass.ClassNr + " - " + testName;
+                            startnumer++;
                             columns = new List<Cell<string>>
                             {
-                                new Cell<string>(durationMinutes.ToString()), 
-                                new Cell<string>(vaulterItem.Participant.VaultingClass.ClassNr),
-                                new Cell<string>(vaulterItem.Participant.VaultingClass.ClassName),
-                                new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
+                                new Cell<string>(durationMinutesString),
+                                new Cell<string>(""),
+                                new Cell<string>(startnumer.ToString()),
+                                new Cell<string>(vaulterItem.Participant.Name),
                                 new Cell<string>(startListItem.HorseInformation.HorseName),
+                                new Cell<string>(startListItem.HorseInformation.Lunger.LungerName),
+                                new Cell<string>(classTestInformation),
                                 new Cell<string>(vaulterItem.Participant.VaultingClub.ClubName),
-                                new Cell<string>(""),
-                                new Cell<string>(""),
-                                new Cell<string>(vaulterItem.Participant.Name)
                             };
                             rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                            columns = new List<Cell<string>>
+                            {
+                                new Cell<string>(""),
+                            };
+                            rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                            durationMinutesString = "";
                         }
                     }
 
@@ -121,6 +152,50 @@ namespace WebApplication1.Business.Logic.Excel
             return rows;
         }
 
+        private List<Cell<string>> JudgesInformation(StartListClassStep startlistClass)
+        {
+            List<Cell<string>> columns = new List<Cell<string>>
+                {
+                    new Cell<string>(""),
+                    new Cell<string>(""),
+                    new Cell<string>("")
+                };
+
+            var judgesInformation = new StringBuilder();
+            judgesInformation.AppendLine("Domare ");
+            for (int judgeTable = 1; judgeTable <= 4; judgeTable++)
+            {
+                if (!string.IsNullOrWhiteSpace(startlistClass.GetJudgeName((JudgeTableNames)judgeTable)))
+                {
+                    var judgeTableName = ((JudgeTableNames)judgeTable);
+                    judgesInformation.AppendLine(judgeTableName.ToString() + ": " + startlistClass.GetJudgeName(judgeTableName) + " ");
+                }
+            }
+            var cell = BoldCell(judgesInformation.ToString());
+            columns.Add(cell);
+            return columns;
+        }
+
+        private static List<Cell<string>> ClassInformation(StartListClassStep startlistClass)
+        {
+            var columns = new List<Cell<string>>
+                {
+                    new Cell<string>(""),
+                    new Cell<string>(""),
+                    new Cell<string>("")
+                };
+            var cell = BoldCell(startlistClass.Name);
+            columns.Add(cell);
+            return columns;
+        }
+
+        private Row<Cell<string>> EmptyRow()
+        {
+            return new Row<Cell<string>>(new List<Cell<string>>());
+        }
+
+        
+
         public void SetStartList()
         {
             const string worksheetName = "startlista";
@@ -128,8 +203,10 @@ namespace WebApplication1.Business.Logic.Excel
             var rows = CreateStartlist();
 
             _excelBaseService.SetValuesInWorkSheet(worksheetName, 1, rows);
+            _excelBaseService.SetAutoRowHeight(worksheetName);
             _excelBaseService.SetFormulaInWorkSheet(worksheetName, rows.Count());
-
+            _excelBaseService.ConvertToNumber(worksheetName, "B");
+            _excelBaseService.ConvertToNumber(worksheetName, "D");
         }
 
         private static Cell<string> BoldCell(string cellValue)
