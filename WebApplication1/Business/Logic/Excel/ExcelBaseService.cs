@@ -170,11 +170,11 @@ namespace WebApplication1.Business.Logic.Excel
             worksheet.Rows().AdjustToContents();
         }
 
-        public void ConvertToNumber(string worksheetName, string columnName)
+        public void ConvertToNumber(string worksheetName, string columnName, string format)
         {
             var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
             var column = worksheet.Column(columnName);
-            worksheet.Column(columnName).Style.NumberFormat.Format = "0.0";
+            worksheet.Column(columnName).Style.NumberFormat.Format = format;
 
             foreach (var cell in column.CellsUsed(c => c.Address.RowNumber > 1)) // Skip the header in D1
             {

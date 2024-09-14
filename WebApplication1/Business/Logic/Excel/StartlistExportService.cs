@@ -205,8 +205,8 @@ namespace WebApplication1.Business.Logic.Excel
             _excelBaseService.SetValuesInWorkSheet(worksheetName, 1, rows);
             _excelBaseService.SetAutoRowHeight(worksheetName);
             _excelBaseService.SetFormulaInWorkSheet(worksheetName, rows.Count());
-            _excelBaseService.ConvertToNumber(worksheetName, "B");
-            _excelBaseService.ConvertToNumber(worksheetName, "D");
+            _excelBaseService.ConvertToNumber(worksheetName, "B", "0.0");
+            _excelBaseService.ConvertToNumber(worksheetName, "D", "0");
         }
 
         private static Cell<string> BoldCell(string cellValue)
