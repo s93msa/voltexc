@@ -89,7 +89,23 @@ namespace WebApplication1.Business.Logic.Excel
         //    }
         //}
 
-
+        public void SetTimeConstants(string worksheetName)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+            worksheet.Cell("l1").Value = "Häst";
+            worksheet.Cell(StartlistExportService.TEAMCOMPULSORY_CELL).Value = 7.5;
+        }
+        public void ConvertTextToFormula(string worksheetName, string column, int endRow)
+        {
+            var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
+            for (int row = 1; row<= endRow; row++)
+            {
+                var formulaAsString = worksheet.Cell(row, column).Value?.ToString();
+                worksheet.Cell(row, column).FormulaA1 = formulaAsString;
+            }
+            worksheet.Cell(StartlistExportService.TEAMCOMPULSORY_CELL).Value = 7.5;
+            worksheet.Column(1).InsertColumnsBefore(1);
+        }
         public void SetFormulaInWorkSheet(string worksheetName, int endRow)
         {
             var worksheet = _workbook.Worksheets.Worksheet(worksheetName);

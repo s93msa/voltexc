@@ -12,7 +12,10 @@ using WebApplication1.Models;
 namespace WebApplication1.Business.Logic.Excel
 {
     public class StartlistExportService
-    {
+    {//Lag grund: 10 min/lag eller Lag kür: 8 min / lag PdD: 5 min/PdD
+        //Individuella: grund och kür 1,5 min/häst + 2 min/voltigör
+        public const string TEAMCOMPULSORY_CELL = "p1";
+
         private const string ExcelFileExtension = ".xlsx";
         private ExcelBaseService _excelBaseService;
         private string _ExcelPathAndName;
@@ -75,6 +78,7 @@ namespace WebApplication1.Business.Logic.Excel
                         var classTestInformation = startListItem.VaultingTeam.VaultingClass.ClassName + " klass: " + startListItem.VaultingTeam.VaultingClass.ClassNr + " - " + testName;
                         columns = new List<Cell<string>>
                         {
+                            //new Cell<string>(TEAMCOMPULSORY_CELL), //durationMinutes.ToString()),
                             new Cell<string>(durationMinutes.ToString()),
                             new Cell<string>(""),
                             new Cell<string>(startnumer.ToString()),
@@ -102,11 +106,11 @@ namespace WebApplication1.Business.Logic.Excel
                             new Cell<string>(string.Join(", ", teamParticipants))
                         };
                         rows.Add(new Row<Cell<string>>(columns.ToArray()));
-                        columns = new List<Cell<string>>
-                            {
-                                new Cell<string>(""),
-                            };
-                        rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                        //columns = new List<Cell<string>>
+                        //    {
+                        //        new Cell<string>(""),
+                        //    };
+                        //rows.Add(new Row<Cell<string>>(columns.ToArray()));
                     }
                     else
                     {
@@ -120,7 +124,8 @@ namespace WebApplication1.Business.Logic.Excel
                             startnumer++;
                             columns = new List<Cell<string>>
                             {
-                                new Cell<string>(durationMinutesString),
+                                //new Cell<string>(TEAMCOMPULSORY_CELL), //new Cell<string>(durationMinutesString),
+                                new Cell<string>(durationMinutesString), 
                                 new Cell<string>(""),
                                 new Cell<string>(startnumer.ToString()),
                                 new Cell<string>(vaulterItem.Participant.Name),
@@ -130,15 +135,19 @@ namespace WebApplication1.Business.Logic.Excel
                                 new Cell<string>(vaulterItem.Participant.VaultingClub.ClubName),
                             };
                             rows.Add(new Row<Cell<string>>(columns.ToArray()));
-                            columns = new List<Cell<string>>
-                            {
-                                new Cell<string>(""),
-                            };
-                            rows.Add(new Row<Cell<string>>(columns.ToArray()));
+                            //columns = new List<Cell<string>>
+                            //{
+                            //    new Cell<string>(""),
+                            //};
+                            //rows.Add(new Row<Cell<string>>(columns.ToArray()));
                             durationMinutesString = "";
                         }
                     }
-
+                    columns = new List<Cell<string>>
+                            {
+                                new Cell<string>(""),
+                            };
+                    rows.Add(new Row<Cell<string>>(columns.ToArray()));
                     //    columns = new List<string>();
                     //    var horseLoungerVaulters = new HorseLoungerVaulters();
                     //    horseLoungerVaulters.excelRowsList
@@ -204,6 +213,7 @@ namespace WebApplication1.Business.Logic.Excel
 
             _excelBaseService.SetValuesInWorkSheet(worksheetName, 1, rows);
             _excelBaseService.SetAutoRowHeight(worksheetName);
+            //_excelBaseService.SetTimeConstants(worksheetName);
             _excelBaseService.SetFormulaInWorkSheet(worksheetName, rows.Count());
             _excelBaseService.ConvertToNumber(worksheetName, "A", "0.0");
             _excelBaseService.ConvertToNumber(worksheetName, "E", "0");
