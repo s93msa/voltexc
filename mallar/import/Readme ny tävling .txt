@@ -2,7 +2,8 @@ Infoga en ny kolumn mellan kommentarerna och första voltigören. Nya kolumnen ska
 På de rader som är lag: Skriv in lagnamn i kolumn m på.
 
 Ändra ordning i excelarket på ekipagefliken så att tävlande på samma häst ligger i rätt ordning. Dvs den först voltigören på hästen måste ligga före den andra startande inom samma startlisteklass.
-Lägg till rätt 
+
+Tänk på att om en individuell voltigör startar i två olika klasser så måste man skapa 2 voltigörer eftersom en voltigör bara kan tillhöra en klass. 
 
 Lägg till ScoreSheetId i kolumn D i kolumnnen klasser
 
