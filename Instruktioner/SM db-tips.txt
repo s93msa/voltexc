@@ -20,3 +20,17 @@ WHERE        (Name LIKE '%Di%')
 Skapa protkoll bara för en startklass
 Sök efter nedan i koden:
 foreach (var startListClassStep in startListClassStepOrdered)
+
+Ändra startordning för hästar för starter på söndagen (startorder > 150)
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP (1000) [StartListClassId]
+      ,[StartListClassStepId]
+      ,[StartOrder]
+      ,[Contest_ContestId]
+      ,[HorseId]
+      ,[HorseName]
+      ,[StartNumber]
+      ,[HorseOrderId]
+      ,[Name]
+  FROM [WebApplication1.Classes.VaultingContextProtokoll2019].[dbo].[aStartListHorses] where startorder > 150 order by startorder, startnumber
