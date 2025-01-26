@@ -1,3 +1,4 @@
+OBS 
 Infoga en ny kolumn mellan kommentarerna och första voltigören. Nya kolumnen ska ha bokstaven "m". 
 På de rader som är lag: Skriv in lagnamn i kolumn m på.
 
@@ -9,7 +10,7 @@ Lägg till ScoreSheetId i kolumn D i kolumnnen klasser
 
 Kontrollera/ändra i web.config:
 ContestId (1 = SM 2 = normal)
-Trahasttavling (true/false) -> om true kolla HorsePointTraHastTavling
+Trahasttavling (true/false) -> om true kolla HorsePointTraHastTavling. Denna används inte längre. Nu har vi speciella [ScoreSheetsId] för trähäst där a-protokollen inte är med 
 
 
 
