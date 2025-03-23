@@ -732,7 +732,7 @@ namespace WebApplication1.Business.Logic.Import
             //var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
             var vaultingTeamId = GetExistingTeam(horseOrder.VaultingTeam.Name)?.TeamId;
             var testnumber = horseOrder.TeamTestnumber;
-            var existingHorseOrder = ContestService.GetHorseOrders(startlistClassStepId, vaultingTeamId, testnumber);
+            var existingHorseOrder = ContestService.GetTeamHorseOrder(startlistClassStepId, vaultingTeamId, testnumber);
            
             return existingHorseOrder;
            
@@ -743,7 +743,7 @@ namespace WebApplication1.Business.Logic.Import
             var startlistClassStepId = horseOrder.StartListClassStepId;
             var horseId = GetExistingHorse(horseOrder.HorseInformation)?.HorseId;
 //            var vaultingTeamId = GetExistingHorseOrderIndivual(horseOrder.VaultingTeam.Name)?.TeamId;
-            var existingHorseOrders = ContestService.GetHorseOrders(startlistClassStepId, horseId);
+            var existingHorseOrders = ContestService.GetHorseOrders(startlistClassStepId, horseId, horseOrder.StartNumber);
 
             return existingHorseOrders;
         }

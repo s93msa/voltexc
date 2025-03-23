@@ -152,12 +152,12 @@ namespace WebApplication1.Business.Logic.Contest
             return horseOrder.ToArray();
         }
 
-        public static HorseOrder[] GetHorseOrders(int? startListClassStepId, int? horseId)
+        public static HorseOrder[] GetHorseOrders(int? startListClassStepId, int? horseId, int startNumber)
         {
             var horseOrders = GetHorseOrders();
             var horseOrder =
                 horseOrders.FindAll(x => x.StartListClassStepId == startListClassStepId &&
-                                         x.HorseId == horseId);
+                                         x.HorseId == horseId && x.StartNumber == startNumber);
 
 
             return horseOrder.ToArray();
@@ -165,7 +165,7 @@ namespace WebApplication1.Business.Logic.Contest
 
 
 
-        public static HorseOrder GetHorseOrders(int? startListClassStepId, int? vaultingTeamId, int testnumber)
+        public static HorseOrder GetTeamHorseOrder(int? startListClassStepId, int? vaultingTeamId, int testnumber)
         {
             var horseOrders = GetHorseOrders();
             var horseOrder =

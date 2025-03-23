@@ -341,7 +341,7 @@ namespace WebApplication1.Business.Logic.Import
             return teamMembersList.ToArray();
         }
 
-            public Team[] GetTeams()
+        public Team[] GetTeams()
         {
             var mergedInfo = GetMergedInfo();
             var teamRows = mergedInfo.Where(x => x.IsTeam).ToArray();
@@ -350,32 +350,39 @@ namespace WebApplication1.Business.Logic.Import
 
             foreach (var teamRow in teamRows)
             {
-                Club club = CreateClubInstance(teamRow.ClubTdbId, teamRow.ClubName);
-
-                var competitionClass = new CompetitionClass
-                {
-                    ClassTdbId = teamRow.ClassTdbId,
-                    ClassNr = teamRow.ClassNr,
-                    ClassName = teamRow.ClassName
-                };
+                Team newTeam = GetAsTeam(teamRow);
                 var existingTeamsWithSameName = teamList.Count(team => team.Name == teamRow.TeamName);
                 if (existingTeamsWithSameName > 0)
                 {
-                    teamRow.TeamName = teamRow.TeamName + (existingTeamsWithSameName + 1);
+                    newTeam.Name = newTeam.Name + (existingTeamsWithSameName + 1);
                 }
-
-                var newTeam = new Team
-                {
-                    Name = teamRow.TeamName,
-                    VaultingClub = club,
-                    VaultingClass = competitionClass,
-                };
                 teamList.Add(newTeam);
 
             }
             return teamList.ToArray();
 
         }
+
+        private static Team GetAsTeam(ExcelImportMergedModel teamRow)
+        {
+            Club club = CreateClubInstance(teamRow.ClubTdbId, teamRow.ClubName);
+
+            var competitionClass = new CompetitionClass
+            {
+                ClassTdbId = teamRow.ClassTdbId,
+                ClassNr = teamRow.ClassNr,
+                ClassName = teamRow.ClassName
+            };
+
+            var newTeam = new Team
+            {
+                Name = teamRow.TeamName,
+                VaultingClub = club,
+                VaultingClass = competitionClass,
+            };
+            return newTeam;
+        }
+
 
         private static Club CreateClubInstance(int clubTdbId, string clubName)
         {
@@ -595,6 +602,104 @@ namespace WebApplication1.Business.Logic.Import
             //TODO: cache
             return _excelImportRepository.GetMergedInfo();
         }
+
+        public List<HorseOrder> GetTeamsHorseordersFromStartList()
+        {
+            if (!_excelImportRepository.WorksheetStartListExist())
+            {
+                return null;
+            }
+            //var teams = new List<Team>();
+            var horseOrders = new List<HorseOrder>();
+            var startListClassList = _excelImportRepository.GetStartlistMergedInfo();           
+
+            int startNumber;
+            foreach (var startListClass in startListClassList)
+            {
+                startNumber = 1;
+                foreach (var horseLoungerVaulters in startListClass.horseLoungerVaultersList)
+                {
+                    var isTeam = horseLoungerVaulters.excelRowsList.FirstOrDefault()?.excelImportMergedModel.IsTeam?? false;
+                    if(isTeam)
+                    {
+                        ExcelImportMergedModel teamRow = horseLoungerVaulters.excelRowsList.FirstOrDefault()?.excelImportMergedModel;
+                        if(teamRow != null)
+                        {
+                            //var team = GetAsTeam(teamRow);
+                            //teams.Add(team);
+
+                            var teamClass = teamRow.ClassTdbId;
+                            HorseOrder horseOrder = CreateHorseOrder(teamRow);
+                            horseOrder.TeamTestnumber = horseLoungerVaulters.excelRowsList.FirstOrDefault().testNumber;
+                            horseOrder.StartNumber = startNumber++;
+                            horseOrder.StartListClassStepId = startListClass.startListClassId;
+                            horseOrders.Add(horseOrder);
+                        }
+                    }
+                    else
+                    {
+                        var vaultersRows = horseLoungerVaulters.excelRowsList;
+                        var vaulterStartOrder = 1;
+                        var vaultersOrder = new List<VaulterOrder>();
+                            foreach (var vaultersRow in vaultersRows)
+                            {
+                                var existingVaulter = ContestService.GetVaulter(vaultersRow.excelImportMergedModel.VaulterId1);
+                                var vaultersClass = existingVaulter.VaultingClass.ClassTdbId;
+                                //// Kanske inte den snyggaste lösningen. Men behövde fixa snabbt. Den tar ut den lägsta testnumret i denna startlsteklass för klassen. För varje loop ökar den med ett så nästa gång tar den den näst lägsta osv
+                                //// Det gör tex att om man kör grund och teknisk kür i samma startlisteklass kommer den först ta grunden för alla tävlande på den hästen sen tekniskt kür för alla tävlande  (för de som kör det)
+                                //var minTestnumber = classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass).Select(y => y.testnumber).Min() + loopIndex;
+                                //var classHaveThisTestNumber = null != classesTdbIdsTestnumber.Where(x => x.ClassTdbId == vaultersClass && x.testnumber == minTestnumber).FirstOrDefault();
+                                //if (!classHaveThisTestNumber)
+                                //{
+                                //    continue;
+                                //}
+                                var vaulter = new Vaulter() { VaulterTdbId = vaultersRow.excelImportMergedModel.VaulterId1, Name = vaultersRow.excelImportMergedModel.VaulterName1 };
+
+                                var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = vaultersRow.testNumber }; // TODO: testnumber
+                                vaultersOrder.Add(vaulterOrder);
+                                //foreach (var testnumber in testnumbers)
+                                //{
+                                //    var vaulterOrder = new VaulterOrder() { StartOrder = vaulterStartOrder++, Participant = vaulter, IsActive = true, Testnumber = testnumber };
+                                //    vaultersOrder.Add(vaulterOrder);
+                                //}
+                            }
+
+                        var lounger = ContestService.GetLunger(horseLoungerVaulters.LoungerTdbId);
+                        var horseOrder = new HorseOrder
+                        {
+                            StartNumber = startNumber++,
+                            HorseInformation = new Horse() { HorseTdbId = horseLoungerVaulters.horseTdbId, Lunger = lounger },
+                            IsActive = true,
+                            IsTeam = false,
+                            Vaulters = vaultersOrder,
+                            StartListClassStepId = startListClass.startListClassId
+                        };
+                        horseOrders.Add(horseOrder);
+
+
+
+                    }
+                }
+            }
+
+            return horseOrders;
+            //return teams;
+            //_updateService.UpdateTeams(teams);
+
+        //     public class TeamList
+        //{
+        //    public int TeamListId { get; set; }
+        //    public int StartNumber { get; set; }
+        //    public int ParticipantId { get; set; }
+
+        //    [ForeignKey("ParticipantId")]
+        //    public virtual Vaulter Participant { get; set; }
+
+        //    public int? TeamId { get; set; }
+
+        //    //public Team Team { get; set; }
+        //}
+    }
 
 
         

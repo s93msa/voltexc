@@ -47,28 +47,28 @@ namespace WebApplication1.Business.Logic.Excel.Results
             _excelBaseService.SetValuesInWorkSheet(worksheetName, 2, rows);
         }
 
-        private Row<string>[] ConvertClassListToArraryList<T>(T[] classes)
+        private ICollection<Row<Cell<string>>> ConvertClassListToArraryList<T>(T[] classes)
         {
-            List<Row<string>> rows = new List<Row<string>>();
+            var rows = new List<Row<Cell<string>>>();
             foreach (T classIntance in classes)
             {
-                string[] row = ConvertClassToArray(classIntance);
-                rows.Add(new Row<string>(row));
+                var row = ConvertClassToArray(classIntance);
+                rows.Add(new Row<Cell<string>>(row));
             }
 
-            return rows.ToArray();
+            return rows;
         }
 
-        private string[] ConvertClassToArray<T>(T classToConvert)
+        private ICollection<Cell<string>> ConvertClassToArray<T>(T classToConvert)
         {
             return classToConvert.GetType()
                     .GetProperties()
                     .Select(p =>
                         {
                             object value = p.GetValue(classToConvert, null);
-                            return value == null ? null : value.ToString();
+                            return value == null ? null : new Cell<string>(value.ToString());
                         })
-                    .ToArray();
+                    .ToList();
         }
     }
 }

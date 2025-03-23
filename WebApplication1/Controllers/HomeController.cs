@@ -17,11 +17,15 @@ namespace WebApplication1.Controllers
     {
         public ExcelResultService _excelResultService;
         public ResultService _resultService;
+        private StartlistExportService _startlistExportService;
+        private ExportStartListService _exportStartListService;
 
         public HomeController()
         {
+            _exportStartListService = new ExportStartListService();
             _excelResultService = new ExcelResultService();
             _resultService = new ResultService();
+            _startlistExportService = new StartlistExportService();
         }
 
         public ActionResult Index()
@@ -39,6 +43,27 @@ namespace WebApplication1.Controllers
             _excelResultService.SetCompetitionClasses(classes.ToArray());
 
             _excelResultService.SaveWithTimeStamp();
+
+            ViewBag.Message = "Excel skapad";
+
+            return View();
+        }
+        public ActionResult CreateExportStartListExcel()
+        {
+            _exportStartListService.SetStartList();
+
+            _exportStartListService.SaveWithTimeStamp();
+
+            ViewBag.Message = "Excel skapad";
+
+            return View();
+        }
+        public ActionResult CreateStartListExcel()
+        {
+
+            _startlistExportService.SetStartList();
+
+            _startlistExportService.SaveWithTimeStamp();
 
             ViewBag.Message = "Excel skapad";
 
@@ -107,9 +132,9 @@ namespace WebApplication1.Controllers
                 // 22 pas de deux final - 
                 // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
                 // 6 Svår klass 1, Seniorlag SM klass – Kür final
-                if(startListClassStep.StartListClassStepId == 2088) // || startListClassStep.StartListClassStepId == 40)
+                //if(startListClassStep.StartListClassStepId == 2088) // || startListClassStep.StartListClassStepId == 40)
                 //{
-                //if (startListClassStep.Date.Day == new DateTime(2023, 07, 08).Day)
+                //if (startListClassStep.Date.Day == new DateTime(2024, 09, 29).Day)
                 //{
                     SaveInExcel(contest, startListClassStep, startNumberInFileName);
                 //}

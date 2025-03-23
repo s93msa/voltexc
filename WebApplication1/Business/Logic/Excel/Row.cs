@@ -7,9 +7,9 @@ namespace WebApplication1.Business.Logic.Excel
 {
     public struct Row<T>
     {
-        public T[] RowValues;
+        public ICollection<T> RowValues;
 
-        public Row(T[] rowValues)
+        public Row(ICollection<T> rowValues)
         {
             RowValues = rowValues;
         }

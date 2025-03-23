@@ -217,6 +217,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Business\Logic\Contest\ContestService.cs" />
+    <Compile Include="Business\Logic\Excel\Cell.cs" />
     <Compile Include="Business\Logic\Excel\ExcelBaseService.cs" />
     <Compile Include="Business\Logic\Excel\Results\CompetitionClass.cs" />
     <Compile Include="Business\Logic\Excel\Results\ExcelResultService.cs" />
@@ -225,6 +226,11 @@
     <Compile Include="Business\Logic\Excel\ExcelTeamService.cs" />
     <Compile Include="Business\Logic\Excel\Results\Participants.cs" />
     <Compile Include="Business\Logic\Excel\Row.cs" />
+    <Compile Include="Business\Logic\Excel\ExportStartListService .cs" />
+    <Compile Include="Business\Logic\Excel\StartlistExportService.cs" />
+    <Compile Include="Business\Logic\Import\ExcelImportMergedModelTestNumber.cs" />
+    <Compile Include="Business\Logic\Import\HorseLounger.cs" />
+    <Compile Include="Business\Logic\Import\StartlistClass.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportMergedModel.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportRepository.cs" />
     <Compile Include="Business\Logic\Import\ExcelImportService.cs" />
@@ -467,6 +473,8 @@
     <Compile Include="ViewModels\HorseOrderViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\VaultersOrderViewModel.cs" />
+    <Content Include="Views\Home\CreateStartListExcel.cshtml" />
+    <None Include="Views\Home\CreateExportStartListExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
