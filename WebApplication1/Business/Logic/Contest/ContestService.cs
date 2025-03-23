@@ -38,7 +38,7 @@ namespace WebApplication1.Business.Logic.Contest
         private static List<TeamList> _teamMembers;
         private static List<HorseOrder> _horseOrders;
         private static List<VaulterOrder> _vaulterOrders;
-
+        private static List<StartListClassStep> _startListSteps;
 
         public static Models.Contest GetContestInstance()
         {
@@ -204,6 +204,11 @@ namespace WebApplication1.Business.Logic.Contest
 
             return club;
         }
+        public static StartListClassStep GetStartListStep(int id)
+        {
+            var startlistSteps = GetStartListSteps();
+            return startlistSteps.FirstOrDefault(x => x.StartListClassStepId == id);
+        }
         public static CompetitionClass GetClass(int classTdbId)
         {
 
@@ -312,6 +317,17 @@ namespace WebApplication1.Business.Logic.Contest
 
         }
 
+        public static void AddStartListSteps(ICollection<StartListClassStep> startListClassSteps)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.StartListClassSteps.AddRange(startListClassSteps);
+                db.SaveChanges();
+            }
+            _startListSteps = null;
+
+        }
+
         public static void AddClasses(CompetitionClass[] classes)
         {
             using (var db = new VaultingContext())
@@ -413,6 +429,18 @@ namespace WebApplication1.Business.Logic.Contest
             }
             _lungers = null;
 
+        }
+        public static void UpdateStartListSteps(ICollection<StartListClassStep> startListSteps)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var startListStep in startListSteps)
+                {
+                    db.Entry(startListStep).State = EntityState.Modified;
+                }
+                db.SaveChanges();
+            }
+            _startListSteps = null;
         }
 
         public static void UpdateClasses(CompetitionClass[] competitionClasses)
@@ -583,6 +611,20 @@ namespace WebApplication1.Business.Logic.Contest
             }
 
             return _clubs;
+
+        }
+
+        private static ICollection<StartListClassStep> GetStartListSteps()
+        {
+            if (_startListSteps == null)
+            {
+                using (var db = new VaultingContext())
+                {
+                    _startListSteps = db.StartListClassSteps.ToList();
+                }
+            }
+
+            return _startListSteps;
 
         }
 

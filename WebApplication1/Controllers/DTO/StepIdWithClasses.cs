@@ -19,6 +19,14 @@ namespace WebApplication1.Controllers.DTO
         }
     }
 
+    public class startListClassStep
+    {
+        public int startListClassId { get; set; }
+        public string stepName { get; set; }
+        public int startOrder { get; set; }
+        public DateTime stepDate { get; set; }
+    }
+
     public class ClassesTdb
     {
         public int ClassTdbId;
@@ -31,6 +39,8 @@ namespace WebApplication1.Controllers.DTO
         }
         
     }
+
+
 
 
 

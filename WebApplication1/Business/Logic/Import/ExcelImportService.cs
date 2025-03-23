@@ -308,6 +308,24 @@ namespace WebApplication1.Business.Logic.Import
             return vaulters.ToArray();
         }
 
+        public ICollection<StartListClassStep> GetStartlistSteps()
+        {
+            var startListClassSteps = new List<StartListClassStep>();
+            var startListSteps = _excelImportRepository.GetStartlistStepOrder();
+            int startorder = 10;
+            foreach (var startListStep in startListSteps)
+            {
+                startListStep.startOrder = startorder;
+                startorder = startorder + 10;
+                startListClassSteps.Add(
+                    new StartListClassStep() { StartListClassStepId = startListStep.startListClassId, Date = startListStep.stepDate, Name = startListStep.stepName, StartOrder = startListStep.startOrder }
+                    );
+            }
+
+            return startListClassSteps;
+        }
+
+
         //public Vaulter[] GetStartOrder()
         //{
         //    var startOrder = GetStartOrders();

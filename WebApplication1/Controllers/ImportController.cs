@@ -76,6 +76,10 @@ namespace WebApplication1.Controllers
             model.NewVaulters = changedItems.New;
             model.UpdatedVaulters = changedItems.Updated;
 
+            var startlistSteps = excelImportService.GetStartlistSteps();
+            changedItems = _updateService.UpdateStartOrderSteps(startlistSteps);
+
+
             if (!_updateService.ExcludeTeam)
             {
                 var teams = excelImportService.GetTeams();

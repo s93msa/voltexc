@@ -242,6 +242,34 @@ namespace WebApplication1.Business.Logic.Import
             return startListClasses;
         }
 
+        public ICollection<startListClassStep> GetStartlistStepOrder()
+        {
+            var startlistSteps = new List<startListClassStep>();
+
+            var startList = _workbook.Worksheets?.Worksheet("startlisteklasser");
+            var stepDate = DateTime.MinValue;
+            foreach (var row in startList.Rows())
+            {
+                if (row.Cell("b").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("b").Value))
+                {
+                    continue;
+                }
+                var startlistStep = new startListClassStep();
+                startlistStep.startListClassId = Convert.ToInt32(row.Cell("b").Value);
+                if(startlistSteps.Count == 0 || startlistSteps.Last().startListClassId != startlistStep.startListClassId)
+                {
+                    if(row.Cell("a").Value is DateTime)
+                    {
+                        stepDate = Convert.ToDateTime(row.Cell("a").Value);
+                    }
+                    startlistStep.stepDate = stepDate;
+                    startlistStep.stepName = (string) row.Cell("c").Value;
+                    startlistSteps.Add(startlistStep);
+                }
+            }
+
+            return startlistSteps;
+        }
         public List<StepIdWithClasses> GetStartlistStepCompetionClasses()
         {
             var stepIdsWithClasses = new List<StepIdWithClasses>();
@@ -252,15 +280,15 @@ namespace WebApplication1.Business.Logic.Import
             var startList = _workbook.Worksheets?.Worksheet("startlisteklasser");
             foreach (var row in startList.Rows())
             {
-                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                if (row.Cell("b").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("b").Value))
                 {
                     continue;
                 }
 
                 //var startOrder = GetStartOrder(row);
-                var startlistClassStepId = Convert.ToInt32(row.Cell("a").Value);
-                var classTdbId = Convert.ToInt32(row.Cell("c").Value);
-                var testNumber = Convert.ToInt32(row.Cell("f").Value);
+                var startlistClassStepId = Convert.ToInt32(row.Cell("b").Value);
+                var classTdbId = Convert.ToInt32(row.Cell("d").Value);
+                var testNumber = Convert.ToInt32(row.Cell("g").Value);
 
                 var stepIdWithClasses = stepIdsWithClasses.Find(x => x.StartListClassStepId == startlistClassStepId);
 

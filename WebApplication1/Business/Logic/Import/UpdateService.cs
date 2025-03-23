@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using WebApplication1.Business.Logic.Contest;
-using WebApplication1.Classes;
-using WebApplication1.Migrations;
 using WebApplication1.Models;
 
 namespace WebApplication1.Business.Logic.Import
@@ -109,6 +105,47 @@ namespace WebApplication1.Business.Logic.Import
             {
                 Updated = updatedClubs.Count,
                 New = newClubs.Count
+            };
+
+            return changed;
+        }
+
+        public Changed UpdateStartOrderSteps(ICollection<StartListClassStep> startListClassSteps)
+        {
+            var newStartListClassSteps = new List<StartListClassStep>();
+            var updatedStartListClassSteps = new List<StartListClassStep>();
+            foreach (var startListClassStep in startListClassSteps)
+            {
+                var existingStartListStep = GetExistingStartListStep(startListClassStep);
+                if (existingStartListStep != null)
+                {
+                    if (NotEqual(startListClassStep, existingStartListStep))
+                    {
+                        existingStartListStep.Name = startListClassStep.Name;
+                        existingStartListStep.Date = startListClassStep.Date;
+                        existingStartListStep.StartOrder = startListClassStep.StartOrder;
+                        updatedStartListClassSteps.Add(existingStartListStep);
+                    }
+                }
+                else
+                {
+                    newStartListClassSteps.Add(existingStartListStep);
+                }
+            }
+
+            if (UpdateExisting)
+            {
+                ContestService.UpdateStartListSteps(updatedStartListClassSteps);
+            }
+            if (AddNew)
+            {
+                ContestService.AddStartListSteps(newStartListClassSteps);
+            }
+
+            var changed = new Changed
+            {
+                Updated = updatedStartListClassSteps.Count,
+                New = newStartListClassSteps.Count
             };
 
             return changed;
@@ -593,6 +630,13 @@ namespace WebApplication1.Business.Logic.Import
                                     existingLunger.LungerTdbId != lunger.LungerTdbId;
         }
 
+        private static bool NotEqual(StartListClassStep startListStep, StartListClassStep existingStartListStep)
+        {
+            return existingStartListStep.Date != startListStep.Date ||
+                existingStartListStep.Name != startListStep.Name ||
+                existingStartListStep.StartOrder != startListStep.StartOrder;
+        }
+
         private static bool NotEqual(TeamMember teamMember, TeamList existingTeamMember)
         {
            // var teamMemberVaulterInfo = GetExistingVaulter(teamMember.VaulterTdbId, teamMember.VaulterName);
@@ -769,6 +813,15 @@ namespace WebApplication1.Business.Logic.Import
 
             //    }
             return existingClub;
+        }
+
+        private static StartListClassStep GetExistingStartListStep(StartListClassStep startListStep)
+        {
+            if (startListStep == null)
+            {
+                return null;
+            }
+            return ContestService.GetStartListStep(startListStep.StartListClassStepId);
         }
 
         private static CompetitionClass GetExistingClass(CompetitionClass competitionClass)
