@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
                 // 22 pas de deux final - 
                 // 1063 Svår klass 2, Juniorlag SM klass - Kür  final SM 2022
                 // 6 Svår klass 1, Seniorlag SM klass – Kür final
-                //if(startListClassStep.StartListClassStepId == 2088) // || startListClassStep.StartListClassStepId == 40)
+                //if(startListClassStep.StartListClassStepId == 1 || startListClassStep.StartListClassStepId == 2)
                 //{
                 //if (startListClassStep.Date.Day == new DateTime(2024, 09, 29).Day)
                 //{
