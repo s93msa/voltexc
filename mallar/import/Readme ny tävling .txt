@@ -8,6 +8,11 @@ Tänk på att om en individuell voltigör startar i två olika klasser så måste man 
 
 Lägg till ScoreSheetId i kolumn D i kolumnnen klasser
 
+Kopiera formeln från en gammal tävling I,J och K kolumnerna i voltigör fliken. Detta för att få ut vilken klass respektive voltigöt tävlar i som individuell. Dett är bra att veta om du vill ha olika färger på armbindlarna beroende på klass
+Om det står "Visa klass" i K kolumnen visas klassen. Du kan skriva något annat där eller tömma den om du inte vill visa klassen. Det kan vara bra att ha dne avakriverad då formeln är tung och gör excelen långsam när man skapar/flyttar rader i tex ekipage 
+
+Skriv in armbindlar i kolumn C i voltigör fliken.  
+
 Kontrollera/ändra i web.config:
 ContestId (1 = SM 2 = normal)
 Trahasttavling (true/false) -> om true kolla HorsePointTraHastTavling. Denna används inte längre. Nu har vi speciella [ScoreSheetsId] för trähäst där a-protokollen inte är med 
