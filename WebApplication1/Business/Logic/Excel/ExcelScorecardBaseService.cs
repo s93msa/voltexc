@@ -117,13 +117,13 @@ namespace WebApplication1.Business.Logic.Excel
         //    string tableName = GetJudgeTableName(judgeTable);
         //    SetInformationGroup2(worksheet, tableName, startRow);
         //}
-        protected void SetJudgeName(IXLWorksheet worksheet, int row, JudgeTable judgeTable)
+        protected void SetJudgeName(IXLWorksheet worksheet, int row, string JudgeName)
         {
-            _excelBaseService.SetValueInWorksheet(worksheet,"domare", GetJudgeName(judgeTable));
+            _excelBaseService.SetValueInWorksheet(worksheet,"domare", JudgeName);
             //SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
         }
 
-        protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow, string startNumber)
+        protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTableNames judgeTableName, int startRow, string startNumber)
         {
             var backgroundColors = new XLColor[]
             {
@@ -131,12 +131,10 @@ namespace WebApplication1.Business.Logic.Excel
 
             };
 
-            string tableName = GetJudgeTableName(judgeTable);
-
             var secondcell = _excelBaseService.GetNamedCell(worksheet, "bord");
 
             secondcell.CellAbove(1).Value = startNumber;
-            secondcell.Value = tableName;
+            secondcell.Value = judgeTableName.ToString();
             secondcell.CellBelow(1).SetValue( _competitionData.VaultingClass.ClassNr);
             secondcell.CellBelow(2).Value = _competitionData.MomentName;
             var armnrCell = _excelBaseService.SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
@@ -187,12 +185,6 @@ namespace WebApplication1.Business.Logic.Excel
                        _competitionData.ListClassStep.Name.Trim().Replace("–", "") + @"\";
 
             return path + fileNamePrefix+ fileName + ".xlsx";
-        }
-
-       
-        private string GetJudgeName(JudgeTable judgeTable)
-        {
-            return judgeTable?.JudgeName;
         }
 
         private string GetJudgeTableName(JudgeTable judgeTable)

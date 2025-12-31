@@ -92,7 +92,7 @@ namespace WebApplication1.Business.Logic.Excel
                 SetHorsePoints(worksheet);
             }
 
-            SetIdInSheet(worksheet, judgeTable);
+            SetIdInSheet(worksheet, judgeTable.JudgeTableName);
            
             switch (worksheet.Name)
 
@@ -134,7 +134,7 @@ namespace WebApplication1.Business.Logic.Excel
 
    
 
-        private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
+        private void SetIdInSheet(IXLWorksheet worksheet, JudgeTableNames judgeTable)
         {
             string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.Horse1.HorseId, _competitionData.TestNumber, judgeTable);
             var cell = _excelBaseService.SetValueInWorksheet(worksheet, "id", idString);
@@ -146,18 +146,16 @@ namespace WebApplication1.Business.Logic.Excel
             SetHeaderPostfix(worksheet);
 
             SetFirstInformationGroup(worksheet, 4);
-            SetTeamInformation(worksheet, judgeTable, 2);
+            SetTeamInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 32, judgeTable);
-
-
+            SetJudgeName(worksheet, 32, judgeTable.JudgeName);
         }
 
-        private void SetTeamInformation(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
+        private void SetTeamInformation(IXLWorksheet worksheet, JudgeTableNames judgeTableName, int startRow)
         {
             var startNumber = GetStartNumberForVaulterString();
-            SetInformationGroup2(worksheet, judgeTable, startRow, startNumber);
-            SetMemberNames(worksheet, judgeTable, startRow + 5);
+            SetInformationGroup2(worksheet, judgeTableName, startRow, startNumber);
+            SetMemberNames(worksheet, startRow + 5);
         }
 
         private string GetStartNumberForVaulterString()
@@ -165,7 +163,7 @@ namespace WebApplication1.Business.Logic.Excel
             return _competitionData.StartVaulterNumber.ToString();
         }
 
-        protected void SetMemberNames(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
+        protected void SetMemberNames(IXLWorksheet worksheet, int startRow)
         {
             var firstcell = _excelBaseService.GetNamedCell(worksheet, "firstvaulter");
             //string tableName = GetJudgeTableName(judgeTable);

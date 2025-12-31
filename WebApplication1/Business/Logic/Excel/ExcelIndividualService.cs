@@ -147,9 +147,9 @@ namespace WebApplication1.Business.Logic.Excel
         {
             SetHeaderPostfix(worksheet);
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 32, judgeTable);
+            SetJudgeName(worksheet, 32, judgeTable.JudgeName);
 
 
         }
@@ -158,9 +158,9 @@ namespace WebApplication1.Business.Logic.Excel
         {
             SetFirstInformationGroup(worksheet, 3);
 
-            SetVaulterInformation(worksheet, judgeTable, 1);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 1);
      
-            SetJudgeName(worksheet, 29, judgeTable);
+            SetJudgeName(worksheet, 29, judgeTable.JudgeName);
 
            
         }
@@ -174,17 +174,17 @@ namespace WebApplication1.Business.Logic.Excel
         {
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
-            SetJudgeName(worksheet, 32, judgeTable);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
+            SetJudgeName(worksheet, 32, judgeTable.JudgeName);
         }
 
         private void SetWorksheetIndividuellJuniorGrund2(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 32, judgeTable);
+            SetJudgeName(worksheet, 32, judgeTable.JudgeName);
 
 
         }
@@ -193,9 +193,9 @@ namespace WebApplication1.Business.Logic.Excel
         {
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 32, judgeTable);
+            SetJudgeName(worksheet, 32, judgeTable.JudgeName);
 
 
         }
@@ -205,9 +205,9 @@ namespace WebApplication1.Business.Logic.Excel
 
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 37, judgeTable);
+            SetJudgeName(worksheet, 37, judgeTable.JudgeName);
         }
 
         private void SetWorksheetIndkürtekn2_3(IXLWorksheet worksheet, JudgeTable judgeTable)
@@ -215,27 +215,27 @@ namespace WebApplication1.Business.Logic.Excel
 
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 37, judgeTable);
+            SetJudgeName(worksheet, 37, judgeTable.JudgeName);
         }
         private void SetWorksheetIndKurArtistisk(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 27, judgeTable);
+            SetJudgeName(worksheet, 27, judgeTable.JudgeName);
         }
         private void SetWorksheetIndTekniskaOvningar(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
 
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 2);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 2);
 
-            SetJudgeName(worksheet, 34, judgeTable);
+            SetJudgeName(worksheet, 34, judgeTable.JudgeName);
         }
 
         private void SetWorksheetIndTekniskArtistisk(IXLWorksheet worksheet, JudgeTable judgeTable)
@@ -243,16 +243,16 @@ namespace WebApplication1.Business.Logic.Excel
 
 
             SetFirstInformationGroup(worksheet, 4);
-            SetVaulterInformation(worksheet, judgeTable, 3);
+            SetVaulterInformation(worksheet, judgeTable.JudgeTableName, 3);
 
-            SetJudgeName(worksheet, 28, judgeTable);
+            SetJudgeName(worksheet, 28, judgeTable.JudgeName);
         }
 
 
-        private void SetVaulterInformation(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
+        private void SetVaulterInformation(IXLWorksheet worksheet, JudgeTableNames judgeTableName, int startRow)
         {
             var startNumber = GetStartNumberForVaulterString();
-            SetInformationGroup2(worksheet, judgeTable, startRow, startNumber);
+            SetInformationGroup2(worksheet, judgeTableName, startRow, startNumber);
         }
 
         private string GetStartNumberForVaulterString()

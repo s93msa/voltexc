@@ -786,7 +786,7 @@ namespace WebApplication1.Business.Logic.Contest
         }
 
 
-        public static string GetTeamExcelId(Team team, int horseId, int testNumber = 0, JudgeTable judgeTable = null)
+        public static string GetTeamExcelId(Team team, int horseId, int testNumber = 0, JudgeTableNames judgeTable = JudgeTableNames.Okänd)
         {
             List<string> returnStrings = new List<string>();
             // var stepTypeString = GetStepTypeString(stepType);
@@ -798,9 +798,9 @@ namespace WebApplication1.Business.Logic.Contest
                 var returnString = "id_" + teamId + "_" + classNr + "_" + horseId;
 
                 //var stepTypeString = GetStepTypeString(stepType);
-                if (testNumber > 0 && judgeTable != null)
+                if (testNumber > 0)
                 {
-                    returnString = returnString + "_" + testNumber + "_" + judgeTable.JudgeTableName;
+                    returnString = returnString + "_" + testNumber + "_" + judgeTable;
                 }
                 returnStrings.Add(returnString);
             }
