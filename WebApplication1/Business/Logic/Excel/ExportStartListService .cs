@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Business.Logic.Import;
@@ -15,8 +16,8 @@ namespace WebApplication1.Business.Logic.Excel
         private string _ExcelPathAndName;
         public ExportStartListService()
         {
-            var workingdirectory = System.Web.Hosting.HostingEnvironment.MapPath("~");
-            _ExcelPathAndName = workingdirectory + @"..\output\startlist";
+            var workingdirectory = @"C:\episerver\voltige\VoltigeClosedXML"; //System.Web.Hosting.HostingEnvironment.MapPath("~");
+            _ExcelPathAndName = workingdirectory + @"\output\startlist";
             var workbook = new XLWorkbook(_ExcelPathAndName + ExcelFileExtension);
 
             _excelBaseService = new ExcelBaseService(workbook);

@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -100,7 +101,7 @@ namespace WebApplication1.Business.Logic.Excel
             var worksheet = _workbook.Worksheets.Worksheet(worksheetName);
             for (int row = 1; row<= endRow; row++)
             {
-                var formulaAsString = worksheet.Cell(row, column).Value?.ToString();
+                var formulaAsString = worksheet.Cell(row, column).Value.ToString();
                 worksheet.Cell(row, column).FormulaA1 = formulaAsString;
             }
             worksheet.Cell(StartlistExportService.TEAMCOMPULSORY_CELL).Value = 7.5;
@@ -223,7 +224,7 @@ namespace WebApplication1.Business.Logic.Excel
             {
                 worksheet.Cell(row, column).Style.Font.Bold = true;
             }
-            worksheet.Cell(row, column).Value = cell.CellValue;
+            worksheet.Cell(row, column).Value = XLCellValue.FromObject(cell.CellValue);
         }
 
         public IXLCell SetValueInWorksheet(IXLWorksheet worksheet, string cellName, string value)
@@ -245,7 +246,7 @@ namespace WebApplication1.Business.Logic.Excel
 
         public IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
         {
-            var linkTocell = worksheet.NamedRange(cellName);
+            var linkTocell = worksheet.DefinedNames.FirstOrDefault( x => x.Name == cellName);
             if (linkTocell == null)
                 return null;
 
@@ -274,13 +275,18 @@ namespace WebApplication1.Business.Logic.Excel
             var column = worksheet.Column(columnName);
             worksheet.Column(columnName).Style.NumberFormat.Format = format;
 
-            foreach (var cell in column.CellsUsed(c => c.Address.RowNumber > 1)) // Skip the header in D1
+            foreach (var cell in column.CellsUsed(c => c.Address.RowNumber > 1)) // // Skip header row 1
             {
-                double result;
-                if (double.TryParse(cell.GetValue<string>(), out result))
-                {
-                    cell.Value = result; // Assign the parsed number
-                    cell.SetDataType(XLDataType.Number); // Set the data type to number
+                var text = cell.GetValue<string>()?.Trim();
+                if (string.IsNullOrEmpty(text)) continue;
+                // Remove Excel-leading apostrophe if present
+                if (text.Length > 0 && text[0] == '\'') text = text.Substring(1);
+
+                double value;
+                if (double.TryParse(text, NumberStyles.Any, CultureInfo.CurrentCulture, out value)
+               || double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                    {
+                    cell.SetValue(value);
                 }
             }
         }
