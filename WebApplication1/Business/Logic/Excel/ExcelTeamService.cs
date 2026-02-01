@@ -1,9 +1,13 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2016.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Web;
-using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
@@ -60,18 +64,6 @@ namespace WebApplication1.Business.Logic.Excel
             //{
             //    return;
             //}
-            if (judgeTable == null)
-            {
-                judgeTable = new JudgeTable();
-                judgeTable.JudgeTableName = JudgeTableNames.Okänd;
-            }
-            if (excelWorksheetNameJudgesTable == null)
-                return;
-            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
-
-            SetWorksheetTeam(worksheet, judgeTable);
-
-            _excelBaseService.ShowOnlyWorksheet(worksheet);
             string fileOutputname;
             if (StartOrderInfileName)
             {
@@ -82,7 +74,64 @@ namespace WebApplication1.Business.Logic.Excel
                 fileOutputname = GetOutputFilename(judgeTable);
 
             }
-            SaveExcelFile(fileOutputname);
+
+            if (judgeTable == null)
+            {
+                judgeTable = new JudgeTable();
+                judgeTable.JudgeTableName = JudgeTableNames.Okänd;
+            }
+            if (excelWorksheetNameJudgesTable == null)
+                return;
+            var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
+
+
+            SetWorksheetTeam(worksheet, judgeTable);
+
+                _excelBaseService.ShowOnlyWorksheet(worksheet);
+              
+
+                SaveExcelFile(fileOutputname);
+
+            //New
+            //// Copy template -> output (overwrite if exists)
+            // Copy template to output directory using relative paths
+            var workingDirectory = HttpContext.Current.Server.MapPath("~");
+            var templatePath = System.IO.Path.Combine(workingDirectory, _competitionData.InputFileName);
+
+            // Build output directory path with class name
+            var outputFilePath = System.IO.Path.Combine(
+                workingDirectory,
+                "..",
+                "output",
+                fileOutputname
+            );
+
+            // Create output directory if it doesn't exist
+            //if (!System.IO.Directory.Exists(outputDir))
+            //{
+            //    System.IO.Directory.CreateDirectory(outputDir);
+            //}
+
+            // Define output file path
+            //var outputFilePath = System.IO.Path.Combine(outputDir, fileOutputname);
+            outputFilePath = outputFilePath.Replace(".xlsx", "_v2.xlsx");
+            System.IO.File.Copy(templatePath, outputFilePath, true);
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(outputFilePath, true))
+            {
+                WorkbookPart workbookPart = doc.WorkbookPart;
+
+                SetIdInSheet(workbookPart, excelWorksheetNameJudgesTable, judgeTable.JudgeTableName);
+                SetJudgeName(workbookPart, excelWorksheetNameJudgesTable, judgeTable.JudgeName);
+                Sheet sheet = workbookPart.Workbook.Sheets.Cast<Sheet>().FirstOrDefault(s => s.Name == excelWorksheetNameJudgesTable);
+                WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
+                Worksheet worksheetOPenXml = worksheetPart.Worksheet;
+                _excelBaseService.ShowOnlyWorksheetOpenXml(workbookPart, worksheetOPenXml);
+                //worksheetPart.Worksheet.Save();
+                workbookPart.Workbook.Save();
+
+
+
+            }
         }
 
         private void SetWorksheetTeam(IXLWorksheet worksheet, JudgeTable judgeTable)
@@ -132,7 +181,26 @@ namespace WebApplication1.Business.Logic.Excel
 
         }
 
-   
+        private void SetIdInSheet(WorkbookPart workbookPart, string worksheetName, JudgeTableNames judgeTable)
+        {
+            string idString = ContestService.GetTeamExcelId(_competitionData.Team1, _competitionData.Horse1.HorseId, _competitionData.TestNumber, judgeTable);
+
+            Sheet sheet = workbookPart.Workbook.Sheets.Cast<Sheet>()
+               .FirstOrDefault(s => s.Name == worksheetName);
+
+            WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
+            Worksheet worksheet = worksheetPart.Worksheet;
+
+            string cellCordinates = _excelBaseService.GetCellRef(workbookPart, worksheetName, "id");
+            _excelBaseService.SetValueInWorksheetOpenXML(worksheet, cellCordinates, idString);
+            _excelBaseService.HideColumnOpenXml(workbookPart, worksheet, cellCordinates);
+        }
+
+        /// <summary>
+        /// Hides the column that contains the given cell address in the provided Worksheet (OpenXML).
+        /// </summary>
+        
+
 
         private void SetIdInSheet(IXLWorksheet worksheet, JudgeTableNames judgeTable)
         {

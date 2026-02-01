@@ -1,10 +1,12 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc.Routing.Constraints;
-using ClosedXML.Excel;
 using WebApplication1.Business.Logic.Contest;
 using WebApplication1.Classes;
 using WebApplication1.Models;
@@ -119,8 +121,22 @@ namespace WebApplication1.Business.Logic.Excel
         //}
         protected void SetJudgeName(IXLWorksheet worksheet, int row, string JudgeName)
         {
+
             _excelBaseService.SetValueInWorksheet(worksheet,"domare", JudgeName);
             //SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
+        }
+        protected void SetJudgeName(WorkbookPart workbookPart, string  worksheetName, string JudgeName)
+        {
+            Sheet sheet = workbookPart.Workbook.Sheets.Cast<Sheet>()
+                .FirstOrDefault(s => s.Name == worksheetName);
+
+            WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
+            Worksheet worksheet = worksheetPart.Worksheet;
+
+            string cellCordinates = _excelBaseService.GetCellRef(workbookPart, worksheetName, "domare");
+            _excelBaseService.SetValueInWorksheetOpenXML(worksheet, cellCordinates, JudgeName);
+            //SetValueInWorksheet(worksheet, row, "c", GetJudgeName(judgeTable));
+            //worksheetPart.Worksheet.Save();
         }
 
         protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTableNames judgeTableName, int startRow, string startNumber)

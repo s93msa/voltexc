@@ -1,4 +1,8 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -33,6 +37,54 @@ namespace WebApplication1.Business.Logic.Excel
                 else
                     currrentWorksheet.Hide(); //.Visibility = XLWorksheetVisibility.Hidden;
             }
+        }
+
+
+        public void ShowOnlyWorksheetOpenXml(WorkbookPart workbookPart, Worksheet worksheetToShow)
+        {
+            if (workbookPart == null || worksheetToShow == null) return;
+
+            // Find the WorksheetPart that contains this Worksheet instance
+            var worksheetPart = workbookPart.WorksheetParts.FirstOrDefault(wp => wp.Worksheet == worksheetToShow);
+            if (worksheetPart == null) return;
+
+            // Relationship id used on the Sheet element
+            string relId = workbookPart.GetIdOfPart(worksheetPart);
+
+            // Collect sheets and determine index of the sheet to show
+            var sheets = workbookPart.Workbook.Sheets.Cast<Sheet>().ToList();
+            int showIndex = -1;
+            for (int i = 0; i < sheets.Count; i++)
+            {
+                var s = sheets[i];
+                if (s.Id != null && s.Id.Value == relId)
+                {
+                    // Make target sheet visible
+                    s.State = new EnumValue<SheetStateValues>(SheetStateValues.Visible);
+                    showIndex = i;
+                }
+                else
+                {
+                    // Hide non-target sheets
+                    s.State = new EnumValue<SheetStateValues>(SheetStateValues.Hidden);
+                }
+            }
+
+            // Ensure BookViews / WorkbookView exists and set ActiveTab to the target sheet index (zero-based)
+            var bookViews = workbookPart.Workbook.GetFirstChild<BookViews>() ?? workbookPart.Workbook.AppendChild(new BookViews());
+            var workbookView = bookViews.Elements<WorkbookView>().FirstOrDefault();
+            //if (workbookView == null)
+            //{
+            //    workbookView = new WorkbookView();
+            //    bookViews.Append(workbookView);
+            //}
+
+            if (showIndex >= 0)
+            {
+                workbookView.ActiveTab = new UInt32Value((uint)showIndex);
+            }
+
+            //workbookPart.Workbook.Save();
         }
 
         public void SaveExcelFile()
@@ -243,6 +295,152 @@ namespace WebApplication1.Business.Logic.Excel
             //= value;
 
         }
+
+        public string  GetCellRef(WorkbookPart workbookPart, string worksheetName, string cellName)
+        {
+            var definedNames = workbookPart.Workbook.DefinedNames.
+                Elements<DocumentFormat.OpenXml.Spreadsheet.DefinedName>().Where(n => n.Name.Value == cellName);
+
+            var definedName = definedNames.FirstOrDefault(d => d.InnerText.Split('!')[0].Trim('\'') == worksheetName);
+
+            string fullRef = definedName.Text;
+            return fullRef.Split('!')[1].Replace("$", "");
+        }
+
+        public void SetValueInWorksheetOpenXML(Worksheet worksheet, string cellRef, string value)
+        {
+
+
+            // Parse cell reference (e.g., "A1" -> row 1, column 1)
+            Cell cell = GetOrCreateCell(worksheet, cellRef);
+
+                if (cell != null)
+                {
+                    // Clear any existing cell data
+                    cell.CellValue = new CellValue(value);
+                    cell.DataType = new EnumValue<CellValues>(CellValues.String);
+                }
+        }
+
+
+        /// <summary>
+        /// Gets or creates a cell in the worksheet at the specified address.
+        /// </summary>
+        private Cell GetOrCreateCell(Worksheet worksheet, string cellAddress)
+        {
+            SheetData sheetData = worksheet.GetFirstChild<SheetData>();
+            if (sheetData == null)
+                return null;
+
+            // Parse cell address (e.g., "A1")
+            uint rowNum = uint.Parse(new string(cellAddress.Where(char.IsDigit).ToArray()));
+            string colLetter = new string(cellAddress.Where(char.IsLetter).ToArray());
+            uint colNum = ConvertColumnLetterToNumber(colLetter);
+
+            // Get or create the row
+            Row row = sheetData.Elements<Row>()
+                .FirstOrDefault(r => r.RowIndex == rowNum);
+
+            if (row == null)
+            {
+                row = new Row { RowIndex = rowNum };
+                sheetData.AppendChild(row);
+            }
+
+            // Get or create the cell
+            Cell cell = row.Elements<Cell>()
+                .FirstOrDefault(c => c.CellReference == cellAddress);
+
+            if (cell == null)
+            {
+                cell = new Cell { CellReference = cellAddress };
+                row.AppendChild(cell);
+            }
+
+            return cell;
+        }
+
+        /// <summary>
+        /// Converts column letter (A, B, AA, etc.) to numeric index.
+        /// </summary>
+        private uint ConvertColumnLetterToNumber(string columnLetter)
+        {
+            uint columnNumber = 0;
+            foreach (char c in columnLetter.ToUpper())
+            {
+                columnNumber = columnNumber * 26 + (uint)(c - 'A' + 1);
+            }
+            return columnNumber;
+        }
+
+        public void HideColumnOpenXml(WorkbookPart workbookPart, Worksheet worksheet, string cellAddress)
+        {
+            if (workbookPart == null || worksheet == null || string.IsNullOrWhiteSpace(cellAddress))
+                return;
+
+            // Extract column letters from address (e.g. "A1" -> "A")
+            string colLetters = new string(cellAddress.Where(char.IsLetter).ToArray()).Replace("$", "");
+            if (string.IsNullOrEmpty(colLetters))
+                return;
+
+            uint colIndex = ConvertColumnLetterToNumber(colLetters);
+
+            // Ensure Columns element exists (insert before SheetData)
+            Columns columns = worksheet.GetFirstChild<Columns>();
+            if (columns == null)
+            {
+                columns = new Columns();
+                var sheetData = worksheet.GetFirstChild<SheetData>();
+                if (sheetData != null)
+                    worksheet.InsertBefore(columns, sheetData);
+                else
+                    worksheet.Append(columns);
+            }
+
+            // Try to find an existing Column element that covers this column
+            var existing = columns.Elements<Column>()
+                .FirstOrDefault(c => c.Min != null && c.Max != null && c.Min.Value <= colIndex && c.Max.Value >= colIndex);
+
+            if (existing != null && existing.Min.Value == colIndex && existing.Max.Value == colIndex)
+            {
+                // Exact single-column definition found: mark hidden
+                existing.Hidden = new BooleanValue(true);
+            }
+            else
+            {
+                // Append a single-column definition to hide only this column.
+                // If an existing range covers it, adding a single-column Column element will override that column.
+                var newCol = new Column()
+                {
+                    Min = new UInt32Value(colIndex),
+                    Max = new UInt32Value(colIndex),
+                    Hidden = new BooleanValue(true),
+                    CustomWidth = new BooleanValue(true),
+                    Width = new DoubleValue(0.0)
+                };
+
+                // Place new column element. Keeping document order simple: append.
+                columns.Append(newCol);
+            }
+        }
+
+        //private uint ConvertColumnLetterToNumber(string columnLetter)
+        //{
+        //    if (string.IsNullOrWhiteSpace(columnLetter))
+        //        throw new ArgumentException("columnLetter is null or empty", nameof(columnLetter));
+
+        //    // Keep only letters and normalize
+        //    var letters = new string(columnLetter.Where(char.IsLetter).ToArray()).ToUpper();
+        //    if (letters.Length == 0)
+        //        throw new ArgumentException("columnLetter contains no letters", nameof(columnLetter));
+
+        //    uint columnNumber = 0;
+        //    foreach (char c in letters)
+        //    {
+        //        columnNumber = columnNumber * 26 + (uint)(c - 'A' + 1);
+        //    }
+        //    return columnNumber;
+        //}
 
         public IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
         {

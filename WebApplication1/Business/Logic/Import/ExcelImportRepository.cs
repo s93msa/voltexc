@@ -281,15 +281,15 @@ namespace WebApplication1.Business.Logic.Import
             var startList = _workbook.Worksheets?.Worksheet("startlisteklasser");
             foreach (var row in startList.Rows())
             {
-                if (row.Cell("b").Value.IsText && string.IsNullOrWhiteSpace((string)row.Cell("b").Value))
+                if(row.Cell("b").Value.IsBlank)
                 {
                     continue;
                 }
 
                 //var startOrder = GetStartOrder(row);
-                var startlistClassStepId = Convert.ToInt32(row.Cell("b").Value);
-                var classTdbId = Convert.ToInt32(row.Cell("d").Value);
-                var testNumber = Convert.ToInt32(row.Cell("g").Value);
+                var startlistClassStepId = row.Cell("b").GetValue<int>();
+                var classTdbId = row.Cell("d").GetValue<int>(); 
+                var testNumber = row.Cell("g").GetValue<int>();
 
                 var stepIdWithClasses = stepIdsWithClasses.Find(x => x.StartListClassStepId == startlistClassStepId);
 
