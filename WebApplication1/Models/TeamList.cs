@@ -9,7 +9,7 @@ namespace VoltigeCore.Models
         public int StartNumber { get; set; }
         public int ParticipantId { get; set; }
         [ForeignKey("ParticipantId")]
-        public virtual Vaulter Participant { get; set; }
+        public virtual Vaulter? Participant { get; set; }
         public int? TeamId { get; set; }
     }
 }
