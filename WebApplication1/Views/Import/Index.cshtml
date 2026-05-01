@@ -1,83 +1,66 @@
-﻿@using WebApplication1.Business.Logic.Import
-@model WebApplication1.ViewModels.ImportViewModel
+@using VoltigeCore.Business.Logic.Import
+@model VoltigeCore.ViewModels.ImportViewModel
 
 @{
-    ViewBag.Title = "View";
+    ViewData["Title"] = "Importera från TDB";
 }
 
-<h2>View</h2>
+<h2>Importera från TDB</h2>
 
-@using (Html.BeginForm("Upload", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+<form method="post" enctype="multipart/form-data" asp-controller="Import" asp-action="Upload">
+    <div class="mb-3">
+        <input type="file" name="file" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <input type="checkbox" name="addNewCheckbox" id="AddNewCheckbox" value="on" />
+        <label for="AddNewCheckbox">Lägg till nya</label>
+    </div>
+    <div class="mb-2">
+        <input type="checkbox" name="updateCheckbox" id="UpdateCheckbox" value="on" />
+        <label for="UpdateCheckbox">Uppdatera redan existerande</label>
+    </div>
+    <div class="mb-2">
+        <input type="checkbox" name="excludeStartlist" id="excludeStartlist" value="on" checked />
+        <label for="excludeStartlist">Gör ingen koll av startlistan</label>
+    </div>
+    <div class="mb-2">
+        <input type="checkbox" name="excludeTeam" id="excludeTeam" value="on" checked />
+        <label for="excludeTeam">Uppdatera eller lägg inte till lag</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Tillbaka</a>
+</div>
+
+@if (Model != null)
 {
-    <input type="file" name="File"  />
-    <label for="AddNewCheckbox">Lägg till nya</label><input type="checkbox" name="addNewCheckbox" id="AddNewCheckbox" />
-    <label for="UpdateCheckbox">Uppdatera redan existerande</label><input type="checkbox" name="updateCheckbox" id="UpdateCheckbox" />
-    <label for="UpdateCheckbox">Gör ingen koll av startlistan </label><input type="checkbox" name="excludeStartlist" id="excludeStartlist" checked="checked" />
-    <label for="excludeTeam">Updatera eller lägg inte till lag </label><input type="checkbox" name="excludeTeam" id="excludeTeam" checked="checked" />
+    <div class="mt-4">
+        <div>Nya longörer: @Model.NewLungers <br />Uppdaterade longörer: @Model.UppdatedLungers</div>
+        <div>Nya hästar: @Model.NewHorses <br />Updaterade hästar: @Model.UpdatedHorses</div>
+        <div>Nya klubbar: @Model.NewClubs <br />Updaterade klubbar: @Model.UpdatedClubs</div>
+        <div>Nya klasser: @Model.NewClasses <br />Updaterade klasser: @Model.UpdatedClasses</div>
+        <div>Nya voltigörer: @Model.NewVaulters <br />Updaterade voltigörer: @Model.UpdatedVaulters</div>
+        <div>Nya lag: @Model.NewTeams <br />Updaterade lag: @Model.UpdatedTeams</div>
+        <div>Nya lagmedlemmar: @Model.NewTeamMembers <br />Updaterade lagmedlemmar: @Model.UpdatedTeamMembers</div>
 
+        @foreach (var item in Model.ChangedStartListTeamList ?? new Dictionary<int, Changed>())
+        {
+            <div>
+                <label>Startlisteklass:</label> @item.Key <br />
+                <label>Ny startlista för lag:</label> @item.Value.New <br />
+                <label>Ändrad startlista för lag:</label> @item.Value.Updated
+            </div>
+        }
 
-    <input type="submit" name="Submit" id="Submit" value="Upload" />
+        @foreach (var item in Model.ChangedStartListIndividualList ?? new Dictionary<int, VoltigeCore.Business.Logic.Import.UpdateService.NewHordeorders>())
+        {
+            <div>
+                <label>Startlisteklass:</label> @item.Key <br />
+                <label>Ny startlista för häst:</label> @item.Value.NewHorseOrders <br />
+                <label>Nya Individuell på häst:</label> @item.Value.NewVaulterOrders
+            </div>
+        }
+    </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-<div>
-    <div>
-        Nya longörer: @Html.DisplayFor(modelItem => modelItem.NewLungers) <br />
-        Uppdaterade longörer: @Html.DisplayFor(modelItem => modelItem.UppdatedLungers)
-    </div>
-    <div>
-        Nya hästar: @Html.DisplayFor(m => m.NewHorses) <br />
-        Updaterade hästar: @Html.DisplayFor(m => m.UpdatedHorses)
-    </div>
-    <div>
-
-        Nya klubbar: @Html.DisplayFor(m => m.NewClubs) <br />
-        Updaterade klubbar:  @Html.DisplayFor(m => m.UpdatedClubs)
-    </div>
-    <div>
-
-        Nya klasser: @Html.DisplayFor(m => m.NewClasses) <br />
-        Updaterade klasser: @Html.DisplayFor(m => m.UpdatedClasses)
-    </div>
-    <div>
-
-        Nya voltigörer: @Html.DisplayFor(m => m.NewVaulters) <br />
-        Updaterade voltigörer: @Html.DisplayFor(m => m.UpdatedVaulters)
-    </div>
-    <div>
-
-        Nya lag: @Html.DisplayFor(m => m.NewTeams) <br />
-        Updaterade lag: @Html.DisplayFor(m => m.UpdatedTeams)
-    </div>
-    <div>
-
-        Nya lagmedlemmar: @Html.DisplayFor(m => m.NewTeamMembers) <br />
-        Updaterade lagmedlemmar: @Html.DisplayFor(m => m.UpdatedTeamMembers)
-    </div>
-    <div>
-
-        @foreach (var item in Model?.ChangedStartListTeamList ?? new Dictionary<int, Changed>())
-        {
-            <div>
-                <label>Startlisteklass</label>@Html.DisplayFor(m => item.Key) <br />
-                <label>Ny startlista för lag</label>@Html.DisplayFor(m => item.Value.New) <br />
-                <label>Ändrad startlista för lag</label>@Html.DisplayFor(m => item.Value.Updated)
-            </div>
-        }
-    </div>
-    <div>
-        @foreach (var item in Model?.ChangedStartListIndividualList ?? new Dictionary<int, UpdateService.NewHordeorders>())
-        {
-            <div>
-                <label>Startlisteklass</label>@Html.DisplayFor(m => item.Key) <br />
-                <label>Ny startlista för häst</label>@Html.DisplayFor(m => item.Value.NewHorseOrders) <br />
-                <label>Nya Individuell på häst</label>@Html.DisplayFor(m => item.Value.NewVaulterOrders)
-            </div>
-        }
-    </div>
-
-
-</div>

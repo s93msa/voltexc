@@ -1,11 +1,14 @@
-﻿
 @{
-    ViewBag.Title = "Protokoll är skapade";
+    ViewData["Title"] = "Protokoll är skapade";
 }
 
 <h2>Protokoll är skapade</h2>
-<div class="jumbotron">
-    <h1>Skapa excel för resultatprogram</h1>
-    <p>@Html.ActionLink("Skapa nu", "CreatePreResultInformationExcel", "Home")</p>
+<div class="card mt-3">
+    <div class="card-body">
+        <h4>Skapa excel för resultatprogram</h4>
+        <a asp-controller="Home" asp-action="CreatePreResultInformationExcel" class="btn btn-primary">Skapa nu</a>
+    </div>
 </div>
-
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Tillbaka</a>
+</div>

@@ -1,15 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace WebApplication1.Controllers.DTO
+namespace VoltigeCore.Controllers.DTO
 {
-    
     public class StepIdWithClasses
     {
         public int StartListClassStepId;
-
         public List<ClassesTdb> CompetitionClassesTdbIds;
 
         public StepIdWithClasses(int startListClassStepId, List<ClassesTdb> competitionClassesTdbIds)
@@ -37,11 +33,5 @@ namespace WebApplication1.Controllers.DTO
             ClassTdbId = classTdbId;
             this.testnumber = testnumber;
         }
-        
     }
-
-
-
-
-
 }

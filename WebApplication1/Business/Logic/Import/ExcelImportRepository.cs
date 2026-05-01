@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using ClosedXML.Excel;
-using WebApplication1.Controllers.DTO;
-using WebApplication1.Models;
 
-namespace WebApplication1.Business.Logic.Import
+using ClosedXML.Excel;
+using VoltigeCore.Controllers.DTO;
+using VoltigeCore.Models;
+
+namespace VoltigeCore.Business.Logic.Import
 {
     public class ExcelImportRepository
     {
@@ -163,7 +163,7 @@ namespace WebApplication1.Business.Logic.Import
             foreach (var row in worksheet.Rows())
             {
                 var horse = new Horse();
-                var tdbId = row.Cell("a").Value?.ToString();
+                var tdbId = row.Cell("a").Value.ToString();
                 if (!string.IsNullOrWhiteSpace(tdbId))
                 {
                     horse.HorseTdbId = Convert.ToInt32(tdbId);
@@ -183,18 +183,18 @@ namespace WebApplication1.Business.Logic.Import
             foreach (var row in worksheet.Rows())
             {
 
-                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                if (string.IsNullOrWhiteSpace(row.Cell("a").GetString()))
                 {
                     continue;
                 }
-                vaulterTdbId = Convert.ToInt32(row.Cell("a").Value);
+                vaulterTdbId = Convert.ToInt32(row.Cell("a").GetDouble());
 
                 var vaulter = new Vaulter
                 {
                     VaulterTdbId = vaulterTdbId,
                     Name = row.Cell("b").Value.ToString()
                 };
-                var armBand = (string) row.Cell("c").Value;
+                var armBand = row.Cell("c").GetString();
                 if (!string.IsNullOrWhiteSpace(armBand))
                 {
                     vaulter.Armband = armBand;
@@ -213,14 +213,14 @@ namespace WebApplication1.Business.Logic.Import
             var startList = _workbook.Worksheets?.Worksheet("startordning");
             foreach (var row in startList.Rows())
             {
-                if (row.Cell("a").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("a").Value))
+                if (string.IsNullOrWhiteSpace(row.Cell("a").GetString()))
                 {
                     continue;
                 }
 
                 var startOrder = GetStartOrder(row);
-                var startlistClassName = row.Cell("b").Value as string;
-                var startlistClassDate = Convert.ToDateTime(row.Cell("c").Value);
+                var startlistClassName = row.Cell("b").GetString();
+                var startlistClassDate = Convert.ToDateTime(row.Cell("c").GetString());
                 if (startListClasses.Exists(x => x.StartOrder == startOrder))
                 {
                     continue;
@@ -489,7 +489,7 @@ namespace WebApplication1.Business.Logic.Import
 
         private static string GetString(IXLRow row, string cell, string defaultValue = "")
         {
-            var returnValue = row?.Cell(cell)?.Value?.ToString().Trim();
+            var returnValue = row?.Cell(cell)?.Value.ToString().Trim();
 
             if(defaultValue != "" && string.IsNullOrWhiteSpace(returnValue))
             {
@@ -501,7 +501,7 @@ namespace WebApplication1.Business.Logic.Import
         private static int GetInt(IXLRow row, string cell, int defaultValue = 0)
         {
             int returnValue;
-            var cellValue = row?.Cell(cell)?.Value?.ToString();
+            var cellValue = row?.Cell(cell)?.Value.ToString();
 
             if (int.TryParse(cellValue, out returnValue))
             {
@@ -514,7 +514,7 @@ namespace WebApplication1.Business.Logic.Import
         private static DateTime GetDate(IXLRow row, string cell)
         {
             DateTime returnValue;
-            var cellValue = row?.Cell(cell)?.Value?.ToString();
+            var cellValue = row?.Cell(cell)?.Value.ToString();
 
             if (DateTime.TryParse(cellValue, out returnValue))
             {

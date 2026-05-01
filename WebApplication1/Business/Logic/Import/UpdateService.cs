@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WebApplication1.Business.Logic.Contest;
-using WebApplication1.Models;
+using VoltigeCore.Business.Logic.Contest;
+using VoltigeCore.Models;
 
-namespace WebApplication1.Business.Logic.Import
+namespace VoltigeCore.Business.Logic.Import
 {
     public class UpdateService
     {

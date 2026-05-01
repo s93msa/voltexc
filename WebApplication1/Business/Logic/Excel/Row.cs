@@ -1,9 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace WebApplication1.Business.Logic.Excel
+namespace VoltigeCore.Business.Logic.Excel
 {
     public struct Row<T>
     {
@@ -14,4 +11,4 @@ namespace WebApplication1.Business.Logic.Excel
             RowValues = rowValues;
         }
     }
-}   
+}

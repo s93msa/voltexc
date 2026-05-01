@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Web;
-
-namespace WebApplication1.Business.Logic.Import
+namespace VoltigeCore.Business.Logic.Import
 {
     public class ExcelImportMergedModel
     {
@@ -33,10 +27,7 @@ namespace WebApplication1.Business.Logic.Import
         public string VaulterName7 { get; set; }
         public int VaulterId8 { get; set; }
         public string VaulterName8 { get; set; }
-
         public bool IsTeam { get; set; }
-
         public string TeamName { get; set; }
-
     }
 }

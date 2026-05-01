@@ -1,26 +1,14 @@
-﻿using System.Web;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Http;
 
-namespace WebApplication1.Business.Logic.Import
+namespace VoltigeCore.Business.Logic.Import
 {
     public class RequestService
     {
-        private readonly HttpRequestBase _request;
-
-        public RequestService(HttpRequestBase request)
+        public XLWorkbook GetWorkbook(IFormFile file)
         {
-            _request = request;
-        }
-
-        public XLWorkbook GetWorkbook(HttpPostedFileBase file)
-        {
-
-            if (file != null && file.ContentLength > 0)
-            {
-                return new XLWorkbook(file.InputStream);
-            }
-
-
+            if (file != null && file.Length > 0)
+                return new XLWorkbook(file.OpenReadStream());
             return null;
         }
 

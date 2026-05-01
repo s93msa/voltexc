@@ -1,40 +1,21 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using WebApplication1.Controllers;
 
-namespace WebApplication1.Models
+namespace VoltigeCore.Models
 {
     public class CompetitionClass
     {
         public int CompetitionClassId { get; set; }
         public string ClassNr { get; set; }
         public string ClassName { get; set; }
-
-        [Index]
         public int ClassTdbId { get; set; }
-
-        public int ScoreSheetId { get; set; }
+        public int? ScoreSheetId { get; set; }
         [ForeignKey("ScoreSheetId")]
-        public virtual ScoreSheets ScoreSheet  { get; set; }
-        //public string HeaderPostfix { get; set; }
+        public virtual ScoreSheets? ScoreSheet { get; set; }
 
-        //  public string Excelfile { get; set; }
-
-        //  public virtual List<Step> Steps { get; set; }
-
-        //TODO: remove currentContestType from method
         public List<Step> GetCompetitionSteps(ContestType currentContestType)
         {
             return ScoreSheet.GetMoments();
-//            return Steps.FindAll(x => x.TypeOfContest.ContestTypeId == currentContestType.ContestTypeId);
         }
-       
-        //public CompetitionClass(int classNr, string className, List<Step> steps)
-        //{
-        //    ClassNr = classNr;
-        //    ClassName = className;
-        //    Steps = steps;
-        //}
-
     }
 }

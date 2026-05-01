@@ -1,31 +1,19 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using ClosedXML.Excel;
-using WebApplication1.Models;
+using VoltigeCore.Models;
 
-namespace WebApplication1.Classes
+namespace VoltigeCore.Classes
 {
-
     public class ExcelPreCompetitionData
     {
         public string EventLocation { get; }
         public StartListClassStep ListClassStep { get; }
-
-
         public Vaulter Vaulter1 { get; }
         public string VaulterName { get; }
         public string ArmNumber { get; }
-
-        
         public string TeamName { get; }
-
-        public Team  Team1{ get; }
-
-
+        public Team Team1 { get; }
         public string Country { get; }
-       
         public int StartVaulterNumber { get; }
         public CompetitionClass VaultingClass { get; }
         public int TestNumber { get; }
@@ -44,24 +32,16 @@ namespace WebApplication1.Classes
         public JudgeTable JudgeTableB { get; }
         public JudgeTable JudgeTableC { get; }
         public JudgeTable JudgeTableD { get; }
-        //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-        //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-        //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-        //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
         public string InputFileName { get; }
         public XLWorkbook Workbook { get; }
 
-      
-
-
         private SortedList<int, Vaulter> _vaultersList = null;
         private Team _team = null;
-        public ExcelPreCompetitionData(Models.Contest contest, StartListClassStep startListClassStep,
-             HorseOrder horseOrder, int startVaulterNumber, VaulterOrder vaulterOrder)
-        {
-            var contest1 = contest;
-            EventLocation = contest1?.Location;
 
+        public ExcelPreCompetitionData(Contest contest, StartListClassStep startListClassStep,
+            HorseOrder horseOrder, int startVaulterNumber, VaulterOrder vaulterOrder)
+        {
+            EventLocation = contest?.Location;
             ListClassStep = startListClassStep;
             StartVaulterNumber = startVaulterNumber;
             Vaulter1 = vaulterOrder.Participant;
@@ -90,32 +70,22 @@ namespace WebApplication1.Classes
             JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
             JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
             JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
-            //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-            //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-            //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-            //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
             InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.GetExcelfile();
-            var workingdirectory = HttpContext.Current.Server.MapPath("~");
+            var workingdirectory = AppConfig.ContentRootPath;
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
-            //var vaulter = horseOrder.Participant;
         }
 
-        public ExcelPreCompetitionData(Models.Contest contest, StartListClassStep startListClassStep,
-             HorseOrder horseOrder, int startVaulterNumber, Team team)
+        public ExcelPreCompetitionData(Contest contest, StartListClassStep startListClassStep,
+            HorseOrder horseOrder, int startVaulterNumber, Team team)
         {
-            var contest1 = contest;
-            EventLocation = contest1?.Location;
-
+            EventLocation = contest?.Location;
             ListClassStep = startListClassStep;
             StartVaulterNumber = startVaulterNumber;
-           // Vaulter1 = vaulterOrder.Participant;
             _team = team;
             TeamName = team?.Name?.Trim();
             Team1 = team;
             Country = team?.VaultingClub?.Country;
-            //ArmNumber = Vaulter1?.Armband;
             VaultingClass = team?.VaultingClass;
-            
             TestNumber = horseOrder.TeamTestnumber;
             Step1 = GetCompetitionStep(contest.TypeOfContest, VaultingClass, TestNumber);
             MomentName = Step1?.Name;
@@ -132,23 +102,10 @@ namespace WebApplication1.Classes
             JudgeTableB = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.B);
             JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
             JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
-            //var excelWorksheetNameJudgesTableA = step?.ExcelWorksheetNameJudgesTableA;
-            //var excelWorksheetNameJudgesTableB = step?.ExcelWorksheetNameJudgesTableB;
-            //var excelWorksheetNameJudgesTableC = step?.ExcelWorksheetNameJudgesTableC;
-            //var excelWorksheetNameJudgesTableD = step?.ExcelWorksheetNameJudgesTableD;
             InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.GetExcelfile();
-            var workingdirectory = HttpContext.Current.Server.MapPath("~");
+            var workingdirectory = AppConfig.ContentRootPath;
             Workbook = new XLWorkbook(workingdirectory + InputFileName);
-            //WorkbookOverrideA = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
-            //WorkbookOverrideB = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
-            //WorkbookOverrideC = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
-            //WorkbookOverrideD = GetOverrideExcelfile(workingdirectory, Step1.OverrideExcelfileA);
-
-
-            //var vaulter = horseOrder.Participant;
         }
-
-        
 
         public SortedList<int, Vaulter> GetTeamVaultersSorted()
         {
@@ -156,23 +113,16 @@ namespace WebApplication1.Classes
                 return _vaultersList;
 
             _vaultersList = new SortedList<int, Vaulter>();
-
             foreach (var vaulter in _team.TeamList)
-            {
                 _vaultersList.Add(vaulter.StartNumber, vaulter.Participant);
-            }
 
             return _vaultersList;
         }
 
-        public string GetName()
-        {
-            return TeamName?? VaulterName;
-        }
-        public string GetStepDate()
-        {
-            return ListClassStep.Date.ToShortDateString();
-        }
+        public string GetName() => TeamName ?? VaulterName;
+
+        public string GetStepDate() => ListClassStep.Date.ToShortDateString();
+
         public static Step GetCompetitionStep(ContestType contestType, CompetitionClass vaulterClass, int testNumber)
         {
             foreach (var step in vaulterClass.GetCompetitionSteps(contestType))
@@ -180,18 +130,8 @@ namespace WebApplication1.Classes
                 if (testNumber == step.TestNumber)
                     return step;
             }
-
             return null;
         }
-
-        //public XLWorkbook GetWorkbook()
-        //{
-        //    var excelfile = Step1.OverrideExcelfileName;
-        //    if (string.IsNullOrEmpty(excelfile))
-        //        return Workbook;
-
-        //    return excelfile;
-        //}
 
         private static JudgeTable GetJudge(List<JudgeTable> judgeTables, JudgeTableNames tableName)
         {
@@ -202,14 +142,5 @@ namespace WebApplication1.Classes
             }
             return null;
         }
-        //private XLWorkbook GetOverrideExcelfile(string workingdirectory, string overrideExcelfile)
-        //{
-        //    if (string.IsNullOrWhiteSpace(overrideExcelfile))
-        //        return new XLWorkbook(workingdirectory + overrideExcelfile);
-        //    return null;
-        //}
-
     }
-
-
 }

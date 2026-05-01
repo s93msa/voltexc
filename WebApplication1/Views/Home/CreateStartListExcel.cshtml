@@ -1,6 +1,8 @@
-﻿@{
-    ViewBag.Title = "Importlista är nu skapad";
+@{
+    ViewData["Title"] = "Excel skapad";
 }
 
-<h2>Ny Startlista är nu skapad</h2>
-
+<h2>@ViewBag.Message</h2>
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Tillbaka</a>
+</div>

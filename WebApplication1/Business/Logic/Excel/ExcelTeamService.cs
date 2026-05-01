@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Web;
 using ClosedXML.Excel;
-using WebApplication1.Business.Logic.Contest;
-using WebApplication1.Classes;
-using WebApplication1.Models;
+using VoltigeCore.Business.Logic.Contest;
+using VoltigeCore.Classes;
+using VoltigeCore.Models;
 
-namespace WebApplication1.Business.Logic.Excel
+namespace VoltigeCore.Business.Logic.Excel
 {
     public class ExcelTeamService : ExcelScorecardBaseService
     {
@@ -17,7 +12,6 @@ namespace WebApplication1.Business.Logic.Excel
         public ExcelTeamService(ExcelPreCompetitionData competitionInformation) : base(competitionInformation)
         {
             _competitionData = competitionInformation;
-
         }
 
         public void CreateExcelforIndividual()
@@ -28,111 +22,36 @@ namespace WebApplication1.Business.Logic.Excel
             CreateExcelFromValuesJudgeD();
         }
 
-
-
-    
-
-    private void CreateExcelFromValuesJudgeA()
-        {
-            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableA?.Trim();
-            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableA);
-        }
-        private void CreateExcelFromValuesJudgeB()
-        {
-            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableB?.Trim();
-            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableB);
-        }
-        private void CreateExcelFromValuesJudgeC()
-        {
-            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableC?.Trim();
-            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableC);
-        }
-
-        private void CreateExcelFromValuesJudgeD()
-        {
-            var excelWorksheetNameJudgesTable = _competitionData.ExcelWorksheetNameJudgesTableD?.Trim();
-            CreateExcelFromValues(excelWorksheetNameJudgesTable, _competitionData.JudgeTableD);
-        }
+        private void CreateExcelFromValuesJudgeA() => CreateExcelFromValues(_competitionData.ExcelWorksheetNameJudgesTableA?.Trim(), _competitionData.JudgeTableA);
+        private void CreateExcelFromValuesJudgeB() => CreateExcelFromValues(_competitionData.ExcelWorksheetNameJudgesTableB?.Trim(), _competitionData.JudgeTableB);
+        private void CreateExcelFromValuesJudgeC() => CreateExcelFromValues(_competitionData.ExcelWorksheetNameJudgesTableC?.Trim(), _competitionData.JudgeTableC);
+        private void CreateExcelFromValuesJudgeD() => CreateExcelFromValues(_competitionData.ExcelWorksheetNameJudgesTableD?.Trim(), _competitionData.JudgeTableD);
 
         private void CreateExcelFromValues(string excelWorksheetNameJudgesTable, JudgeTable judgeTable)
         {
-            //if (!_competitionData.VaultingClass.ClassNr.StartsWith("28") && !_competitionData.VaultingClass.ClassNr.StartsWith("7"))
-            //{
-            //    return;
-            //}
             if (judgeTable == null)
             {
                 judgeTable = new JudgeTable();
                 judgeTable.JudgeTableName = JudgeTableNames.Okänd;
             }
-            if (excelWorksheetNameJudgesTable == null)
-                return;
+            if (excelWorksheetNameJudgesTable == null) return;
+
             var worksheet = _competitionData.Workbook.Worksheets.Worksheet(excelWorksheetNameJudgesTable);
-
             SetWorksheetTeam(worksheet, judgeTable);
-
             _excelBaseService.ShowOnlyWorksheet(worksheet);
-            string fileOutputname;
-            if (StartOrderInfileName)
-            {
-                fileOutputname = GetOutputFilename(judgeTable, _competitionData.StartVaulterNumber.ToString());
-            }
-            else
-            {
-                fileOutputname = GetOutputFilename(judgeTable);
-
-            }
+            string fileOutputname = StartOrderInfileName
+                ? GetOutputFilename(judgeTable, _competitionData.StartVaulterNumber.ToString())
+                : GetOutputFilename(judgeTable);
             SaveExcelFile(fileOutputname);
         }
 
         private void SetWorksheetTeam(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
             if (ContestService.IsTraHastTavling())
-            {
                 SetHorsePoints(worksheet);
-            }
-
             SetIdInSheet(worksheet, judgeTable);
-           
-            switch (worksheet.Name)
-
-            {
-                //case "Häst, individuell":
-                //    SetWorksheetHorse(worksheet, judgeTable);
-                //    break;
-                //case "Individuell minior grund 1":
-                //    SetWorksheetIndividuellMiniorGrund1(worksheet, judgeTable);
-                //    break;
-                //case "Individuell junior grund 2":
-                //    SetWorksheetIndividuellJuniorGrund2(worksheet, judgeTable);
-                //    break;
-                //case "Individuell senior grund 3":
-                //    SetWorksheetIndividuellSeniorGrund3(worksheet, judgeTable);
-                //    break;
-                //case "Ind kür tekn 1":
-                //    SetWorksheetIndkürtekn1(worksheet, judgeTable);
-                //    break;
-                //case "Ind kür tekn 2 3":
-                //    SetWorksheetIndkürtekn2_3(worksheet, judgeTable);
-                //    break;
-                //case "Individuell kür artistisk":
-                //    SetWorksheetIndKurArtistisk(worksheet, judgeTable);
-                //    break;
-                //case "Individuell tekniska övningar":
-                //    SetWorksheetIndTekniskaOvningar(worksheet, judgeTable);
-                //    break;
-                //case "Individuellt tekniskt artistisk":
-                //    SetWorksheetIndTekniskArtistisk(worksheet, judgeTable);
-                //    break;
-                default:
-                    SetWorksheetDefault(worksheet, judgeTable);
-                    break;
-            }
-
-
+            SetWorksheetDefault(worksheet, judgeTable);
         }
-
-   
 
         private void SetIdInSheet(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
@@ -144,43 +63,26 @@ namespace WebApplication1.Business.Logic.Excel
         private void SetWorksheetDefault(IXLWorksheet worksheet, JudgeTable judgeTable)
         {
             SetHeaderPostfix(worksheet);
-
             SetFirstInformationGroup(worksheet, 4);
             SetTeamInformation(worksheet, judgeTable, 2);
-
             SetJudgeName(worksheet, 32, judgeTable);
-
-
         }
 
         private void SetTeamInformation(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
         {
-            var startNumber = GetStartNumberForVaulterString();
-            SetInformationGroup2(worksheet, judgeTable, startRow, startNumber);
+            SetInformationGroup2(worksheet, judgeTable, startRow, _competitionData.StartVaulterNumber.ToString());
             SetMemberNames(worksheet, judgeTable, startRow + 5);
-        }
-
-        private string GetStartNumberForVaulterString()
-        {
-            return _competitionData.StartVaulterNumber.ToString();
         }
 
         protected void SetMemberNames(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow)
         {
             var firstcell = _excelBaseService.GetNamedCell(worksheet, "firstvaulter");
-            //string tableName = GetJudgeTableName(judgeTable);
             int offset = 0;
             foreach (var vaulter in _competitionData.GetTeamVaultersSorted())
             {
                 firstcell.CellBelow(offset).Value = vaulter.Value?.Name?.Trim();
-                //SetValueInWorksheet(worksheet, startRow, "h", vaulter.Value?.Name);
-                //startRow++;
                 offset++;
             }
-           
-            
         }
-
-
     }
 }

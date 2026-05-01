@@ -1,137 +1,87 @@
-﻿@using WebApplication1.Classes
-@using WebApplication1.Models
-@model WebApplication1.Models.Contest
+@using VoltigeCore.Classes
+@using VoltigeCore.Models
+@model VoltigeCore.Models.Contest
 
 @{
-    ViewBag.Title = "View";
+    ViewData["Title"] = "Startlista";
 }
 
-<h2>View</h2>
+<h2>Startlista</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-   
-
-@*@foreach (var startListClass in Model.StartListClass?.OrderBy(x => x.StartOrder))
-{*@
-    @{int startnumber;}
+<table class="table table-bordered table-sm">
+    @{int startnumber = 0;}
     @foreach (var startListClassStep in Model.GetActiveStartListClassStep().OrderBy(x => x.StartOrder))
     {
         startnumber = 0;
         <tr>
-            <th>
-                @startListClassStep.Date.ToLocalTime()
-               
-            </th>
-            <th colspan="4">
-                @Html.DisplayFor(modelItem => startListClassStep.Name) <BR />
-                </th>
-           
-            <th>
-
-
-                @*@Html.ActionLink("Edit", "Edit", new { id= startListClass.StartListClassI
-                                    Dommare A: @Html.DisplayFor(modelItem => startListClassStep.JudgeTables[0])
-d }) |
-                    @Html.ActionLink("Details", "Details", new { id= startListClass.StartListClassId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id= startListClass.StartListClassId })*@
-            </th>
+            <th>@startListClassStep.Date.ToLocalTime()</th>
+            <th colspan="4">@startListClassStep.Name</th>
+            <th></th>
         </tr>
         <tr>
-            <td>
-            </td>
+            <td></td>
             <td colspan="4">
                 @if (!string.IsNullOrWhiteSpace(startListClassStep.GetJudgeName(JudgeTableNames.A)))
                 {
                     <div>
-                        Domare A:@startListClassStep.GetJudgeName(JudgeTableNames.A) B: @startListClassStep.GetJudgeName(JudgeTableNames.B)
-                        C: @startListClassStep.GetJudgeName(JudgeTableNames.C) D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
+                        Domare A: @startListClassStep.GetJudgeName(JudgeTableNames.A)
+                        B: @startListClassStep.GetJudgeName(JudgeTableNames.B)
+                        C: @startListClassStep.GetJudgeName(JudgeTableNames.C)
+                        D: @startListClassStep.GetJudgeName(JudgeTableNames.D)
                     </div>
                 }
-
-            </td><td></td>
+            </td>
+            <td></td>
         </tr>
-        foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
+        @foreach (var startListItem in startListClassStep.GetActiveStartList().OrderBy(x => x.StartNumber))
         {
             if (startListItem.IsTeam)
             {
                 startnumber++;
-
                 <tr>
-                    <td>
-                        @*@Html.ActionLink("Ändra", "Edit", "HorseOrders", new { id = startListItem.HorseOrderId }, null) |*@
+                    <td>@startnumber</td>
+                    <td>@startListItem.VaultingTeam?.Name</td>
+                    <td>@startListItem.HorseInformation?.HorseName</td>
+                    <td>@startListItem.HorseInformation?.Lunger?.LungerName</td>
+                    <td>@startListItem.VaultingTeam?.VaultingClass?.ClassName klass: @startListItem.VaultingTeam?.VaultingClass?.ClassNr -
+                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam?.VaultingClass, startListItem.TeamTestnumber)?.Name)
                     </td>
                     <td>
-                        @startnumber.ToString()
+                        @startListItem.VaultingTeam?.VaultingClub?.ClubName
+                        (@startListItem.VaultingTeam?.VaultingClub?.Country)
+                        <br />Voltigörer:<br />
+                        @if (startListItem.VaultingTeam?.TeamList != null)
+                        {
+                            foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
+                            {
+                                @vaulter.Participant?.Name
+                                <br />
+                            }
+                        }
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.Name)
-
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClass.ClassName) klass: @startListItem.VaultingTeam.VaultingClass.ClassNr-
-                        @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, startListItem.VaultingTeam.VaultingClass, startListItem.TeamTestnumber)?.Name)
-                    </td>
-					<td>
-						@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.ClubName)
-						(@Html.DisplayFor(modelItem => startListItem.VaultingTeam.VaultingClub.Country))
-						<br />Voltigörer: <br />
-						@foreach (var vaulter in startListItem.VaultingTeam.TeamList.OrderBy(x => x.StartNumber))
-						{
-							@(@*vaulter.StartNumber.ToString() + " " +*@ /**/
-																										 vaulter.Participant.Name)
-							<br />
-
-						}
-
-					</td>
                 </tr>
-
             }
             else
             {
                 foreach (var vaulters in startListItem.GetActiveVaulters().OrderBy(x => x.StartOrder))
                 {
                     startnumber++;
-
                     <tr>
-                        <td>
-                            @*@Html.ActionLink("Ändra", "EditVaulterOrder", "HorseOrders", new { id = vaulters.VaulterOrderID }, null)*@
-                            @startnumber.ToString()
+                        <td>@startnumber</td>
+                        <td>@vaulters.Participant?.Name (@vaulters.Participant?.Armband)</td>
+                        <td>@startListItem.HorseInformation?.HorseName</td>
+                        <td>@startListItem.HorseInformation?.Lunger?.LungerName</td>
+                        <td>@vaulters.Participant?.VaultingClass?.ClassName -
+                            @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant?.VaultingClass, vaulters.Testnumber)?.Name)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vaulters.Participant.Name)
-                            (@Html.DisplayFor(modelItem => vaulters.Participant.Armband))
-                        </td>
-                        <td>
-                            @*@Html.DisplayFor(modelItem => vaulters.StartOrder).*@
-                            @Html.DisplayFor(modelItem => startListItem.HorseInformation.HorseName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => startListItem.HorseInformation.Lunger.LungerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClass.ClassName) @*(@vaulters.Participant.VaultingClass.ClassNr)*@-
-                            @(ExcelPreCompetitionData.GetCompetitionStep(Model.TypeOfContest, vaulters.Participant.VaultingClass, vaulters.Testnumber)?.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.ClubName)
-                            (@Html.DisplayFor(modelItem => vaulters.Participant.VaultingClub.Country))
-                        </td>
+                        <td>@vaulters.Participant?.VaultingClub?.ClubName (@vaulters.Participant?.VaultingClub?.Country)</td>
                     </tr>
                 }
             }
-
         }
-
-    @*}*@
     }
 </table>
+
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Tillbaka</a>
+</div>

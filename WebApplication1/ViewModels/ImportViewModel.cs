@@ -1,11 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using WebApplication1.Business.Logic.Import;
-using WebApplication1.Migrations;
+using VoltigeCore.Business.Logic.Import;
 
-namespace WebApplication1.ViewModels
+namespace VoltigeCore.ViewModels
 {
     public class ImportViewModel
     {
@@ -29,11 +25,7 @@ namespace WebApplication1.ViewModels
         public int NewVaulters { get; set; }
         public int UpdatedVaulters { get; set; }
 
-
-        public Dictionary<int,Changed> ChangedStartListTeamList { get; set; }
+        public Dictionary<int, Changed> ChangedStartListTeamList { get; set; }
         public Dictionary<int, UpdateService.NewHordeorders> ChangedStartListIndividualList { get; set; }
-
-
-
     }
 }

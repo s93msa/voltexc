@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using ClosedXML.Excel;
-using WebApplication1.Business.Logic.Contest;
-using WebApplication1.Controllers.DTO;
-using WebApplication1.Models;
 
-namespace WebApplication1.Business.Logic.Import
+using ClosedXML.Excel;
+using VoltigeCore.Business.Logic.Contest;
+using VoltigeCore.Controllers.DTO;
+using VoltigeCore.Models;
+
+namespace VoltigeCore.Business.Logic.Import
 {
     public class ExcelImportService
     {
@@ -532,7 +532,7 @@ namespace WebApplication1.Business.Logic.Import
             {
                 for (int i = 1; i < noOfLungers; i++)
                 {
-                    var newHorseLunger = Mapper.Map<Horse>(horse);
+                    var newHorseLunger = new Horse { HorseId = horse.HorseId, HorseName = horse.HorseName, HorseTdbId = horse.HorseTdbId, LungerId = horse.LungerId };
                     newHorseLunger.Lunger = lungers[i];
                     newHorseLungers.Add(newHorseLunger);
                 }
@@ -723,5 +723,6 @@ namespace WebApplication1.Business.Logic.Import
         
     }
 }
+
 
 
