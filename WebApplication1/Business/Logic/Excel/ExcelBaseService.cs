@@ -120,10 +120,18 @@ namespace VoltigeCore.Business.Logic.Excel
             return currentCell;
         }
 
-        public IXLCell GetNamedCell(IXLWorksheet worksheet, string cellName)
+        public IXLCell? GetNamedCell(IXLWorksheet worksheet, string cellName)
         {
-            var linkTocell = worksheet.NamedRange(cellName);
-            if (linkTocell == null) return null;
+            IXLDefinedName linkTocell;
+
+            try
+            {
+                linkTocell = worksheet.DefinedName(cellName);
+            }
+            catch(KeyNotFoundException)
+            {
+                return null;
+            }
             var currentCell = worksheet.Cell(linkTocell.RefersTo.Split('!')[1]);
             return currentCell;
         }
