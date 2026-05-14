@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using VoltigeCore.Business.Logic.Contest;
 using VoltigeCore.Models;
 
@@ -12,7 +13,8 @@ namespace VoltigeCore.Controllers
         public IActionResult Index()
         {
             var contest = ContestService.GetContestInstance();
-            var horseOptions = ContestService.GetHorses()
+
+            ViewBag.HorseOptions = ContestService.GetHorses()
                 .OrderBy(h => h.HorseName)
                 .Select(h => new SelectListItem
                 {
@@ -22,7 +24,36 @@ namespace VoltigeCore.Controllers
                         : h.HorseName
                 })
                 .ToList();
-            ViewBag.HorseOptions = horseOptions;
+
+            ViewBag.HorseOrderJson = JsonSerializer.Serialize(
+                contest.GetActiveStartListClassStep()
+                    .SelectMany(step => step.GetActiveStartList()
+                        .Where(ho => !ho.IsTeam)
+                        .Select(ho => new
+                        {
+                            HorseOrderId = ho.HorseOrderId,
+                            StepId = ho.StartListClassStepId,
+                            StartNumber = ho.StartNumber,
+                            Display = (ho.HorseInformation?.HorseName ?? "?") +
+                                (ho.HorseInformation?.Lunger?.LungerName != null
+                                    ? $" ({ho.HorseInformation.Lunger.LungerName})" : ""),
+                            Vaulters = ho.GetActiveVaulters()
+                                .OrderBy(v => v.StartOrder)
+                                .Select(v => new
+                                {
+                                    Id = v.VaulterOrderID,
+                                    Name = v.Participant?.Name ?? "",
+                                    Order = v.StartOrder
+                                }).ToList()
+                        }))
+                    .ToList());
+
+            ViewBag.StepsJson = JsonSerializer.Serialize(
+                contest.GetActiveStartListClassStep()
+                    .OrderBy(s => s.StartOrder)
+                    .Select(s => new { StepId = s.StartListClassStepId, Name = s.Name })
+                    .ToList());
+
             return View(contest);
         }
 
