@@ -1,0 +1,294 @@
+@{
+    ViewData["Title"] = "Hjälp / Help";
+}
+
+<h2>Hjälp / Help</h2>
+
+<ul class="nav nav-tabs mb-4" id="langTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="sv-tab" data-bs-toggle="tab" data-bs-target="#sv" type="button" role="tab">
+            Svenska
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="en-tab" data-bs-toggle="tab" data-bs-target="#en" type="button" role="tab">
+            English
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <!-- ================================================================ SVENSKA -->
+    <div class="tab-pane fade show active" id="sv" role="tabpanel">
+
+        <h3>Redigera startlista</h3>
+        <p>
+            Sidan <strong>Redigera startlista</strong> visar den aktuella startlistan för tävlingen och
+            låter dig ändra vilken häst en voltigör eller ett lag är tilldelat.
+            Klicka på knappen <strong>Byt häst</strong> på den rad du vill ändra för att öppna
+            redigeringsdialogen.
+        </p>
+
+        <h4>Startlistan – hur den är uppbyggd</h4>
+        <p>
+            Startlistan är organiserad i <em>startplatser</em> (HorseOrder). Varje startplats
+            kopplar en häst till ett eller flera startande:
+        </p>
+        <ul>
+            <li>
+                <strong>Lag:</strong> En startplats per lag. Lagets namn och häst visas på en rad.
+            </li>
+            <li>
+                <strong>Individuella voltigörer:</strong> En startplats kan innehålla flera voltigörer
+                som turas om på samma häst. Varje voltigör visas på sin egen rad, men de delar
+                startplats och häst.
+            </li>
+        </ul>
+        <p>
+            Ordningen i startlistan bestäms av startplatsnumret (StartNumber) för varje startplats,
+            och inom en startplats av startordningen (StartOrder) för varje voltigör.
+        </p>
+
+        <h4>Redigeringsdialog – tre lägen</h4>
+        <p>
+            När du klickar på <strong>Byt häst</strong> på en individuell voltigörrad visas tre val.
+            För lagrader visas bara läge 1.
+        </p>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Läge 1 – Byt häst för alla på startplatsen</div>
+            <div class="card-body">
+                <p>
+                    Välj en ny häst i listan. Alla voltigörer som delar den aktuella startplatsen
+                    byter häst samtidigt. Ingen förändring görs i startordningen eller hur
+                    startplatserna är organiserade.
+                </p>
+                <p class="mb-0 text-muted">
+                    <strong>Används när:</strong> Hela startplatsen ska byta till en annan häst,
+                    t.ex. på grund av ett hästbyte inför tävlingen.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Läge 2 – Flytta voltigör till en annan befintlig startplats</div>
+            <div class="card-body">
+                <ol>
+                    <li>
+                        Välj <strong>omgång</strong> — alla omgångar i tävlingen visas.
+                        Voltigörens nuvarande omgång är förvald.
+                    </li>
+                    <li>
+                        Välj <strong>häst (startplats)</strong> — startplatserna i den valda
+                        omgången visas sorterade efter startordning. Varje alternativ visar
+                        häst, longerare och de voltigörer som redan är kopplade till platsen.
+                    </li>
+                </ol>
+                <p>
+                    Voltigören flyttas från sin nuvarande startplats till den valda startplatsen.
+                    Du måste sedan ange ny <strong>startordning</strong> för:
+                </p>
+                <ul>
+                    <li>
+                        De voltigörer som redan finns på den <em>valda</em> startplatsen plus
+                        den voltigör som flyttas dit.
+                    </li>
+                    <li>
+                        De voltigörer som är kvar på den <em>ursprungliga</em> startplatsen
+                        (om det uppstår ett glapp i numreringen).
+                    </li>
+                </ul>
+                <p class="mb-0 text-muted">
+                    <strong>Används när:</strong> En voltigör ska dela häst med en annan grupp
+                    eller byta till en annan befintlig startplats, även i en annan omgång.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Läge 3 – Ge voltigören en ny häst, behåll startplatsen</div>
+            <div class="card-body">
+                <p>
+                    Välj en ny häst. Voltigören får en <em>helt ny</em> startplats med den valda
+                    hästen och behåller sin plats i startlistan (dvs. sin löpande startnummer).
+                </p>
+                <p>
+                    Systemet hanterar automatiskt uppdelningen av den ursprungliga startplatsen:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Voltigören startar ensam på startplatsen:</strong> Ingen uppdelning
+                        behövs. Den ursprungliga startplatsen tas bort (avaktiveras) och en ny
+                        skapas med den valda hästen.
+                    </li>
+                    <li>
+                        <strong>Voltigören är sist på startplatsen:</strong> De som kommer före
+                        stannar på den ursprungliga startplatsen. En ny startplats skapas för
+                        voltigören med den valda hästen, placerad direkt efter den ursprungliga.
+                    </li>
+                    <li>
+                        <strong>Voltigören är först på startplatsen:</strong> En ny startplats skapas
+                        för voltigören med den valda hästen, och de övriga stannar kvar på
+                        ursprungshästen – nu i en separat startplats som läggs direkt efter.
+                    </li>
+                    <li>
+                        <strong>Voltigören är i mitten:</strong> Den ursprungliga startplatsen delas
+                        i tre: de som startar <em>före</em> voltigören stannar på ursprungshästen,
+                        voltigören får en ny startplats med den valda hästen, och de som startar
+                        <em>efter</em> voltigören får en ny startplats med ursprungshästen.
+                    </li>
+                </ul>
+                <p class="mb-0 text-muted">
+                    <strong>Används när:</strong> En enskild voltigör ska byta häst men ändå
+                    starta på samma position i tävlingen som planerat.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a asp-controller="EditStartList" asp-action="Index" class="btn btn-outline-secondary">
+                Tillbaka till Redigera startlista
+            </a>
+        </div>
+
+    </div><!-- /sv -->
+
+    <!-- ================================================================ ENGLISH -->
+    <div class="tab-pane fade" id="en" role="tabpanel">
+
+        <h3>Edit Start List</h3>
+        <p>
+            The <strong>Edit Start List</strong> page shows the current start list for the
+            competition and lets you change the horse assigned to a vaulter or a team.
+            Click the <strong>Byt häst</strong> (Change horse) button on the row you want to
+            edit to open the edit dialog.
+        </p>
+
+        <h4>How the start list is structured</h4>
+        <p>
+            The start list is organised into <em>start slots</em> (HorseOrder). Each start slot
+            connects a horse to one or more competitors:
+        </p>
+        <ul>
+            <li>
+                <strong>Teams:</strong> One start slot per team. The team name and horse are shown
+                on a single row.
+            </li>
+            <li>
+                <strong>Individual vaulters:</strong> A start slot can contain several vaulters
+                who take turns on the same horse. Each vaulter appears on their own row, but they
+                share a start slot and horse.
+            </li>
+        </ul>
+        <p>
+            The order in the start list is determined by the slot number (StartNumber) for each
+            start slot, and within a slot by the start order (StartOrder) for each vaulter.
+        </p>
+
+        <h4>Edit dialog – three modes</h4>
+        <p>
+            When you click <strong>Byt häst</strong> on an individual vaulter row, three options
+            are shown. For team rows, only mode 1 is available.
+        </p>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Mode 1 – Change horse for all vaulters on this start slot</div>
+            <div class="card-body">
+                <p>
+                    Select a new horse from the list. Every vaulter sharing the current start slot
+                    switches to the new horse at once. No change is made to the start order or how
+                    the start slots are organised.
+                </p>
+                <p class="mb-0 text-muted">
+                    <strong>Use when:</strong> The entire start slot should switch to a different
+                    horse, for example because of a horse substitution before the competition.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Mode 2 – Move vaulter to an existing start slot</div>
+            <div class="card-body">
+                <ol>
+                    <li>
+                        Select a <strong>round</strong> — all rounds in the competition are shown.
+                        The vaulter's current round is pre-selected.
+                    </li>
+                    <li>
+                        Select a <strong>horse (start slot)</strong> — the start slots in the
+                        chosen round are listed in start order. Each option shows the horse,
+                        lunger, and the vaulters already assigned to that slot.
+                    </li>
+                </ol>
+                <p>
+                    The vaulter is moved from their current start slot to the selected one.
+                    You must then set a new <strong>start order</strong> for:
+                </p>
+                <ul>
+                    <li>
+                        The vaulters already on the <em>target</em> start slot plus the vaulter
+                        being moved there.
+                    </li>
+                    <li>
+                        The vaulters remaining on the <em>original</em> start slot (to close any
+                        gap left by the move).
+                    </li>
+                </ul>
+                <p class="mb-0 text-muted">
+                    <strong>Use when:</strong> A vaulter needs to share a horse with another group
+                    or join an existing start slot, including in a different round.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header fw-semibold">Mode 3 – Give vaulter a new horse, keep their position</div>
+            <div class="card-body">
+                <p>
+                    Select a new horse. The vaulter receives a <em>brand new</em> start slot with
+                    the chosen horse and keeps their sequential position in the start list (i.e.
+                    their running start number stays the same).
+                </p>
+                <p>
+                    The system automatically handles the splitting of the original start slot:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Vaulter is the only one on the slot:</strong> No split needed.
+                        The original slot is deactivated and a new one is created with the chosen
+                        horse.
+                    </li>
+                    <li>
+                        <strong>Vaulter is last on the slot:</strong> Those before them stay on
+                        the original start slot. A new slot is created for the vaulter with the
+                        chosen horse, placed immediately after.
+                    </li>
+                    <li>
+                        <strong>Vaulter is first on the slot:</strong> A new slot is created for
+                        the vaulter with the chosen horse. The remaining vaulters stay on the
+                        original horse — now in a separate slot placed directly after.
+                    </li>
+                    <li>
+                        <strong>Vaulter is in the middle:</strong> The original slot is split into
+                        three: those starting <em>before</em> the vaulter remain on the original
+                        horse, the vaulter gets a new slot with the chosen horse, and those starting
+                        <em>after</em> get a new slot with the original horse.
+                    </li>
+                </ul>
+                <p class="mb-0 text-muted">
+                    <strong>Use when:</strong> An individual vaulter needs to change horse but
+                    should still start at the same position in the competition as planned.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a asp-controller="EditStartList" asp-action="Index" class="btn btn-outline-secondary">
+                Back to Edit Start List
+            </a>
+        </div>
+
+    </div><!-- /en -->
+
+</div><!-- /tab-content -->

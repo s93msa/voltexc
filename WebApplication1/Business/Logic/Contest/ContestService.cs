@@ -158,6 +158,11 @@ namespace VoltigeCore.Business.Logic.Contest
             return GetHorses().FirstOrDefault(x => x.HorseTdbId == horseTdbId && x.Lunger.LungerTdbId == lungerTdbId);
         }
 
+        public static VaulterOrder GetVaulterOrder(int vaulterOrderId)
+        {
+            return GetVaulterOrders().FirstOrDefault(x => x.VaulterOrderID == vaulterOrderId);
+        }
+
         public static VaulterOrder GetVaulterOrder(int[] horseOrderIds, int vaulterId, int testNumber)
         {
             return GetVaulterOrders().FirstOrDefault(x => horseOrderIds.Contains(x.HorseOrderId ?? -1) &&
@@ -322,6 +327,30 @@ namespace VoltigeCore.Business.Logic.Contest
                 db.SaveChanges();
             }
             _horses = null;
+        }
+
+        public static void UpdateVaulterOrder(VaulterOrder vaulterOrder) => UpdateVaulterOrders(new[] { vaulterOrder });
+
+        public static void UpdateVaulterOrders(VaulterOrder[] vaulterOrders)
+        {
+            using (var db = new VaultingContext())
+            {
+                foreach (var vo in vaulterOrders)
+                    db.Entry(vo).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            _vaulterOrders = null;
+        }
+
+        public static int AddHorseOrder(HorseOrder horseOrder)
+        {
+            using (var db = new VaultingContext())
+            {
+                db.HorseOrders.Add(horseOrder);
+                db.SaveChanges();
+            }
+            _horseOrders = null;
+            return horseOrder.HorseOrderId;
         }
 
         public static void UpdateHorseOrder(HorseOrder horseOrder) => UpdateHorseOrder(new[] { horseOrder });
