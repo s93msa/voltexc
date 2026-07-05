@@ -255,15 +255,15 @@ namespace VoltigeCore.Business.Logic.Import
                     continue;
                 }
                 var startlistStep = new startListClassStep();
-                startlistStep.startListClassId = Convert.ToInt32(row.Cell("b").Value);
+                startlistStep.startListClassId = Convert.ToInt32(row.Cell("b").Value.GetNumber());
                 if(startlistSteps.Count == 0 || startlistSteps.Last().startListClassId != startlistStep.startListClassId)
                 {
-                    if(row.Cell("a").Value is DateTime)
+                    if(row.Cell("a").Value.IsDateTime)
                     {
-                        stepDate = Convert.ToDateTime(row.Cell("a").Value);
+                        stepDate = row.Cell("a").Value.GetDateTime();
                     }
                     startlistStep.stepDate = stepDate;
-                    startlistStep.stepName = (string) row.Cell("c").Value;
+                    startlistStep.stepName = (string) row.Cell("c").Value.GetText();
                     startlistSteps.Add(startlistStep);
                 }
             }
