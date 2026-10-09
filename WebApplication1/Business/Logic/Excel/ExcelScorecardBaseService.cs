@@ -1,6 +1,6 @@
-using System;
-using ClosedXML.Excel;
+using System.IO;
 using VoltigeCore.Business.Logic.Contest;
+using VoltigeCore.Business.Logic.Excel.OpenXml;
 using VoltigeCore.Classes;
 using VoltigeCore.Models;
 
@@ -10,111 +10,120 @@ namespace VoltigeCore.Business.Logic.Excel
     {
         public bool StartOrderInfileName { get; set; } = false;
 
-        private readonly ExcelPreCompetitionData _competitionData;
-        protected ExcelBaseService _excelBaseService;
+        protected readonly ExcelPreCompetitionData _competitionData;
 
         protected ExcelScorecardBaseService(ExcelPreCompetitionData competitionInformation)
         {
             _competitionData = competitionInformation;
-            _excelBaseService = new ExcelBaseService(_competitionData.Workbook);
         }
 
-        protected void SetHorsePoints(IXLWorksheet worksheet)
+        // ARGB hex equivalents of the ClosedXML XLColor values previously used.
+        private static readonly string[] ClassBackgroundColorsArgb =
         {
-            var horseSheetNames = new string[] { "Häst, individuell", "Häst, lag", "Pas-de-Deux Häst" };
-            if (IsSheetNameInArray(worksheet, horseSheetNames))
-                SetAJudgeResult(worksheet);
+            "FFFFFFFF", "FFFFFFFF", "FF0000FF", "FF008000", "FFFF0000", "FFFFFF00",
+            "FFFFFFFF", "FFFFFFFF", "FFFFFFFF", "FFFFFFFF", "FFFFFFFF", "FFFF0000", "FFFFFF00"
+        };
+
+        protected void SetHorsePoints(ScorecardWriter writer, string sheetName)
+        {
+            var horseSheetNames = new[] { "Häst, individuell", "Häst, lag", "Pas-de-Deux Häst" };
+            if (System.Array.IndexOf(horseSheetNames, sheetName.Trim()) >= 0)
+                SetAJudgeResult(writer);
             else
-                SetLattClassHorseResult(worksheet);
+                SetLattClassHorseResult(writer);
         }
 
-        protected void SetAJudgeResult(IXLWorksheet worksheet)
+        private void SetAJudgeResult(ScorecardWriter writer)
         {
-            var result = _excelBaseService.GetNamedCell(worksheet, "result");
-            result.Value = ContestService.HorsePointTraHastTavling();
+            if (writer.TryResolveDefinedName("result", out var addr))
+                writer.SetCellNumber(addr, ContestService.HorsePointTraHastTavling());
         }
 
-        protected void SetLattClassHorseResult(IXLWorksheet worksheet)
+        private void SetLattClassHorseResult(ScorecardWriter writer)
         {
-            var result = _excelBaseService.GetNamedCell(worksheet, "Hästpoäng");
-            if (result != null)
-                result.Value = ContestService.HorsePointTraHastTavling();
+            if (writer.TryResolveDefinedName("Hästpoäng", out var addr))
+                writer.SetCellNumber(addr, ContestService.HorsePointTraHastTavling());
         }
 
-        protected static bool IsSheetNameInArray(IXLWorksheet worksheet, string[] names)
+        protected void SetHeaderPostfix(ScorecardWriter writer)
         {
-            return System.Linq.Enumerable.Contains(names, worksheet.Name.Trim());
-        }
+            if (!writer.TryResolveDefinedName("header", out var addr)) return;
 
-        protected static string[] ConcatArrays(string[] a, string[] b)
-        {
-            var result = new string[a.Length + b.Length];
-            a.CopyTo(result, 0);
-            b.CopyTo(result, a.Length);
-            return result;
-        }
-
-        protected void SetHeaderPostfix(IXLWorksheet worksheet)
-        {
-            var header = _excelBaseService.GetNamedCell(worksheet, "header");
-            if (header != null)
+            var headerPostfix = _competitionData.VaultingClass.ScoreSheet.HeaderPostfix;
+            var current = writer.GetCellString(addr);
+            if (string.IsNullOrEmpty(current) ||
+                (!string.IsNullOrEmpty(headerPostfix) && !current.EndsWith(headerPostfix)))
             {
-                var headerPostfix = _competitionData.VaultingClass.ScoreSheet.HeaderPostfix;
-                if (header.Value.IsBlank || (!string.IsNullOrEmpty(headerPostfix) && !header.Value.ToString().EndsWith(headerPostfix)))
-                    header.Value = header.Value + " " + headerPostfix;
+                writer.SetCellString(addr, current + " " + headerPostfix);
             }
         }
 
-        protected void SetFirstInformationGroup(IXLWorksheet worksheet, int startRow)
+        protected void SetFirstInformationGroup(ScorecardWriter writer)
         {
-            var firstcell = _excelBaseService.GetNamedCell(worksheet, "datum");
-            firstcell.Value = _competitionData.GetStepDate();
-            firstcell.CellBelow(1).Value = _competitionData.EventLocation;
-            firstcell.CellBelow(2).Value = _competitionData.GetName();
-            firstcell.CellBelow(3).Value = _competitionData.VaultingClubName;
-            firstcell.CellBelow(4).Value = _competitionData.Country;
-            firstcell.CellBelow(5).Value = RemoveNumberFromEnd(_competitionData.HorseName);
-            firstcell.CellBelow(6).Value = _competitionData.LungerName;
+            if (!writer.TryResolveDefinedName("datum", out var addr)) return;
+            writer.SetCellString(addr, _competitionData.GetStepDate());
+            writer.SetCellString(addr.Below(1), _competitionData.EventLocation);
+            writer.SetCellString(addr.Below(2), _competitionData.GetName());
+            writer.SetCellString(addr.Below(3), _competitionData.VaultingClubName);
+            writer.SetCellString(addr.Below(4), _competitionData.Country);
+            writer.SetCellString(addr.Below(5), RemoveNumberFromEnd(_competitionData.HorseName));
+            writer.SetCellString(addr.Below(6), _competitionData.LungerName);
         }
 
-        protected void SetJudgeName(IXLWorksheet worksheet, int row, JudgeTable judgeTable)
+        protected void SetJudgeName(ScorecardWriter writer, JudgeTable? judgeTable)
         {
-            _excelBaseService.SetValueInWorksheet(worksheet, "domare", judgeTable?.JudgeName);
+            if (writer.TryResolveDefinedName("domare", out var addr))
+                writer.SetCellString(addr, judgeTable?.JudgeName ?? "");
         }
 
-        protected void SetInformationGroup2(IXLWorksheet worksheet, JudgeTable judgeTable, int startRow, string startNumber)
+        protected void SetInformationGroup2(ScorecardWriter writer, JudgeTable? judgeTable, string startNumber)
         {
-            var backgroundColors = new XLColor[]
+            if (!writer.TryResolveDefinedName("bord", out var bord)) return;
+
+            writer.SetCellString(bord.Above(1), startNumber);
+            writer.SetCellString(bord, judgeTable?.JudgeTableName.ToString() ?? "");
+            writer.SetCellString(bord.Below(1), _competitionData.VaultingClass.ClassNr);
+            writer.SetCellString(bord.Below(2), _competitionData.MomentName);
+
+            if (writer.TryResolveDefinedName("armnr", out var armnr))
             {
-                XLColor.White, XLColor.White, XLColor.Blue, XLColor.Green, XLColor.Red, XLColor.Yellow,
-                XLColor.White, XLColor.White, XLColor.White, XLColor.White, XLColor.White, XLColor.Red, XLColor.Yellow
-            };
+                writer.SetCellString(armnr, _competitionData.ArmNumber?.Trim() ?? "");
 
-            string tableName = judgeTable?.JudgeTableName.ToString();
-            var secondcell = _excelBaseService.GetNamedCell(worksheet, "bord");
-            secondcell.CellAbove(1).Value = startNumber;
-            secondcell.Value = tableName;
-            secondcell.CellBelow(1).SetValue(_competitionData.VaultingClass.ClassNr);
-            secondcell.CellBelow(2).Value = _competitionData.MomentName;
-            var armnrCell = _excelBaseService.SetValueInWorksheet(worksheet, "armnr", _competitionData.ArmNumber?.Trim());
-            int classNr;
-            if (armnrCell != null && int.TryParse(_competitionData.VaultingClass.ClassNr, out classNr) && classNr <= backgroundColors.Length)
-                armnrCell.CellBelow(1).Style.Fill.BackgroundColor = backgroundColors[classNr - 1];
+                if (int.TryParse(_competitionData.VaultingClass.ClassNr, out var classNr)
+                    && classNr >= 1 && classNr <= ClassBackgroundColorsArgb.Length)
+                {
+                    writer.SetCellBackgroundColor(armnr.Below(1), ClassBackgroundColorsArgb[classNr - 1]);
+                }
+            }
         }
 
-        protected void SaveExcelFile(string outputFileName)
+        protected void SetIdAndHide(ScorecardWriter writer, string sheetName, string idString)
+        {
+            if (!writer.TryResolveDefinedName("id", out var addr)) return;
+            writer.SetCellString(addr, idString);
+            writer.HideColumn(sheetName, addr.Column);
+        }
+
+        protected void SaveAsScorecard(string outputFileName, System.Action<ScorecardWriter> populate)
         {
             outputFileName = outputFileName.Replace("/", "");
-            string fileoutputname = AppConfig.OutputPath + outputFileName;
-            _excelBaseService.SaveExcelFile(fileoutputname);
+            var outputPathAndName = SanitizeOutputPath(AppConfig.OutputPath + outputFileName);
+
+            var templateBytes = TemplateCache.GetBytes(_competitionData.TemplatePath);
+            using var writer = new ScorecardWriter(outputPathAndName, templateBytes);
+            populate(writer);
         }
 
-        protected string GetOutputFilename(JudgeTable judgeTabel, string fileNamePrefix = "")
+        private static string SanitizeOutputPath(string path) =>
+            path.Replace("&", "och")
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty)
+                .Replace("*", string.Empty);
+
+        protected string? GetOutputFilename(JudgeTable? judgeTabel, string fileNamePrefix = "")
         {
-            string pathPrefix = "";
             if (judgeTabel == null) return null;
-            if (fileNamePrefix.Length > 0)
-                pathPrefix = "utskrift_";
+            string pathPrefix = fileNamePrefix.Length > 0 ? "utskrift_" : "";
 
             var fileName = _competitionData.GetName().Replace("–", "").Replace(".xlsx", "");
             fileName = fileName.Trim() + '_' + judgeTabel.JudgeTableName +
@@ -123,13 +132,13 @@ namespace VoltigeCore.Business.Logic.Excel
                        _competitionData.ListClassStep.Date.DayOfWeek.ToString().Substring(0, 2);
 
             var path = pathPrefix + _competitionData.ListClassStep.Date.ToShortDateString() +
-                       @"\" + judgeTabel.JudgeTableName + @"\" +
-                       _competitionData.ListClassStep.Name.Trim().Replace("–", "") + @"\";
+                       Path.DirectorySeparatorChar + judgeTabel.JudgeTableName + Path.DirectorySeparatorChar +
+                       _competitionData.ListClassStep.Name.Trim().Replace("–", "") + Path.DirectorySeparatorChar;
 
             return path + fileNamePrefix + fileName + ".xlsx";
         }
 
-        private string RemoveNumberFromEnd(string horseName)
+        private static string? RemoveNumberFromEnd(string? horseName)
         {
             if (horseName == null) return null;
             var length = horseName.Length;

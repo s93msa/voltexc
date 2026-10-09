@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ClosedXML.Excel;
 using VoltigeCore.Models;
 
 namespace VoltigeCore.Classes
@@ -33,7 +32,7 @@ namespace VoltigeCore.Classes
         public JudgeTable JudgeTableC { get; }
         public JudgeTable JudgeTableD { get; }
         public string InputFileName { get; }
-        public XLWorkbook Workbook { get; }
+        public string TemplatePath { get; }
 
         private SortedList<int, Vaulter> _vaultersList = null;
         private Team _team = null;
@@ -71,8 +70,7 @@ namespace VoltigeCore.Classes
             JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
             JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
             InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.GetExcelfile();
-            var workingdirectory = AppConfig.ContentRootPath;
-            Workbook = new XLWorkbook(workingdirectory + InputFileName);
+            TemplatePath = AppConfig.ContentRootPath + InputFileName;
         }
 
         public ExcelPreCompetitionData(Contest contest, StartListClassStep startListClassStep,
@@ -103,8 +101,7 @@ namespace VoltigeCore.Classes
             JudgeTableC = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.C);
             JudgeTableD = GetJudge(startListClassStep.JudgeTables, JudgeTableNames.D);
             InputFileName = Step1.OverrideExcelfileName ?? VaultingClass?.ScoreSheet.GetExcelfile();
-            var workingdirectory = AppConfig.ContentRootPath;
-            Workbook = new XLWorkbook(workingdirectory + InputFileName);
+            TemplatePath = AppConfig.ContentRootPath + InputFileName;
         }
 
         public SortedList<int, Vaulter> GetTeamVaultersSorted()
