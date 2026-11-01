@@ -280,15 +280,15 @@ namespace VoltigeCore.Business.Logic.Import
             var startList = _workbook.Worksheets?.Worksheet("startlisteklasser");
             foreach (var row in startList.Rows())
             {
-                if (row.Cell("b").Value is string && string.IsNullOrWhiteSpace((string)row.Cell("b").Value))
+                if (row.Cell("b").Value.IsBlank)
                 {
                     continue;
                 }
 
                 //var startOrder = GetStartOrder(row);
-                var startlistClassStepId = Convert.ToInt32(row.Cell("b").Value);
-                var classTdbId = Convert.ToInt32(row.Cell("d").Value);
-                var testNumber = Convert.ToInt32(row.Cell("g").Value);
+                var startlistClassStepId = Convert.ToInt32(row.Cell("b").Value.GetNumber());
+                var classTdbId = Convert.ToInt32(row.Cell("d").Value.GetNumber());
+                var testNumber = Convert.ToInt32(row.Cell("g").Value.GetNumber());
 
                 var stepIdWithClasses = stepIdsWithClasses.Find(x => x.StartListClassStepId == startlistClassStepId);
 
